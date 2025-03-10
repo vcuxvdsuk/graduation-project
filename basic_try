@@ -1,0 +1,78 @@
+from embedding_mod_funcs import *
+from meta_data_preproccesing import *
+from model_funcs import *
+from ploting_funcs import *
+from SV_funcs import *
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print(device)
+
+
+
+#########################################################################################################
+#                                                 1
+#                       SpeechBrain Create Embedding from an Audio Recording
+#########################################################################################################
+
+
+
+
+
+
+#########################################################################################################
+#                                                2
+#                                       Plot the Embedding
+#########################################################################################################
+
+
+
+
+#########################################################################################################
+#                                               3
+#                                   embedding modification
+#########################################################################################################
+
+
+
+
+#########################################################################################################
+#                                               4
+#                                   basic speaker verification
+#########################################################################################################
+
+
+
+
+#########################################################################################################
+
+# Main function
+def main(config_file='config.yaml'):
+    # Load configuration settings
+    config = load_config(config_file)
+    
+    # Load model
+    speaker_model = load_model(config)
+    
+    # Extract embedding from the audio file
+    #embedding = extract_embedding(config['audio_file'], speaker_model)
+    embedding = extract_person_embedding(config['person_dir'],speaker_model)
+
+    # Plot the original embedding
+    plot_embedding(embedding, config)
+
+    # Modify the embedding and re-plot
+    #modified_embedding = modify_embedding(embedding, config)
+    modified_embedding = modify_embedding_list(embedding, config)
+    plot_embedding(modified_embedding, config)
+
+    # Perform speaker verification
+    #result = verify_speaker(embedding, modified_embedding, config)
+    result = True
+    if result:
+        print("The embeddings belong to the same speaker.")
+    else:
+        print("The embeddings belong to different speakers.")
+
+# Run the pipeline
+if __name__ == '__main__':
+    main()
