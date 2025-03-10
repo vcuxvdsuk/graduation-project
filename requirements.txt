@@ -1,0 +1,8 @@
+torch
+torchaudio
+pandas
+numpy
+tqdm
+pyyaml
+speechbrain
+python-dotenv

@@ -26,17 +26,32 @@ def load_model_ASR(config):
     asr = SpeakerRecognition.from_hparams(source=config['speechbrain_model']['ASR'],
                                         savedir=config['speechbrain_model']['savedir'])
     return asr
-import os
-import numpy as np
-import torchaudio
-import pandas as pd
-from tqdm import tqdm
 
-import os
-import numpy as np
-import torchaudio
-import pandas as pd
-from tqdm import tqdm
+
+def extract_single_embedding(speaker_model, audio_path):
+    try:
+        # Check if the file exists
+        if not os.path.exists(audio_path):
+            print(f"Audio file not found: {audio_path}")
+            return None
+
+        # Load the audio signal
+        signal, fs = torchaudio.load(audio_path)
+
+        # Ensure the signal is in the expected format (mono)
+        if signal.dim() > 1:
+            signal = signal.mean(dim=0, keepdim=True)  # Convert stereo to mono if necessary
+
+        # Get the embedding for the signal
+        embedding = speaker_model.encode_batch(signal)
+
+        # Return the embedding as a numpy array
+        return embedding.cpu().numpy()
+
+    except Exception as e:
+        print(f"Error processing audio file {audio_path}: {e}")
+        return None
+
 
 def extract_family_embeddings(speaker_model, audio_dir, file, emb_dir, csv_file):
     family_embeddings = []

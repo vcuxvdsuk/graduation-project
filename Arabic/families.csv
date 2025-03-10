@@ -1,0 +1,716 @@
+id	client_id	path	sentence	age	gender	speaker_number	family_id
+1255	ara_dev_sp_1	common_voice_ar_19204914.wav	ليس كل ما على شبكة الإنترنت يمكن إيجاده باستخدام جوجل.	twenties	male	1	0
+1253	ara_dev_sp_1	common_voice_ar_19204913.wav	هل كتبت هذا الكتاب ؟	twenties	male	1	0
+1262	ara_dev_sp_1	common_voice_ar_19204978.wav	الإنجليز أكثرهم محافظين.	twenties	male	1	0
+1266	ara_dev_sp_1	common_voice_ar_19204981.wav	أعتقد أنك محقة يا جين.	twenties	male	1	0
+1265	ara_dev_sp_1	common_voice_ar_19204982.wav	أفضل ألا أخرج اليوم.	twenties	male	1	0
+1260	ara_dev_sp_1	common_voice_ar_19204947.wav	.رأيت رجلاً يتّجه نحوي	twenties	male	1	0
+1446	ara_dev_sp_10	common_voice_ar_19994877.wav	ماذا حصل لكلبك ؟	twenties	male	10	0
+1440	ara_dev_sp_10	common_voice_ar_19994851.wav	لنكولن رجل عظيم.	twenties	male	10	0
+1450	ara_dev_sp_10	common_voice_ar_19994904.wav	هل عندك اعتراض على هذه الخطة.	twenties	male	10	0
+1437	ara_dev_sp_10	common_voice_ar_19994796.wav	هل الشاطئ قريب من هذه المنطقة ؟	twenties	male	10	0
+1441	ara_dev_sp_10	common_voice_ar_19994868.wav	.إنه دائم الضحك	twenties	male	10	0
+1443	ara_dev_sp_10	common_voice_ar_19994866.wav	بيل أكبر مني بسنتين.	twenties	male	10	0
+1454	ara_dev_sp_10	common_voice_ar_19994976.wav	متى وصلت إلى هناك ؟	twenties	male	10	0
+1462	ara_dev_sp_11	common_voice_ar_19493956.wav	الحائط مطلي بالأخضر.	not_defined	not_defined	11	0
+1481	ara_dev_sp_11	common_voice_ar_19493976.wav	.لم يصدّق أحد قصّته	not_defined	not_defined	11	0
+1478	ara_dev_sp_11	common_voice_ar_19493969.wav	! أنت ملاك	not_defined	not_defined	11	0
+1463	ara_dev_sp_11	common_voice_ar_19493958.wav	أعمل لدى شركة نفط.	not_defined	not_defined	11	0
+1483	ara_dev_sp_11	common_voice_ar_19493978.wav	.لعلّ الجوّ جميل	not_defined	not_defined	11	0
+1503	ara_dev_sp_12	common_voice_ar_20439359.wav	يتوجب عليك أن تشكره.	not_defined	not_defined	12	0
+1498	ara_dev_sp_12	common_voice_ar_20439335.wav	تغيرتَ كثيرًا.	not_defined	not_defined	12	0
+1494	ara_dev_sp_12	common_voice_ar_20439310.wav	يجب أن تواجه الحقائق.	not_defined	not_defined	12	0
+1495	ara_dev_sp_12	common_voice_ar_20439312.wav	آمل أن أراك قريباً.	not_defined	not_defined	12	0
+1504	ara_dev_sp_12	common_voice_ar_20439363.wav	أنا في الشهر الرابع من حملي.	not_defined	not_defined	12	0
+1528	ara_dev_sp_13	common_voice_ar_19532668.wav	تبدو شاحباً اليوم.	teens	male	13	1
+1526	ara_dev_sp_13	common_voice_ar_19532666.wav	اُنقل الطاولة إلى الخارج إذا سمحت.	teens	male	13	1
+1520	ara_dev_sp_13	common_voice_ar_19532652.wav	.غرق في النهر	teens	male	13	1
+1505	ara_dev_sp_13	common_voice_ar_19532643.wav	لم يسبق لي أن تسلقت جبل فوجي.	teens	male	13	1
+1530	ara_dev_sp_13	common_voice_ar_19532676.wav	.خرجت العائلة كلّها لتتمشّى	teens	male	13	1
+1512	ara_dev_sp_13	common_voice_ar_19532644.wav	انتهت المباراة الساعة التاسعة.	teens	male	13	1
+1566	ara_dev_sp_14	common_voice_ar_19152246.wav	.ستُنشر روايتها الجديدة الشهر القادم	not_defined	not_defined	14	1
+1557	ara_dev_sp_14	common_voice_ar_19152240.wav	.علينا أن نهتمّ بالمحافظة على تراثنا الوطني	not_defined	not_defined	14	1
+1553	ara_dev_sp_14	common_voice_ar_19152239.wav	.هاملت مسرحية لشكسبير	not_defined	not_defined	14	1
+1568	ara_dev_sp_15	common_voice_ar_19721635.wav	أنا لن أذهب إلى هناك لأموت. أنا ذاهب لأعيش .	thirties	male	15	1
+1581	ara_dev_sp_15	common_voice_ar_19721692.wav	لديك الكثير من الكتب.	thirties	male	15	1
+1594	ara_dev_sp_15	common_voice_ar_19721910.wav	.أشرت إليه	thirties	male	15	1
+1582	ara_dev_sp_15	common_voice_ar_19721691.wav	أراك غداً في المكتبة.	thirties	male	15	1
+1590	ara_dev_sp_15	common_voice_ar_19721809.wav	بإمكاني القدوم غداً.	thirties	male	15	1
+1580	ara_dev_sp_15	common_voice_ar_19721690.wav	انظر خلفك!	thirties	male	15	1
+1573	ara_dev_sp_15	common_voice_ar_19721653.wav	ألست طوم ؟	thirties	male	15	1
+1598	ara_dev_sp_16	common_voice_ar_19220768.wav	وقال أيضا عضو مجلس الشيوخ ، تشونسي ديب ،	not_defined	not_defined	16	1
+1610	ara_dev_sp_16	common_voice_ar_19220794.wav	وقع حادث.	not_defined	not_defined	16	1
+1601	ara_dev_sp_16	common_voice_ar_19220770.wav	.طلى دراجته بالأحمر	not_defined	not_defined	16	1
+1595	ara_dev_sp_16	common_voice_ar_19220769.wav	تحيا اللغة الفارسية!	not_defined	not_defined	16	1
+1613	ara_dev_sp_16	common_voice_ar_19220790.wav	إنه رجل أناني جدا.	not_defined	not_defined	16	1
+1612	ara_dev_sp_16	common_voice_ar_19220795.wav	هل تعيش هنا ؟	not_defined	not_defined	16	1
+1651	ara_dev_sp_17	common_voice_ar_19065149.wav	أيمكنك اللعب معي ؟	not_defined	not_defined	17	2
+1647	ara_dev_sp_17	common_voice_ar_19065134.wav	كل قطة لها شخصيتها المستقلة.	not_defined	not_defined	17	2
+1643	ara_dev_sp_17	common_voice_ar_19065120.wav	هل أنت سعيد ؟	not_defined	not_defined	17	2
+1641	ara_dev_sp_17	common_voice_ar_19065117.wav	.وجدنا الباب الرئيسي مقفل	not_defined	not_defined	17	2
+1648	ara_dev_sp_17	common_voice_ar_19065135.wav	سيُعقد اجتماعٌ غداً.	not_defined	not_defined	17	2
+1652	ara_dev_sp_17	common_voice_ar_19065148.wav	هل تعرفه ؟	not_defined	not_defined	17	2
+1660	ara_dev_sp_18	common_voice_ar_20031200.wav	.اِكتب عنوانك من فضلك	thirties	male	18	2
+1677	ara_dev_sp_18	common_voice_ar_20031421.wav	لماذا تأخرت ؟	thirties	male	18	2
+1670	ara_dev_sp_18	common_voice_ar_20031340.wav	باتت حكوماتنا كائناً فضائياً يعيش وسط شعب أرضي.	thirties	male	18	2
+1685	ara_dev_sp_18	common_voice_ar_20031550.wav	.أحب الرحلات	thirties	male	18	2
+1680	ara_dev_sp_18	common_voice_ar_20031446.wav	هناك كلب ينبح.	thirties	male	18	2
+1691	ara_dev_sp_19	common_voice_ar_20782789.wav	بإمكانك وضعها في أي مكان.	twenties	male	19	2
+1693	ara_dev_sp_19	common_voice_ar_20782843.wav	أريدك أن تخبرني الحقيقة.	twenties	male	19	2
+1702	ara_dev_sp_19	common_voice_ar_20939658.wav	ألقت الشرطة القبض على المشتبه به امس.	twenties	male	19	2
+1698	ara_dev_sp_19	common_voice_ar_20842447.wav	إنك لا تدخن ، صحيح ؟	twenties	male	19	2
+1700	ara_dev_sp_19	common_voice_ar_20842443.wav	.لا أثر لوجود حياة على سطح كوكب المريخ	twenties	male	19	2
+1278	ara_dev_sp_2	common_voice_ar_19245335.wav	ضع الجزر في القدر.	twenties	female	2	2
+1283	ara_dev_sp_2	common_voice_ar_19245338.wav	إن ذلك يغيظني حقاً.	twenties	female	2	2
+1271	ara_dev_sp_2	common_voice_ar_19245257.wav	أريد أن أعيش إلى الأبد!	twenties	female	2	2
+1274	ara_dev_sp_2	common_voice_ar_19245276.wav	لديها نظارة شمسية.	twenties	female	2	2
+1272	ara_dev_sp_2	common_voice_ar_19245259.wav	.كنت سعيداً يومها	twenties	female	2	2
+1725	ara_dev_sp_20	common_voice_ar_19384347.wav	أمي تقرأ مجلة.	twenties	female	20	3
+1735	ara_dev_sp_20	common_voice_ar_19384387.wav	و كيف لي أن أعلم ؟	twenties	female	20	3
+1732	ara_dev_sp_20	common_voice_ar_19384374.wav	أطلق عليّ الرّصاص.	twenties	female	20	3
+1729	ara_dev_sp_20	common_voice_ar_19384366.wav	.بارد كالثلج	twenties	female	20	3
+1731	ara_dev_sp_20	common_voice_ar_19384362.wav	أريد أن أجرب ذلك.	twenties	female	20	3
+1760	ara_dev_sp_21	common_voice_ar_19386528.wav	قاست الممرضة حرارته.	not_defined	not_defined	21	3
+1753	ara_dev_sp_21	common_voice_ar_19386506.wav	كيف حالك يا آنسة جون ؟	not_defined	not_defined	21	3
+1757	ara_dev_sp_21	common_voice_ar_19386514.wav	شيء لا يُصدق!	not_defined	not_defined	21	3
+1750	ara_dev_sp_21	common_voice_ar_19386505.wav	هذه كتبي.	not_defined	not_defined	21	3
+1751	ara_dev_sp_21	common_voice_ar_19386508.wav	هل لك أن تغلق الباب ؟	not_defined	not_defined	21	3
+1763	ara_dev_sp_21	common_voice_ar_19386538.wav	بيته هو بيت العائلة.	not_defined	not_defined	21	3
+1754	ara_dev_sp_21	common_voice_ar_19386513.wav	النجدة! ساعدني !	not_defined	not_defined	21	3
+1779	ara_dev_sp_22	common_voice_ar_19745588.wav	.سألتني كم عمري	twenties	male	22	3
+1797	ara_dev_sp_22	common_voice_ar_19745665.wav	كانت أمي جميلة جداً في شبابها.	twenties	male	22	3
+1793	ara_dev_sp_22	common_voice_ar_19745640.wav	بقيَ واحد وذهب الآخر.	twenties	male	22	3
+1802	ara_dev_sp_22	common_voice_ar_19745679.wav	انها تبكي.	twenties	male	22	3
+1778	ara_dev_sp_22	common_voice_ar_19745589.wav	"توقف عن التفكير بي مثل شخص "" عادي ""."	twenties	male	22	3
+1830	ara_dev_sp_23	common_voice_ar_19138765.wav	طبع هذا الكتاب في انجلترا.	twenties	male	23	3
+1824	ara_dev_sp_23	common_voice_ar_19138729.wav	أيمكنني أن أقول شيئاً ؟	twenties	male	23	3
+1835	ara_dev_sp_23	common_voice_ar_19138801.wav	اقبل نعمة الأب ، ومعه ، هذا	twenties	male	23	3
+1809	ara_dev_sp_23	common_voice_ar_19138616.wav	.بعض الثعابين سامة	twenties	male	23	3
+1832	ara_dev_sp_23	common_voice_ar_19138799.wav	كل كلمة في هذا القاموس مهمة.	twenties	male	23	3
+1843	ara_dev_sp_24	common_voice_ar_19431511.wav	البحيرة عميقة جداً.	thirties	female	24	4
+1863	ara_dev_sp_24	common_voice_ar_19465378.wav	من الممكن فعلاً أن يكون ذلك خطأً.	thirties	female	24	4
+1864	ara_dev_sp_24	common_voice_ar_19465376.wav	من الممكن أن تثلج غداً.	thirties	female	24	4
+1855	ara_dev_sp_24	common_voice_ar_19464244.wav	صفّر و هو يمشي.	thirties	female	24	4
+1873	ara_dev_sp_24	common_voice_ar_19465387.wav	كنت هنا من قبل.	thirties	female	24	4
+1865	ara_dev_sp_24	common_voice_ar_19465379.wav	.جفّ القلم	thirties	female	24	4
+1856	ara_dev_sp_24	common_voice_ar_19464247.wav	.كم من الوقت يلزم للوصول إلى المحطّة	thirties	female	24	4
+1882	ara_dev_sp_25	common_voice_ar_19228547.wav	أحدهم سرق محفظتي.	not_defined	not_defined	25	4
+1888	ara_dev_sp_25	common_voice_ar_19228572.wav	.إنّ الكتابَ سهلٌ	not_defined	not_defined	25	4
+1902	ara_dev_sp_25	common_voice_ar_19275749.wav	نادرا ما يكتب رسالة إلى والديه.	not_defined	not_defined	25	4
+1897	ara_dev_sp_25	common_voice_ar_19228620.wav	ماذا قلت لبولا ؟	not_defined	not_defined	25	4
+1903	ara_dev_sp_25	common_voice_ar_19275750.wav	إغسل الصحون يا بن.	not_defined	not_defined	25	4
+1887	ara_dev_sp_25	common_voice_ar_19228574.wav	.هناك شئ واحد آخرعليّ فعله	not_defined	not_defined	25	4
+1290	ara_dev_sp_3	common_voice_ar_19331827.wav	لا تصرخ في وجهي.	twenties	male	3	4
+1293	ara_dev_sp_3	common_voice_ar_19341214.wav	للأرانب آذان طويلة.	twenties	male	3	4
+1294	ara_dev_sp_3	common_voice_ar_19341216.wav	و كأنها لديها صداع.	twenties	male	3	4
+1303	ara_dev_sp_3	common_voice_ar_19341264.wav	.كلٌّ منهم لديه سيارته الخاصة	twenties	male	3	4
+1288	ara_dev_sp_3	common_voice_ar_19331812.wav	ألغيت المباراة بسبب المطر.	twenties	male	3	4
+1320	ara_dev_sp_4	common_voice_ar_21093558.wav	لنغني بالإنجليزية.	not_defined	not_defined	4	4
+1318	ara_dev_sp_4	common_voice_ar_21093537.wav	هل تريدني أن أستدعي لك سيارة أجرة ؟	not_defined	not_defined	4	4
+1304	ara_dev_sp_4	common_voice_ar_20726006.wav	أزور أبي مرتين في السنة.	not_defined	not_defined	4	4
+1316	ara_dev_sp_4	common_voice_ar_21093530.wav	تسكن عمتي في نيويورك.	not_defined	not_defined	4	4
+1310	ara_dev_sp_4	common_voice_ar_21093459.wav	عنده خادمة.	not_defined	not_defined	4	4
+1342	ara_dev_sp_5	common_voice_ar_19534661.wav	يستحم كل صباح.	twenties	male	5	5
+1327	ara_dev_sp_5	common_voice_ar_19534637.wav	كان ذلك فأراً.	twenties	male	5	5
+1334	ara_dev_sp_5	common_voice_ar_19534643.wav	شكلك جميل وأنت تلبس الأزرق.	twenties	male	5	5
+1343	ara_dev_sp_5	common_voice_ar_19534660.wav	أهذه دراجتك ؟	twenties	male	5	5
+1333	ara_dev_sp_5	common_voice_ar_19534651.wav	.لي صديق أباه ممثل مشهور	twenties	male	5	5
+1345	ara_dev_sp_5	common_voice_ar_19534649.wav	هذا الطالب نشيط جدًا.	twenties	male	5	5
+1326	ara_dev_sp_5	common_voice_ar_19534636.wav	.ما زالت قدمَيّ تؤلمانني	twenties	male	5	5
+1357	ara_dev_sp_6	common_voice_ar_19205122.wav	هل لي أن آكل هذه الكعكة ؟	not_defined	not_defined	6	5
+1368	ara_dev_sp_6	common_voice_ar_19205147.wav	.اِشتريت دراجة جديدة	not_defined	not_defined	6	5
+1367	ara_dev_sp_6	common_voice_ar_19205148.wav	إننا في عجلة من أمرنا.	not_defined	not_defined	6	5
+1354	ara_dev_sp_6	common_voice_ar_19205113.wav	منذ متى وأنت تلعب كرة القدم ؟	not_defined	not_defined	6	5
+1364	ara_dev_sp_6	common_voice_ar_19205137.wav	كان رجلاً سابقاً لعصره.	not_defined	not_defined	6	5
+1391	ara_dev_sp_7	common_voice_ar_19629580.wav	تبدو سعيداً هذا اليوم.	not_defined	not_defined	7	5
+1383	ara_dev_sp_7	common_voice_ar_19629491.wav	.لن تستفيد من المقاومة فلا تحاول	not_defined	not_defined	7	5
+1385	ara_dev_sp_7	common_voice_ar_19629525.wav	.إقرأ المقالة	not_defined	not_defined	7	5
+1379	ara_dev_sp_7	common_voice_ar_19629433.wav	.لنلعب الكرة	not_defined	not_defined	7	5
+1403	ara_dev_sp_8	common_voice_ar_19205026.wav	تحافظ على غرفتها مرتبة دوماً.	twenties	male	8	5
+1411	ara_dev_sp_8	common_voice_ar_19205103.wav	أين أشياءك ؟	twenties	male	8	5
+1394	ara_dev_sp_8	common_voice_ar_19205009.wav	"قال دِك: "" يمكنني السباحة ""."	twenties	male	8	5
+1400	ara_dev_sp_8	common_voice_ar_19205024.wav	تركت التدخين.	twenties	male	8	5
+1405	ara_dev_sp_8	common_voice_ar_19205040.wav	كلنا مقتنعون بأنه مذنب.	twenties	male	8	5
+1414	ara_dev_sp_8	common_voice_ar_19205104.wav	.اليابان بلد صناعي	twenties	male	8	5
+1427	ara_dev_sp_9	common_voice_ar_19261958.wav	الكثير من المشاهير يأتون إلى هنا.	twenties	female	9	6
+1429	ara_dev_sp_9	common_voice_ar_19261956.wav	.أنتم معلّمون	twenties	female	9	6
+1426	ara_dev_sp_9	common_voice_ar_19261957.wav	عندي مشكلة.	twenties	female	9	6
+1417	ara_dev_sp_9	common_voice_ar_19230547.wav	.صارع المرض	twenties	female	9	6
+1418	ara_dev_sp_9	common_voice_ar_19230545.wav	تمثال الحرية رمزٌ لأمريكا.	twenties	female	9	6
+43	ara_trn_sp_1	common_voice_ar_19251227.wav	وُلد جدي عام عشرين ميلادية.	twenties	female	1	6
+54	ara_trn_sp_1	common_voice_ar_19317460.wav	لا ليس حقا.	twenties	female	1	6
+16	ara_trn_sp_1	common_voice_ar_19221982.wav	البارحة كانت ليلة عيد ميلادي.	twenties	female	1	6
+51	ara_trn_sp_1	common_voice_ar_19299441.wav	الجود من الموجود	twenties	female	1	6
+1174	ara_trn_sp_10	common_voice_ar_19356231.wav	.يتغيّر الجوّ من يوم إلى آخر	twenties	male	10	6
+1164	ara_trn_sp_10	common_voice_ar_19350418.wav	لمن تلك السيارة ؟	twenties	male	10	6
+1234	ara_trn_sp_10	common_voice_ar_19375666.wav	ماتوا واحداً تلو الآخر.	twenties	male	10	6
+1216	ara_trn_sp_10	common_voice_ar_19370849.wav	هل تكلمني ؟	twenties	male	10	6
+192	ara_trn_sp_100	common_voice_ar_19749070.wav	يجب علينا إنهاء كل شيء قبل صباح الثلاثاء.	thirties	male	100	6
+191	ara_trn_sp_100	common_voice_ar_19749069.wav	. قدمي ما زالت تؤلمني	thirties	male	100	6
+194	ara_trn_sp_100	common_voice_ar_19749071.wav	.بِتْنا في هاكوني	thirties	male	100	6
+195	ara_trn_sp_101	common_voice_ar_19785102.wav	أمس قرأت قصة مثيرة للاهتمام.	not_defined	not_defined	101	7
+197	ara_trn_sp_101	common_voice_ar_19785103.wav	لا أعرف شيئاً عن ماضيه.	not_defined	not_defined	101	7
+200	ara_trn_sp_102	common_voice_ar_19963353.wav	الإنسان بالتفكير والله بالتدبير	twenties	male	102	7
+202	ara_trn_sp_102	common_voice_ar_19963354.wav	.ستبدأ المسرحية في الساعة الثامنة	twenties	male	102	7
+201	ara_trn_sp_102	common_voice_ar_19963355.wav	.الناس يحبون الحرية	twenties	male	102	7
+204	ara_trn_sp_103	common_voice_ar_19436622.wav	كنت خائفاً من أن أضيع في الظلمة.	teens	male	103	7
+205	ara_trn_sp_103	common_voice_ar_19436624.wav	.سأعطيك هذا الكتاب	teens	male	103	7
+210	ara_trn_sp_105	common_voice_ar_19964896.wav	.لا يمكنني احتمال الضجيج أكثر من ذلك	not_defined	not_defined	105	7
+208	ara_trn_sp_105	common_voice_ar_19964899.wav	إلى أين أنت ذاهبٌ يا أبي ؟	not_defined	not_defined	105	7
+215	ara_trn_sp_106	common_voice_ar_20565347.wav	بما أنك متعب ، من الأفضل لك أن تستريح.	thirties	male	106	8
+212	ara_trn_sp_106	common_voice_ar_20565344.wav	لن أكون سعيدًا ، لكن لن أقتل نفسي.	thirties	male	106	8
+213	ara_trn_sp_106	common_voice_ar_20565350.wav	إنه يركلني!!	thirties	male	106	8
+219	ara_trn_sp_107	common_voice_ar_19103183.wav	يا لها من ذكرى!	not_defined	not_defined	107	8
+218	ara_trn_sp_107	common_voice_ar_19103184.wav	هذا سؤال جيد.	not_defined	not_defined	107	8
+217	ara_trn_sp_107	common_voice_ar_19103186.wav	اتصل ابنها من نيويورك.	not_defined	not_defined	107	8
+221	ara_trn_sp_108	common_voice_ar_19212440.wav	يعمل أبي في مصنع.	not_defined	not_defined	108	8
+223	ara_trn_sp_108	common_voice_ar_19212443.wav	.أنا أركض	not_defined	not_defined	108	8
+222	ara_trn_sp_108	common_voice_ar_19212444.wav	ملأت كيسها بالتفاح.	not_defined	not_defined	108	8
+227	ara_trn_sp_109	common_voice_ar_19476979.wav	القليل من العلاج ، والتدليك ، مع بعض المساعدة من الطبيب	not_defined	not_defined	109	8
+225	ara_trn_sp_109	common_voice_ar_19476981.wav	هذه فكرة جيدة!	not_defined	not_defined	109	8
+1305	ara_trn_sp_11	common_voice_ar_19217565.wav	إتفقوا على سعر.	twenties	female	11	9
+1258	ara_trn_sp_11	common_voice_ar_19216539.wav	يشبه أباه.	twenties	female	11	9
+1333	ara_trn_sp_11	common_voice_ar_19217728.wav	هل عندك سيارة ؟	twenties	female	11	9
+1392	ara_trn_sp_11	common_voice_ar_19218207.wav	.نمرّ دائمًا بجانب مكتب البريد في طريقنا إلى العمل	twenties	female	11	9
+1352	ara_trn_sp_11	common_voice_ar_19217988.wav	لديك ثلاثة أقلام.	twenties	female	11	9
+231	ara_trn_sp_110	common_voice_ar_19222360.wav	إتفقوا على انتخابه رئيساً.	not_defined	not_defined	110	9
+229	ara_trn_sp_110	common_voice_ar_19222357.wav	أعمل كل يوم ما عدا يوم الأحد.	not_defined	not_defined	110	9
+230	ara_trn_sp_110	common_voice_ar_19222361.wav	.ضحك الجميع عليّ	not_defined	not_defined	110	9
+236	ara_trn_sp_111	common_voice_ar_19285860.wav	لا تقلق!	thirties	male	111	9
+234	ara_trn_sp_111	common_voice_ar_19285863.wav	ما أسهل أن يكتسب المرء عادات سيئة!	thirties	male	111	9
+232	ara_trn_sp_111	common_voice_ar_19285862.wav	هذا الكرسي يحتاج إلى الإصلاح.	thirties	male	111	9
+238	ara_trn_sp_112	common_voice_ar_21023280.wav	إلى أين أنت ذاهب ؟	twenties	male	112	9
+239	ara_trn_sp_112	common_voice_ar_21023291.wav	سأطلق عليه الرصاص.	twenties	male	112	9
+246	ara_trn_sp_113	common_voice_ar_19738685.wav	هل تنوي أن تساعدهم ؟	not_defined	not_defined	113	10
+243	ara_trn_sp_113	common_voice_ar_19738680.wav	.صوتها ناعم و واضح	not_defined	not_defined	113	10
+244	ara_trn_sp_113	common_voice_ar_19738682.wav	اخي الاصغر ربته جدتي.	not_defined	not_defined	113	10
+242	ara_trn_sp_113	common_voice_ar_19738686.wav	ما هي طبيعة عملك في المكتب ؟	not_defined	not_defined	113	10
+247	ara_trn_sp_114	common_voice_ar_19260124.wav	لن يكون بوسعه القدوم بسبب مرضه.	not_defined	not_defined	114	10
+251	ara_trn_sp_114	common_voice_ar_19260125.wav	توقّف الحاسوب عن العمل بعد تحديث آلي للنظام	not_defined	not_defined	114	10
+256	ara_trn_sp_115	common_voice_ar_19842250.wav	وعرف الفارسي الكبير عن وجوده قبل أن يفعله	not_defined	not_defined	115	10
+254	ara_trn_sp_115	common_voice_ar_19842247.wav	الكل كان سعيداً.	not_defined	not_defined	115	10
+253	ara_trn_sp_115	common_voice_ar_19842245.wav	.لو كان عندي سيارة لذهبت إلى المكتبة	not_defined	not_defined	115	10
+259	ara_trn_sp_116	common_voice_ar_19370417.wav	.أنا لا أحاول سلب حقوقك	not_defined	not_defined	116	10
+260	ara_trn_sp_116	common_voice_ar_19370418.wav	عزفت لحناً على البيانو.	not_defined	not_defined	116	10
+258	ara_trn_sp_116	common_voice_ar_19370415.wav	اتركني و شأني!	not_defined	not_defined	116	10
+257	ara_trn_sp_116	common_voice_ar_19370416.wav	الجميع ينتظرونك.	not_defined	not_defined	116	10
+264	ara_trn_sp_117	common_voice_ar_19962450.wav	.في حال كون هذا الكلام صحيحًا ، فسنضطر لقبول تلك النتيجة	not_defined	not_defined	117	11
+262	ara_trn_sp_117	common_voice_ar_19962448.wav	هل ذاك كلب أم قطة ؟	not_defined	not_defined	117	11
+269	ara_trn_sp_118	common_voice_ar_19205718.wav	من المحتمل أن يصل قريبا.	not_defined	not_defined	118	11
+271	ara_trn_sp_118	common_voice_ar_19205719.wav	قابلتها في الشارع.	not_defined	not_defined	118	11
+267	ara_trn_sp_118	common_voice_ar_19205717.wav	من فضلك تعال.	not_defined	not_defined	118	11
+272	ara_trn_sp_119	common_voice_ar_19706859.wav	أنا معجب بشجاعتك.	twenties	male	119	11
+273	ara_trn_sp_119	common_voice_ar_19706860.wav	.أحتاج مساعدة طبية	twenties	male	119	11
+274	ara_trn_sp_119	common_voice_ar_19706866.wav	أنا ممثل مشهور.	twenties	male	119	11
+276	ara_trn_sp_119	common_voice_ar_19706862.wav	لن يحدث ذلك.	twenties	male	119	11
+1456	ara_trn_sp_12	common_voice_ar_20295876.wav	إنها كلمة أود أن أجد لها بديلًا.	twenties	male	12	11
+1496	ara_trn_sp_12	common_voice_ar_20401387.wav	.كان هناك حصن على تلك الهضبة في يوم من الأيام	twenties	male	12	11
+1473	ara_trn_sp_12	common_voice_ar_20326995.wav	لم تسأل ؟	twenties	male	12	11
+1495	ara_trn_sp_12	common_voice_ar_20401372.wav	عليك أن تفي بوعدك.	twenties	male	12	11
+279	ara_trn_sp_121	common_voice_ar_19205262.wav	من راقب الناس مات هما	not_defined	not_defined	121	12
+278	ara_trn_sp_121	common_voice_ar_19205260.wav	فجأة هطل المطر.	not_defined	not_defined	121	12
+281	ara_trn_sp_121	common_voice_ar_19205261.wav	قاد هتلر بلاده إلى الحرب.	not_defined	not_defined	121	12
+285	ara_trn_sp_122	common_voice_ar_19204111.wav	من فضلك أغلق الباب.	thirties	male	122	12
+287	ara_trn_sp_122	common_voice_ar_19204110.wav	متى سيبدأ الفيلم ؟	thirties	male	122	12
+286	ara_trn_sp_122	common_voice_ar_19204112.wav	أعرف كل شيء.	thirties	male	122	12
+284	ara_trn_sp_122	common_voice_ar_19204114.wav	إنها ستتزوج العام المقبل.	thirties	male	122	12
+289	ara_trn_sp_123	common_voice_ar_19330411.wav	.يهاجر البجع من هنا إلى فلوريدا	not_defined	not_defined	123	12
+290	ara_trn_sp_123	common_voice_ar_19330413.wav	أحب براين أن يتذكر الأيام الخوالي	not_defined	not_defined	123	12
+292	ara_trn_sp_123	common_voice_ar_19330414.wav	هيا بنا!	not_defined	not_defined	123	12
+288	ara_trn_sp_123	common_voice_ar_19330412.wav	حاولت قتل نفسها.	not_defined	not_defined	123	12
+296	ara_trn_sp_124	common_voice_ar_19532851.wav	.لا تقل شيئاً مثل ذلك	not_defined	not_defined	124	12
+293	ara_trn_sp_124	common_voice_ar_19532852.wav	اضرب عصفورين بحجر.	not_defined	not_defined	124	12
+294	ara_trn_sp_124	common_voice_ar_19532848.wav	مُلئت الحافلة.	not_defined	not_defined	124	12
+297	ara_trn_sp_125	common_voice_ar_19555599.wav	لدي سؤال.	not_defined	not_defined	125	13
+298	ara_trn_sp_125	common_voice_ar_19555603.wav	ماذا تفعل بأوقات فراغك ؟	not_defined	not_defined	125	13
+301	ara_trn_sp_125	common_voice_ar_19555601.wav	سأعلمك كيف تقود السيارة.	not_defined	not_defined	125	13
+305	ara_trn_sp_126	common_voice_ar_20038214.wav	أتمنى لك النجاح في الامتحان.	twenties	male	126	13
+303	ara_trn_sp_126	common_voice_ar_20038201.wav	كان بوب سعيداً للغاية.	twenties	male	126	13
+306	ara_trn_sp_126	common_voice_ar_20038216.wav	أين سنأكل ؟	twenties	male	126	13
+308	ara_trn_sp_127	common_voice_ar_19633222.wav	أي طالب يمكنه الرد على هذا السؤال.	not_defined	not_defined	127	13
+310	ara_trn_sp_127	common_voice_ar_19633221.wav	عليك أن تبدأ حالاً.	not_defined	not_defined	127	13
+309	ara_trn_sp_127	common_voice_ar_19633218.wav	القدس عاصمة فلسطين	not_defined	not_defined	127	13
+314	ara_trn_sp_128	common_voice_ar_19206927.wav	أسمعت الأخبار ؟	not_defined	not_defined	128	13
+313	ara_trn_sp_128	common_voice_ar_19206926.wav	متى تنتهي ؟	not_defined	not_defined	128	13
+319	ara_trn_sp_129	common_voice_ar_19205120.wav	أيحب توشيو ساتشيكو ؟	twenties	male	129	14
+317	ara_trn_sp_129	common_voice_ar_19205118.wav	بالنّسبة لرامي، لم تكن العربيّة شيئا جديدا فحسب، بل كانت أيضا صعبة للغاية	twenties	male	129	14
+320	ara_trn_sp_129	common_voice_ar_19205119.wav	متى يمكننا الأكل ؟	twenties	male	129	14
+1728	ara_trn_sp_13	common_voice_ar_19103621.wav	مكعب سكر واحد من فضلك.	thirties	female	13	14
+1715	ara_trn_sp_13	common_voice_ar_19103343.wav	.يلعب بمهارة	thirties	female	13	14
+1721	ara_trn_sp_13	common_voice_ar_19103575.wav	يبدو أننا وقعنا في الفخ.	thirties	female	13	14
+1678	ara_trn_sp_13	common_voice_ar_19083268.wav	.اطمأن والدا توم عندما سمعا بأنه بخير	thirties	female	13	14
+323	ara_trn_sp_130	common_voice_ar_19579949.wav	.جئت هنا بالأمس	twenties	male	130	14
+325	ara_trn_sp_130	common_voice_ar_19579952.wav	إن التحدث بالإنجليزية أمر ممتع.	twenties	male	130	14
+322	ara_trn_sp_130	common_voice_ar_19579953.wav	هل ساعتك على التوقيت الصحيح ؟	twenties	male	130	14
+326	ara_trn_sp_130	common_voice_ar_19579951.wav	.منزلك أكبر من منزلي بثلاث مرات	twenties	male	130	14
+327	ara_trn_sp_131	common_voice_ar_19538953.wav	ليست اليابان بحجم كندا.	not_defined	not_defined	131	14
+329	ara_trn_sp_131	common_voice_ar_19538952.wav	لا أخفي موافقتي على أن التقدم في الحياة يجب أن يكون بجهدك الشخصي	not_defined	not_defined	131	14
+335	ara_trn_sp_132	common_voice_ar_19164214.wav	هل يداك نظيفتان ؟	twenties	male	132	15
+334	ara_trn_sp_132	common_voice_ar_19164212.wav	.من فضلك إلغِ هذا الملفّ	twenties	male	132	15
+332	ara_trn_sp_132	common_voice_ar_19164211.wav	.إذا ابتسم المهزوم أفقد المنتصر لذة الفوز	twenties	male	132	15
+338	ara_trn_sp_133	common_voice_ar_19204608.wav	في الجزء العلوي من كومة المدخنة ، يمكنك رؤية وعاء المدخنة	not_defined	not_defined	133	15
+337	ara_trn_sp_133	common_voice_ar_19204603.wav	.يبدو المعطف الأحمر جميلاً عليك	not_defined	not_defined	133	15
+346	ara_trn_sp_134	common_voice_ar_19204832.wav	.قدماها طويلتان	not_defined	not_defined	134	15
+342	ara_trn_sp_134	common_voice_ar_19204829.wav	ما الذي أحزنها هكذا ؟	not_defined	not_defined	134	15
+345	ara_trn_sp_134	common_voice_ar_19204831.wav	أضف بعض الكزبرة	not_defined	not_defined	134	15
+344	ara_trn_sp_134	common_voice_ar_19204828.wav	ليس معي العنوان الآن.	not_defined	not_defined	134	15
+348	ara_trn_sp_135	common_voice_ar_19249837.wav	لا أدري.	not_defined	not_defined	135	15
+351	ara_trn_sp_135	common_voice_ar_19249838.wav	وَأَمرُهُم شُورَى بَينَهُم	not_defined	not_defined	135	15
+347	ara_trn_sp_135	common_voice_ar_19249839.wav	.عليّ أن أختار بين الذهاب معه أو البقاء هنا وحدي	not_defined	not_defined	135	15
+355	ara_trn_sp_136	common_voice_ar_19103713.wav	.و أخيراً ظهر	not_defined	not_defined	136	16
+354	ara_trn_sp_136	common_voice_ar_19103716.wav	أثق بك.	not_defined	not_defined	136	16
+352	ara_trn_sp_136	common_voice_ar_19103712.wav	رفضت بتي عرض موريل.	not_defined	not_defined	136	16
+356	ara_trn_sp_136	common_voice_ar_19103714.wav	.شرب القليل	not_defined	not_defined	136	16
+359	ara_trn_sp_138	common_voice_ar_19205290.wav	هذا الكتاب ملكٌ للمكتبة.	not_defined	not_defined	138	16
+358	ara_trn_sp_138	common_voice_ar_19205289.wav	درست اللغة الإنجليزية حين كنت هناك.	not_defined	not_defined	138	16
+362	ara_trn_sp_138	common_voice_ar_19205292.wav	.سنسافر إلى الخارج هذا الصيف	not_defined	not_defined	138	16
+366	ara_trn_sp_139	common_voice_ar_19533799.wav	سأُحوّل المبلغ.	not_defined	not_defined	139	16
+365	ara_trn_sp_139	common_voice_ar_19533798.wav	اترك سيارتي و شأنها.	not_defined	not_defined	139	16
+363	ara_trn_sp_139	common_voice_ar_19533795.wav	.لا يعرف أحد عنوانه إلّا توم	not_defined	not_defined	139	16
+1762	ara_trn_sp_14	common_voice_ar_19263293.wav	الصبر مفتاح الفرج	twenties	male	14	16
+1782	ara_trn_sp_14	common_voice_ar_19328645.wav	انتبه! هناك حفرة كبيرة هناك.	twenties	male	14	16
+1763	ara_trn_sp_14	common_voice_ar_19263296.wav	أين أنت ؟	twenties	male	14	16
+1792	ara_trn_sp_14	common_voice_ar_19340854.wav	من يملك هذه الفِلّا ؟	twenties	male	14	16
+372	ara_trn_sp_140	common_voice_ar_19205903.wav	لم أرَ براداً أحمر من قبل.	not_defined	not_defined	140	17
+371	ara_trn_sp_140	common_voice_ar_19205900.wav	الصبر صبران: صبر على ما تكره وصبر على ما تحب	not_defined	not_defined	140	17
+374	ara_trn_sp_141	common_voice_ar_21020800.wav	موريل تشتمني!	twenties	male	141	17
+377	ara_trn_sp_141	common_voice_ar_21020838.wav	""" أشعر بشيء من الدوار. "" "" تبدو شاحباً. من الأفضل لك أن تأخذ بقية اليوم إجازة. """	twenties	male	141	17
+376	ara_trn_sp_141	common_voice_ar_21020836.wav	يا لوقاحتك!	twenties	male	141	17
+373	ara_trn_sp_141	common_voice_ar_21020768.wav	اجلس معي.	twenties	male	141	17
+379	ara_trn_sp_142	common_voice_ar_19204410.wav	.أصل هذه الكلمة يوناني	not_defined	not_defined	142	17
+381	ara_trn_sp_142	common_voice_ar_19204409.wav	ها قد أَتَوْا.	not_defined	not_defined	142	17
+380	ara_trn_sp_142	common_voice_ar_19204411.wav	! ها قد أتى الباص	not_defined	not_defined	142	17
+384	ara_trn_sp_143	common_voice_ar_19808478.wav	الصحة أهم من المال.	not_defined	not_defined	143	17
+386	ara_trn_sp_143	common_voice_ar_19808479.wav	.أفسد المطر نزهتنا	not_defined	not_defined	143	17
+383	ara_trn_sp_143	common_voice_ar_19808476.wav	ألعب التنس كل يوم.	not_defined	not_defined	143	17
+382	ara_trn_sp_143	common_voice_ar_19808480.wav	.من فضلك أرني إياها مرة أخرى	not_defined	not_defined	143	17
+391	ara_trn_sp_144	common_voice_ar_19204503.wav	ركبت القطار الخطأ.	not_defined	not_defined	144	18
+387	ara_trn_sp_144	common_voice_ar_19204506.wav	إنك تعيبني دائماً.	not_defined	not_defined	144	18
+390	ara_trn_sp_144	common_voice_ar_19204507.wav	.يا إلهي ، هذا المكان يبدو رائعاً	not_defined	not_defined	144	18
+388	ara_trn_sp_144	common_voice_ar_19204504.wav	.ضحك الناس عليه	not_defined	not_defined	144	18
+393	ara_trn_sp_145	common_voice_ar_19778911.wav	توم صديقي.	not_defined	not_defined	145	18
+396	ara_trn_sp_145	common_voice_ar_19778920.wav	من الأفضل لك أن تزور طبيبك في الحال.	not_defined	not_defined	145	18
+400	ara_trn_sp_146	common_voice_ar_19206885.wav	.هذا كتاب قديم	not_defined	not_defined	146	18
+398	ara_trn_sp_146	common_voice_ar_19206882.wav	إلى ماذا تنظر ؟	not_defined	not_defined	146	18
+399	ara_trn_sp_146	common_voice_ar_19206883.wav	ابقَ هادئاً من فضلك.	not_defined	not_defined	146	18
+397	ara_trn_sp_146	common_voice_ar_19206881.wav	هل لي أن أرى جواز سفرك ؟	not_defined	not_defined	146	18
+404	ara_trn_sp_147	common_voice_ar_19843023.wav	هل سيعود يوماً ما ؟	not_defined	not_defined	147	18
+403	ara_trn_sp_147	common_voice_ar_19843021.wav	.هما في الغرفة	not_defined	not_defined	147	18
+405	ara_trn_sp_147	common_voice_ar_19843025.wav	أحب أكل البطيخ.	not_defined	not_defined	147	18
+402	ara_trn_sp_147	common_voice_ar_19843020.wav	أنا بخير.	not_defined	not_defined	147	18
+409	ara_trn_sp_148	common_voice_ar_19117938.wav	يقولون بأنه لن يرجع.	not_defined	not_defined	148	19
+410	ara_trn_sp_148	common_voice_ar_19117940.wav	.هذا الدواء سيخفف من صداعك	not_defined	not_defined	148	19
+408	ara_trn_sp_148	common_voice_ar_19117937.wav	.استمر المطر أسبوعاً	not_defined	not_defined	148	19
+411	ara_trn_sp_148	common_voice_ar_19117939.wav	أختي تشبه جدتي.	not_defined	not_defined	148	19
+413	ara_trn_sp_149	common_voice_ar_19244094.wav	غادر جون إلى فرنسا البارحة.	twenties	male	149	19
+415	ara_trn_sp_149	common_voice_ar_19244091.wav	هذا قراري.	twenties	male	149	19
+412	ara_trn_sp_149	common_voice_ar_19244092.wav	.هناك بعبع تحت سريري	twenties	male	149	19
+1861	ara_trn_sp_15	common_voice_ar_19227733.wav	سأترك القرار الأخير لك.	twenties	male	15	19
+1905	ara_trn_sp_15	common_voice_ar_19238089.wav	اِجلس من فضلك.	twenties	male	15	19
+1994	ara_trn_sp_15	common_voice_ar_19238833.wav	.سأشتري السيارة بشرط أن يصلحوا المكابح أولاً	twenties	male	15	19
+418	ara_trn_sp_150	common_voice_ar_19665821.wav	طلبت مني أن أفتح النافذة.	not_defined	not_defined	150	19
+416	ara_trn_sp_150	common_voice_ar_19665823.wav	.منزلي كبير	not_defined	not_defined	150	19
+420	ara_trn_sp_150	common_voice_ar_19665824.wav	هل طلبت الكتاب ؟	not_defined	not_defined	150	19
+417	ara_trn_sp_150	common_voice_ar_19665822.wav	لا تتدخل.	not_defined	not_defined	150	19
+421	ara_trn_sp_151	common_voice_ar_19647457.wav	أنا مهندس حاسب آلي.	not_defined	not_defined	151	20
+424	ara_trn_sp_151	common_voice_ar_19647455.wav	لم أكن مشغولاً بالأمس.	not_defined	not_defined	151	20
+423	ara_trn_sp_151	common_voice_ar_19647456.wav	أنا عطشانٌ جداً.	not_defined	not_defined	151	20
+425	ara_trn_sp_151	common_voice_ar_19647459.wav	اعتقلتها الشرطة.	not_defined	not_defined	151	20
+426	ara_trn_sp_152	common_voice_ar_19730008.wav	من فضلك أدخل بطاقتك.	not_defined	not_defined	152	20
+427	ara_trn_sp_152	common_voice_ar_19730010.wav	لنكمل حديثنا.	not_defined	not_defined	152	20
+432	ara_trn_sp_153	common_voice_ar_19216767.wav	أنا أستخدم برنامج فايرفوكس.	not_defined	not_defined	153	20
+431	ara_trn_sp_153	common_voice_ar_19216766.wav	طعمه لذيذ جداً.	not_defined	not_defined	153	20
+433	ara_trn_sp_153	common_voice_ar_19216768.wav	الرياضيات مادة صعبة بالنسبة لي.	not_defined	not_defined	153	20
+436	ara_trn_sp_154	common_voice_ar_20933205.wav	السكين ليست حادة.	fifties	male	154	20
+437	ara_trn_sp_154	common_voice_ar_20933201.wav	إعتقلت الشرطة المشتبه به امس.	fifties	male	154	20
+440	ara_trn_sp_155	common_voice_ar_20179034.wav	أخبرتني ذلك بنفسك.	not_defined	not_defined	155	21
+442	ara_trn_sp_155	common_voice_ar_20179053.wav	إنك شجاع للغاية.	not_defined	not_defined	155	21
+438	ara_trn_sp_155	common_voice_ar_20179030.wav	آخِرُ شخصٍ أخبرتُه فكرتي ظنّنِيْ مجنونًا.	not_defined	not_defined	155	21
+441	ara_trn_sp_155	common_voice_ar_20179032.wav	انفجر غضباً.	not_defined	not_defined	155	21
+445	ara_trn_sp_156	common_voice_ar_21099434.wav	لا يمكنك أن تدمر حياتي.	twenties	male	156	21
+443	ara_trn_sp_156	common_voice_ar_21099386.wav	حوله ، في كل مكان ، كان دليلاً على الفخامة والعمر	twenties	male	156	21
+444	ara_trn_sp_156	common_voice_ar_21099403.wav	هي ممرضة.	twenties	male	156	21
+453	ara_trn_sp_157	common_voice_ar_19540848.wav	تستخدم شاحنة التزجيج في رصف الطرق عندما يتوقع الصقيع بين عشية وضحاها	not_defined	not_defined	157	21
+449	ara_trn_sp_157	common_voice_ar_19538084.wav	هل أنت وحدك ؟	not_defined	not_defined	157	21
+460	ara_trn_sp_158	common_voice_ar_20896991.wav	هل تلعب كرة القدم ؟	not_defined	not_defined	158	21
+455	ara_trn_sp_158	common_voice_ar_20896985.wav	لا تهاجم الذئابُ الناسَ عادةً.	not_defined	not_defined	158	21
+456	ara_trn_sp_158	common_voice_ar_20896982.wav	كاد أن يُغمى عليها.	not_defined	not_defined	158	21
+461	ara_trn_sp_159	common_voice_ar_20732053.wav	هذه السكين أفادتني كثيرًا.	twenties	male	159	22
+462	ara_trn_sp_159	common_voice_ar_20732070.wav	ما رأيها في ما توصل إليه المؤتمر من نتائج ؟	twenties	male	159	22
+2090	ara_trn_sp_16	common_voice_ar_19398412.wav	إنه رسّام مشهور.	not_defined	not_defined	16	22
+2177	ara_trn_sp_16	common_voice_ar_19471854.wav	.السفر يوسع آفاق تفكير المرء	not_defined	not_defined	16	22
+2185	ara_trn_sp_16	common_voice_ar_19471957.wav	سيسعدني أن أساعدك في أي وقت.	not_defined	not_defined	16	22
+468	ara_trn_sp_160	common_voice_ar_21204198.wav	لا أعتقد أنه قادم.	twenties	male	160	22
+472	ara_trn_sp_160	common_voice_ar_21204303.wav	أما بالنسبة لملابسها ، فلم تكن لديه أفكار على الإطلاق	twenties	male	160	22
+470	ara_trn_sp_160	common_voice_ar_21204290.wav	هذا بيتي.	twenties	male	160	22
+471	ara_trn_sp_160	common_voice_ar_21204297.wav	.نظرت الفتاة حولها	twenties	male	160	22
+478	ara_trn_sp_161	common_voice_ar_20026853.wav	.هناك مستشفى بالقرب من هنا	thirties	female	161	22
+475	ara_trn_sp_161	common_voice_ar_20026829.wav	أريد أن آكل في مطعم الليلة.	thirties	female	161	22
+476	ara_trn_sp_161	common_voice_ar_20026833.wav	لم يكن لديها ما تفعله بالأمس.	thirties	female	161	22
+482	ara_trn_sp_162	common_voice_ar_19488097.wav	.بصراحة لا أوافقك الرأي	not_defined	not_defined	162	23
+484	ara_trn_sp_162	common_voice_ar_19488103.wav	كل من هُوَ وحيد ، وحيد لأنه خائف من الآخرين.	not_defined	not_defined	162	23
+485	ara_trn_sp_162	common_voice_ar_19488101.wav	اهدنا الصراط المستقيم.	not_defined	not_defined	162	23
+492	ara_trn_sp_163	common_voice_ar_19204685.wav	من رسم هذه اللوحات ؟	not_defined	not_defined	163	23
+488	ara_trn_sp_163	common_voice_ar_19204640.wav	أيمكنك إيجادها ؟	not_defined	not_defined	163	23
+491	ara_trn_sp_163	common_voice_ar_19204642.wav	.هيلين في السابعة عشر من عمرها	not_defined	not_defined	163	23
+493	ara_trn_sp_163	common_voice_ar_19204687.wav	القرار لك.	not_defined	not_defined	163	23
+499	ara_trn_sp_164	common_voice_ar_21004405.wav	أين وُلِدَ توم ؟	not_defined	not_defined	164	23
+500	ara_trn_sp_164	common_voice_ar_21004403.wav	ماذا حصل ؟	not_defined	not_defined	164	23
+494	ara_trn_sp_164	common_voice_ar_21004066.wav	نظر إلى السماء.	not_defined	not_defined	164	23
+497	ara_trn_sp_164	common_voice_ar_21004370.wav	.ألعب معه	not_defined	not_defined	164	23
+498	ara_trn_sp_164	common_voice_ar_21004375.wav	إنك مخطئ بشأن ذلك.	not_defined	not_defined	164	23
+504	ara_trn_sp_165	common_voice_ar_19674081.wav	الحب بطبيعته أعمى.	twenties	male	165	23
+501	ara_trn_sp_165	common_voice_ar_19674080.wav	أحاول النوم.	twenties	male	165	23
+503	ara_trn_sp_165	common_voice_ar_19674083.wav	شاهدنا مباراة كرة القدم على التلفاز.	twenties	male	165	23
+505	ara_trn_sp_165	common_voice_ar_19675585.wav	أظن أنه من الأفضل لك أن تبدأ حمية غذائية.	twenties	male	165	23
+509	ara_trn_sp_166	common_voice_ar_20428741.wav	أولا ، يجب أن أشكركم على مساعدتكم.	fourties	male	166	24
+512	ara_trn_sp_166	common_voice_ar_20429199.wav	لا تقرأ في هذه القاعة.	fourties	male	166	24
+514	ara_trn_sp_166	common_voice_ar_20429386.wav	هذا هو الباقي.	fourties	male	166	24
+518	ara_trn_sp_167	common_voice_ar_19204623.wav	مساء الخير.	not_defined	not_defined	167	24
+517	ara_trn_sp_167	common_voice_ar_19204620.wav	سُرقت سيارتي ليلة البارحة.	not_defined	not_defined	167	24
+531	ara_trn_sp_168	common_voice_ar_19231214.wav	لا تنسَ أن تضع طابعاً على رسالتك.	not_defined	not_defined	168	24
+526	ara_trn_sp_168	common_voice_ar_19231203.wav	لم ترد أن تتدخل.	not_defined	not_defined	168	24
+527	ara_trn_sp_168	common_voice_ar_19231202.wav	أخذت تكلم الكلب.	not_defined	not_defined	168	24
+525	ara_trn_sp_168	common_voice_ar_19231205.wav	ذهبنا لمشاهدة فيلم ليلة البارحة.	not_defined	not_defined	168	24
+536	ara_trn_sp_169	common_voice_ar_21100425.wav	ستبدأ الدراسة بعد غد.	not_defined	not_defined	169	24
+534	ara_trn_sp_169	common_voice_ar_21100407.wav	عليك التصرف بأدب أثناء غيابي ، أتسمع ما أقول ؟	not_defined	not_defined	169	24
+535	ara_trn_sp_169	common_voice_ar_21100410.wav	اسمي وانج.	not_defined	not_defined	169	24
+538	ara_trn_sp_169	common_voice_ar_21100471.wav	جلست بجانبي.	not_defined	not_defined	169	24
+543	ara_trn_sp_170	common_voice_ar_20136959.wav	تد يحب زوجته إلزبيث.	thirties	male	170	25
+539	ara_trn_sp_170	common_voice_ar_20136668.wav	لا للتطرف أياً كان.	thirties	male	170	25
+541	ara_trn_sp_170	common_voice_ar_20136670.wav	أبقَوْ حبهما سراً.	thirties	male	170	25
+544	ara_trn_sp_170	common_voice_ar_20137009.wav	هذه الجملة ليس لها أي معنى.	thirties	male	170	25
+551	ara_trn_sp_171	common_voice_ar_19651948.wav	لكل داء دواء	twenties	male	171	25
+553	ara_trn_sp_171	common_voice_ar_19651953.wav	.إذا كان هذا الكلام صحيحًا ، فسنضطر لقبول النتيجة	twenties	male	171	25
+552	ara_trn_sp_171	common_voice_ar_19651954.wav	ما زال توم في المستشفى.	twenties	male	171	25
+556	ara_trn_sp_172	common_voice_ar_20907895.wav	قرأ الكتاب من الجلدة إلى الجلدة.	not_defined	not_defined	172	25
+562	ara_trn_sp_172	common_voice_ar_20907903.wav	قطّعت أمي الكعك.	not_defined	not_defined	172	25
+558	ara_trn_sp_172	common_voice_ar_20907897.wav	تعرّض للإصابة عندما كان يلعب الركبي.	not_defined	not_defined	172	25
+557	ara_trn_sp_172	common_voice_ar_20907896.wav	.تبدو الأرض مبلولة	not_defined	not_defined	172	25
+564	ara_trn_sp_173	common_voice_ar_19623195.wav	رأيت بيتاً سطحه أحمر.	not_defined	not_defined	173	25
+569	ara_trn_sp_173	common_voice_ar_19623263.wav	أمي لا يمكنها ركوب الدراجة.	not_defined	not_defined	173	25
+565	ara_trn_sp_173	common_voice_ar_19623196.wav	ما الذي جعلك تغير رأيك ؟	not_defined	not_defined	173	25
+574	ara_trn_sp_174	common_voice_ar_19225116.wav	أريد الذهاب معك.	not_defined	not_defined	174	26
+575	ara_trn_sp_174	common_voice_ar_19225118.wav	ذهبت إلى الحديقة الحيوان.	not_defined	not_defined	174	26
+576	ara_trn_sp_174	common_voice_ar_19225124.wav	""" هل أنت على ما يرام ؟ "" "" أنا بخير! """	not_defined	not_defined	174	26
+583	ara_trn_sp_175	common_voice_ar_20354929.wav	شخصٌ يُدعَى هنري قال انه يريد ان يقابلك.	twenties	male	175	26
+584	ara_trn_sp_175	common_voice_ar_20354976.wav	.التلوث يضر كوكبنا	twenties	male	175	26
+582	ara_trn_sp_175	common_voice_ar_20354933.wav	لقد انتهى كل شيء بالنسبة لي. لقد فقدت عملي.	twenties	male	175	26
+589	ara_trn_sp_176	common_voice_ar_19983488.wav	كنا جميعنا حاضرون وقت حفل زفافها.	fourties	male	176	26
+588	ara_trn_sp_176	common_voice_ar_19983491.wav	ستتحسن إذا تناولت هذا الدواء.	fourties	male	176	26
+596	ara_trn_sp_176	common_voice_ar_19983504.wav	سأتركك غداً.	fourties	male	176	26
+598	ara_trn_sp_177	common_voice_ar_21075661.wav	ذهب إلى المحل.	not_defined	not_defined	177	26
+604	ara_trn_sp_177	common_voice_ar_21077933.wav	يريد أن يلتقي بك.	not_defined	not_defined	177	26
+597	ara_trn_sp_177	common_voice_ar_21075660.wav	.لا أعرف إلّا هذا	not_defined	not_defined	177	26
+600	ara_trn_sp_177	common_voice_ar_21075694.wav	مرحبًا ، أردت أن أخبرك أن المشكلة قد حُلَّتْ.	not_defined	not_defined	177	26
+614	ara_trn_sp_178	common_voice_ar_19719148.wav	من يدري ؟	not_defined	not_defined	178	27
+606	ara_trn_sp_178	common_voice_ar_19719101.wav	.سأقاتل حتى النفس الأخير	not_defined	not_defined	178	27
+611	ara_trn_sp_178	common_voice_ar_19719146.wav	أمدرّس أنت أم طالب ؟	not_defined	not_defined	178	27
+609	ara_trn_sp_178	common_voice_ar_19719107.wav	أسرع و ستلحق بالقطار.	not_defined	not_defined	178	27
+618	ara_trn_sp_179	common_voice_ar_20016681.wav	أين توني ؟	thirties	female	179	27
+619	ara_trn_sp_179	common_voice_ar_20016680.wav	يجب عليك أن تدرس بجهد أكبر.	thirties	female	179	27
+615	ara_trn_sp_179	common_voice_ar_20016639.wav	الجوّ بارد جداً هذا الشتاء.	thirties	female	179	27
+620	ara_trn_sp_179	common_voice_ar_20016682.wav	.الحاسوب جديد	thirties	female	179	27
+626	ara_trn_sp_180	common_voice_ar_19867387.wav	.أحياناً يكون الصبر لا يُطاق	not_defined	not_defined	180	27
+630	ara_trn_sp_180	common_voice_ar_19867388.wav	لا أفهم معنى هذه الكلمة.	not_defined	not_defined	180	27
+627	ara_trn_sp_180	common_voice_ar_19867384.wav	أستطيع عزف مقطوعات لشوبان.	not_defined	not_defined	180	27
+625	ara_trn_sp_180	common_voice_ar_19867381.wav	تفضل بالجلوس من فضلك.	not_defined	not_defined	180	27
+636	ara_trn_sp_181	common_voice_ar_20937863.wav	يستحسن أن تغادر الآن.	twenties	male	181	27
+635	ara_trn_sp_181	common_voice_ar_20937862.wav	هل لي أن أستعير مذياعك ؟	twenties	male	181	27
+638	ara_trn_sp_181	common_voice_ar_20937876.wav	بقيت في المنزل اليلة الفائتة.	twenties	male	181	27
+633	ara_trn_sp_181	common_voice_ar_20937803.wav	كادت أن تصدمني سيارة.	twenties	male	181	27
+641	ara_trn_sp_181	common_voice_ar_20937952.wav	ظننته صحيحًا.	twenties	male	181	27
+644	ara_trn_sp_182	common_voice_ar_21101378.wav	قابلته البارحة.	twenties	female	182	28
+651	ara_trn_sp_182	common_voice_ar_21177729.wav	لو كنت مكانك لأخذت بنصيحته.	twenties	female	182	28
+649	ara_trn_sp_182	common_voice_ar_21177669.wav	إنك فيلسوف ، أليس ذلك صحيحاً ؟	twenties	female	182	28
+658	ara_trn_sp_183	common_voice_ar_21262385.wav	ليس عليك أن تدرس.	twenties	male	183	28
+655	ara_trn_sp_183	common_voice_ar_21262296.wav	ارفع يديك.	twenties	male	183	28
+652	ara_trn_sp_183	common_voice_ar_21262269.wav	لَا يَسْمَعُونَ حَسِيسَهَا وَهُمْ فِي مَا اشْتَهَتْ أَنْفُسُهُمْ خَالِدُونَ	twenties	male	183	28
+659	ara_trn_sp_183	common_voice_ar_21262384.wav	المشتري هو أضخم كوكب في المجموعة الشمسية.	twenties	male	183	28
+668	ara_trn_sp_184	common_voice_ar_19236913.wav	أحب قصص الغرام.	not_defined	not_defined	184	28
+665	ara_trn_sp_184	common_voice_ar_19236912.wav	رجل ميت ليس له فائدة في المزرعة	not_defined	not_defined	184	28
+667	ara_trn_sp_184	common_voice_ar_19236910.wav	.لا تلعب هنا	not_defined	not_defined	184	28
+675	ara_trn_sp_185	common_voice_ar_19204463.wav	لا يمكنني فهم ما تعنيه هذه الجملة بالضبط.	twenties	male	185	28
+671	ara_trn_sp_185	common_voice_ar_19204413.wav	.إلى ذلك الحين	twenties	male	185	28
+673	ara_trn_sp_185	common_voice_ar_19204417.wav	البارحة كان عيد ميلادي.	twenties	male	185	28
+683	ara_trn_sp_186	common_voice_ar_19209679.wav	هناك شخصٌ ما يريدك على الهاتف.	twenties	male	186	29
+679	ara_trn_sp_186	common_voice_ar_19209649.wav	إن الجميع يحترمك.	twenties	male	186	29
+685	ara_trn_sp_186	common_voice_ar_19209682.wav	.مات من دون أن يترك وصية	twenties	male	186	29
+682	ara_trn_sp_186	common_voice_ar_19209652.wav	.تقع المحطة غرب الفندق	twenties	male	186	29
+692	ara_trn_sp_187	common_voice_ar_19541056.wav	.ذهب للمتجر في آخر لحظة ، قبل الإغلاق بقليل	twenties	female	187	29
+694	ara_trn_sp_187	common_voice_ar_19541088.wav	.في كندا لا يمكنك شرب الكحول حتى تبلغ سن العشرين	twenties	female	187	29
+705	ara_trn_sp_188	common_voice_ar_19205073.wav	.كان هناك حوالي عشرون شخصاً	not_defined	not_defined	188	29
+708	ara_trn_sp_188	common_voice_ar_19205071.wav	.يصبح الجو أدفأ يوماً بعد يوم	not_defined	not_defined	188	29
+702	ara_trn_sp_188	common_voice_ar_19205065.wav	درس كل يوم لمدة ساعة ونصف.	not_defined	not_defined	188	29
+718	ara_trn_sp_189	common_voice_ar_19845509.wav	.أخفض صوت المذياع	twenties	male	189	29
+710	ara_trn_sp_189	common_voice_ar_19845512.wav	هل تأكل في الفصل ؟	twenties	male	189	29
+709	ara_trn_sp_189	common_voice_ar_19845503.wav	أبي يذهب إلى عمله كل صباح عن طريق الباص.	twenties	male	189	29
+720	ara_trn_sp_190	common_voice_ar_19501893.wav	.لم يكن ذلك قصدي	twenties	male	190	30
+726	ara_trn_sp_190	common_voice_ar_19501892.wav	.هناك صفحة ناقصة	twenties	male	190	30
+725	ara_trn_sp_190	common_voice_ar_19501891.wav	لو سمحت ، أين البيض ؟	twenties	male	190	30
+736	ara_trn_sp_191	common_voice_ar_19233454.wav	أعمل لصالح شركة نفط.	twenties	male	191	30
+732	ara_trn_sp_191	common_voice_ar_19233447.wav	نصحته ألا يضع الكثير من السكر.	twenties	male	191	30
+739	ara_trn_sp_192	common_voice_ar_19205875.wav	أصبحت ابنتها امرأة جميلة.	not_defined	not_defined	192	30
+740	ara_trn_sp_192	common_voice_ar_19205882.wav	هل تحبان بعضكما البعض بشدة ؟	not_defined	not_defined	192	30
+738	ara_trn_sp_192	common_voice_ar_19205874.wav	من صنع رجل الثلج ذاك ؟	not_defined	not_defined	192	30
+749	ara_trn_sp_193	common_voice_ar_19854412.wav	متى تنام ؟	teens	male	193	30
+751	ara_trn_sp_193	common_voice_ar_19854423.wav	سيقام حفل زفافهم غداً.	teens	male	193	30
+756	ara_trn_sp_193	common_voice_ar_19854411.wav	أعمل لدى شركة شحن.	teens	male	193	30
+754	ara_trn_sp_193	common_voice_ar_19854420.wav	لم تعد إليّ نقودي.	teens	male	193	30
+765	ara_trn_sp_194	common_voice_ar_19220386.wav	كيف حال الجميع ؟	not_defined	not_defined	194	31
+757	ara_trn_sp_194	common_voice_ar_19220364.wav	إنه صعب أن أتحدث ثلاث لغات	not_defined	not_defined	194	31
+763	ara_trn_sp_194	common_voice_ar_19220366.wav	أعرف أباك.	not_defined	not_defined	194	31
+758	ara_trn_sp_194	common_voice_ar_19220367.wav	.أنتم مدرّسون	not_defined	not_defined	194	31
+774	ara_trn_sp_195	common_voice_ar_20444748.wav	حصل بيري منه على معلومات هامة.	not_defined	not_defined	195	31
+773	ara_trn_sp_195	common_voice_ar_20444732.wav	أرادت أن تكون مدرسةً.	not_defined	not_defined	195	31
+778	ara_trn_sp_196	common_voice_ar_21172250.wav	لا أستطيع أن أجد أي خطأ في نظريته.	thirties	male	196	31
+783	ara_trn_sp_196	common_voice_ar_21179258.wav	اعتقدت أنه مريض.	thirties	male	196	31
+782	ara_trn_sp_196	common_voice_ar_21179256.wav	الجو مشمس اليوم.	thirties	male	196	31
+790	ara_trn_sp_197	common_voice_ar_19375915.wav	.ليركب الجميع	fourties	male	197	31
+787	ara_trn_sp_197	common_voice_ar_19375894.wav	.أفاعي الكوبرا تكون دائمًا متيقظة إلى أبعد الحدود	fourties	male	197	31
+794	ara_trn_sp_197	common_voice_ar_19375924.wav	انتبه! هناك شاحنة قادمة !	fourties	male	197	31
+793	ara_trn_sp_197	common_voice_ar_19375923.wav	أساء الملك استخدام سلطته.	fourties	male	197	31
+798	ara_trn_sp_198	common_voice_ar_19204870.wav	طاب مساؤك. أحلام سعيدة .	not_defined	not_defined	198	32
+799	ara_trn_sp_198	common_voice_ar_19204871.wav	.مشى إلى البيت	not_defined	not_defined	198	32
+805	ara_trn_sp_198	common_voice_ar_19204881.wav	سني يؤلمني.	not_defined	not_defined	198	32
+804	ara_trn_sp_198	common_voice_ar_19204878.wav	.لم تقصد أن تؤذي أحداً بكلامها	not_defined	not_defined	198	32
+795	ara_trn_sp_198	common_voice_ar_19204864.wav	سأدفع أنا.	not_defined	not_defined	198	32
+812	ara_trn_sp_199	common_voice_ar_19968518.wav	إجلس مستقيماً.	not_defined	not_defined	199	32
+815	ara_trn_sp_199	common_voice_ar_19968536.wav	خدعها.	not_defined	not_defined	199	32
+810	ara_trn_sp_199	common_voice_ar_19968507.wav	هل اللغة الإنجليزية أصعب من اليابانية ؟	not_defined	not_defined	199	32
+162	ara_trn_sp_2	common_voice_ar_19064748.wav	ذكر هاتوياما أنه يعيل عائلته بالمراهنة على سباق الخيل.	thirties	female	2	32
+98	ara_trn_sp_2	common_voice_ar_19061962.wav	هل ستغني ؟	thirties	female	2	32
+97	ara_trn_sp_2	common_voice_ar_19061960.wav	بالرغم من أنني أحسست بأن هناك شيئاً غريباً ، لم أعرف بالتحديد ما هو.	thirties	female	2	32
+829	ara_trn_sp_200	common_voice_ar_19090175.wav	! اِنتبه	fourties	male	200	32
+818	ara_trn_sp_200	common_voice_ar_19090098.wav	يعزف على البيانو بشكل جيد جداً	fourties	male	200	32
+826	ara_trn_sp_200	common_voice_ar_19090171.wav	امتلأ قلبي بالسعادة.	fourties	male	200	32
+295	ara_trn_sp_3	common_voice_ar_19530092.wav	هل لي أن أخرج لمشاهدة فيلم الليلة ؟	twenties	male	3	33
+230	ara_trn_sp_3	common_voice_ar_19529914.wav	ما الذي تحدّثت عنه ؟	twenties	male	3	33
+266	ara_trn_sp_3	common_voice_ar_19529991.wav	لقد مضت أربعون سنة.	twenties	male	3	33
+249	ara_trn_sp_3	common_voice_ar_19529955.wav	من اهتم بالكلب في غيابك ؟	twenties	male	3	33
+322	ara_trn_sp_4	common_voice_ar_19234367.wav	رأيتك راكباً سيارتك الجديدة.	twenties	male	4	33
+413	ara_trn_sp_4	common_voice_ar_19234757.wav	أنا لستُ سعيدة.	twenties	male	4	33
+443	ara_trn_sp_4	common_voice_ar_19234880.wav	كالعادة تأخر مايك عن إجتماع بعد الظهر.	twenties	male	4	33
+352	ara_trn_sp_4	common_voice_ar_19234589.wav	إنه لا يسكن في نفس الحي الذي أعيش فيه.	twenties	male	4	33
+528	ara_trn_sp_5	common_voice_ar_19179148.wav	.لا تتحدى من ليس لديه ما يخسره	thirties	female	5	33
+480	ara_trn_sp_5	common_voice_ar_19176870.wav	يحب أن يسبح في الصيف.	thirties	female	5	33
+504	ara_trn_sp_5	common_voice_ar_19177070.wav	أحسن إلى الناس تستعبد قلوبهم فطالما استعبد الإنسان إحسان	thirties	female	5	33
+651	ara_trn_sp_6	common_voice_ar_19855706.wav	.اِقطع الكعكة بالسكين	twenties	female	6	33
+598	ara_trn_sp_6	common_voice_ar_19838544.wav	جميعنا متأكدون من براءته.	twenties	female	6	33
+580	ara_trn_sp_6	common_voice_ar_19837721.wav	! لقد كبرت	twenties	female	6	33
+635	ara_trn_sp_6	common_voice_ar_19847636.wav	! لن أُهزم	twenties	female	6	33
+69	ara_trn_sp_62	common_voice_ar_20527675.wav	أين تعملين ؟	twenties	male	62	34
+67	ara_trn_sp_62	common_voice_ar_20527677.wav	عليّ أن أعيد الكتاب قبل السبت.	twenties	male	62	34
+71	ara_trn_sp_63	common_voice_ar_19850609.wav	مهما قلت عنه ، اظن انه صادق.	fourties	male	63	34
+70	ara_trn_sp_63	common_voice_ar_19850608.wav	.دعني أساعدك	fourties	male	63	34
+73	ara_trn_sp_64	common_voice_ar_19533050.wav	.لم يعد لدينا سكر	not_defined	not_defined	64	34
+75	ara_trn_sp_64	common_voice_ar_19533052.wav	أعرف اسمه.	not_defined	not_defined	64	34
+78	ara_trn_sp_65	common_voice_ar_19206277.wav	هاتان أُختان	not_defined	not_defined	65	34
+77	ara_trn_sp_65	common_voice_ar_19206273.wav	وصلت البارحة.	not_defined	not_defined	65	34
+81	ara_trn_sp_66	common_voice_ar_19803329.wav	أتعرف كيف تلعب الشطرنج ؟	not_defined	not_defined	66	35
+83	ara_trn_sp_67	common_voice_ar_19382767.wav	عمّا تبحث ؟	not_defined	not_defined	67	35
+82	ara_trn_sp_67	common_voice_ar_19382768.wav	.الأمل ليس استراتيجية	not_defined	not_defined	67	35
+85	ara_trn_sp_68	common_voice_ar_19367228.wav	.زادت الفرقة الموسيقية عدد الحفلات في جولتها	thirties	male	68	35
+87	ara_trn_sp_68	common_voice_ar_19367226.wav	.لا ، لن تحتاج	thirties	male	68	35
+89	ara_trn_sp_69	common_voice_ar_20058637.wav	إنه وسيم.	not_defined	not_defined	69	35
+90	ara_trn_sp_69	common_voice_ar_20058646.wav	.الولد عطشان	not_defined	not_defined	69	35
+774	ara_trn_sp_7	common_voice_ar_19194200.wav	أين وُلد ؟	teens	female	7	36
+781	ara_trn_sp_7	common_voice_ar_19194227.wav	أتوقعت أن يقول الحقيقة ؟	teens	female	7	36
+743	ara_trn_sp_7	common_voice_ar_19191571.wav	هل سنذهب إلى حفلة الغد في قاعة المدينة؟	teens	female	7	36
+835	ara_trn_sp_7	common_voice_ar_19203813.wav	أبي يحب أمي.	teens	female	7	36
+92	ara_trn_sp_70	common_voice_ar_19314633.wav	كيف حال الطقس ؟	teens	male	70	36
+93	ara_trn_sp_70	common_voice_ar_19314632.wav	كل ما يحصل ، يحصل لسبب.	teens	male	70	36
+97	ara_trn_sp_72	common_voice_ar_19465398.wav	إن الله يمهل ولا يهمل	not_defined	not_defined	72	36
+96	ara_trn_sp_72	common_voice_ar_19465397.wav	سأحضر بعض كؤوس الشرب.	not_defined	not_defined	72	36
+103	ara_trn_sp_74	common_voice_ar_20312018.wav	متى وصلت ؟	not_defined	not_defined	74	36
+102	ara_trn_sp_74	common_voice_ar_20312016.wav	لديك بعض الكتب.	not_defined	not_defined	74	36
+106	ara_trn_sp_75	common_voice_ar_20268158.wav	.و العكس صحيح	twenties	male	75	37
+104	ara_trn_sp_75	common_voice_ar_20268170.wav	سأرفع عليك قضية.	twenties	male	75	37
+109	ara_trn_sp_76	common_voice_ar_19527482.wav	بإمكانك أن تطلب منه المساعدة.	not_defined	not_defined	76	37
+111	ara_trn_sp_77	common_voice_ar_19375157.wav	.خذني معك	not_defined	not_defined	77	37
+112	ara_trn_sp_77	common_voice_ar_19375155.wav	بعض أصدقائي يمكنهم تحدث الإنجليزية جيداً.	not_defined	not_defined	77	37
+113	ara_trn_sp_78	common_voice_ar_20755023.wav	بإمكانك استخدامها في أي وقت.	twenties	male	78	37
+115	ara_trn_sp_78	common_voice_ar_20755031.wav	لَا يَحْزُنُهُمُ الْفَزَعُ الْأَكْبَرُ وَتَتَلَقَّاهُمُ الْمَلَائِكَةُ هَذَا يَوْمُكُمُ الَّذِي كُنْتُمْ تُوعَدُونَ	twenties	male	78	37
+116	ara_trn_sp_79	common_voice_ar_20373576.wav	.إسمي بوب	thirties	male	79	38
+117	ara_trn_sp_79	common_voice_ar_20373578.wav	أفرش أسناني مرتين في اليوم.	thirties	male	79	38
+897	ara_trn_sp_8	common_voice_ar_19228448.wav	شكراً لك!	twenties	female	8	38
+886	ara_trn_sp_8	common_voice_ar_19228383.wav	هذا المنتزه يذكّرني بطفولتي.	twenties	female	8	38
+896	ara_trn_sp_8	common_voice_ar_19228437.wav	كنت مشغولاً.	twenties	female	8	38
+931	ara_trn_sp_8	common_voice_ar_19235683.wav	.هذا قلم	twenties	female	8	38
+120	ara_trn_sp_81	common_voice_ar_20248419.wav	خرجت على المعاش السنة الفائتة.	teens	other	81	38
+122	ara_trn_sp_81	common_voice_ar_20248440.wav	فعل ما طلبت منه تماماً.	teens	other	81	38
+124	ara_trn_sp_82	common_voice_ar_19219148.wav	بلغها أن تعاود الإتصال بي من فضلك.	thirties	male	82	38
+126	ara_trn_sp_82	common_voice_ar_19219153.wav	كان ذاك أرنوبًا شريرًا.	thirties	male	82	38
+123	ara_trn_sp_82	common_voice_ar_19219147.wav	في البداية واجه صعوبة في التأقلم مع بيته الجديد.	thirties	male	82	38
+130	ara_trn_sp_83	common_voice_ar_19348897.wav	.كان هناك حوالي عشرين دولاراً	twenties	male	83	39
+127	ara_trn_sp_83	common_voice_ar_19348894.wav	لا أحتاج إلى مساعدتك.	twenties	male	83	39
+128	ara_trn_sp_83	common_voice_ar_19348895.wav	كان عطشاناً جداً فطلب القليل من الماء.	twenties	male	83	39
+133	ara_trn_sp_84	common_voice_ar_19743246.wav	.تفاجأت زوجتي	not_defined	not_defined	84	39
+132	ara_trn_sp_84	common_voice_ar_19743245.wav	اخي الصغير يشاهد التلفاز.	not_defined	not_defined	84	39
+131	ara_trn_sp_84	common_voice_ar_19743247.wav	نحن لا نعرف الحقيقة بعد.	not_defined	not_defined	84	39
+137	ara_trn_sp_85	common_voice_ar_19436319.wav	أُدعى جاك.	twenties	male	85	39
+136	ara_trn_sp_85	common_voice_ar_19436318.wav	ذهب الجميع إلى هناك ، أليس كذلك ؟	twenties	male	85	39
+135	ara_trn_sp_85	common_voice_ar_19436314.wav	مدريد عاصمة أسبانيا.	twenties	male	85	39
+139	ara_trn_sp_86	common_voice_ar_19587990.wav	هل يمكنك أن تسبح حقاً ؟	not_defined	not_defined	86	39
+140	ara_trn_sp_86	common_voice_ar_19587991.wav	يمكنك الذهاب إلى المحطة بالحافلة.	not_defined	not_defined	86	39
+142	ara_trn_sp_86	common_voice_ar_19587993.wav	أفضل الجود العطاء قبل الموعد	not_defined	not_defined	86	39
+146	ara_trn_sp_87	common_voice_ar_19641665.wav	هذا كتابها.	not_defined	not_defined	87	40
+145	ara_trn_sp_87	common_voice_ar_19641666.wav	أفكر في الذهاب إلى الجبال.	not_defined	not_defined	87	40
+144	ara_trn_sp_87	common_voice_ar_19641664.wav	يقال أنه لن يعود.	not_defined	not_defined	87	40
+149	ara_trn_sp_88	common_voice_ar_21100462.wav	صَبَاح الْخَيْر جَمِيْعاً.	not_defined	not_defined	88	40
+148	ara_trn_sp_88	common_voice_ar_21100437.wav	.أشعل الضوء. لا يمكنني أن أرى شيئاً	not_defined	not_defined	88	40
+147	ara_trn_sp_88	common_voice_ar_21100439.wav	تعبتُ كثيرا بسبب السباحة.	not_defined	not_defined	88	40
+151	ara_trn_sp_89	common_voice_ar_19204374.wav	كان أي شيء غير عادي أو غير طبيعي كافياً لإرسال زميل إلى مولوكاي	not_defined	not_defined	89	40
+153	ara_trn_sp_89	common_voice_ar_19204376.wav	.اشترت البيض بالدزينة	not_defined	not_defined	89	40
+152	ara_trn_sp_89	common_voice_ar_19204373.wav	.بالكاد أستطيع سماعك	not_defined	not_defined	89	40
+1124	ara_trn_sp_9	common_voice_ar_19210355.wav	أحب الكعك أيضاً.	not_defined	not_defined	9	40
+1080	ara_trn_sp_9	common_voice_ar_19206774.wav	.مج بطول كن	not_defined	not_defined	9	40
+1096	ara_trn_sp_9	common_voice_ar_19206815.wav	بيتك يحتاج لإصلاح.	not_defined	not_defined	9	40
+1130	ara_trn_sp_9	common_voice_ar_19217298.wav	.أعمل منذ السادسة صباحاً	not_defined	not_defined	9	40
+1134	ara_trn_sp_9	common_voice_ar_19217308.wav	.أنا عاطل عن العمل	not_defined	not_defined	9	40
+1032	ara_trn_sp_9	common_voice_ar_19190476.wav	إخلع خفيك من فضلك.	not_defined	not_defined	9	40
+155	ara_trn_sp_90	common_voice_ar_19968629.wav	.لدى بتي صوت رقيق	twenties	male	90	41
+156	ara_trn_sp_90	common_voice_ar_19968632.wav	لقد تأخرت عن العمل.	twenties	male	90	41
+158	ara_trn_sp_90	common_voice_ar_19968638.wav	أشتاق إليه.	twenties	male	90	41
+162	ara_trn_sp_91	common_voice_ar_19395296.wav	أين مكان عملك ؟	twenties	male	91	41
+161	ara_trn_sp_91	common_voice_ar_19395294.wav	.حتى الأطفال يمكنهم فهم ذلك	twenties	male	91	41
+160	ara_trn_sp_91	common_voice_ar_19395293.wav	انه حاليا في رحلة عمل في ناجويا.	twenties	male	91	41
+163	ara_trn_sp_92	common_voice_ar_19540127.wav	.سافرت على نفقتي	not_defined	not_defined	92	41
+166	ara_trn_sp_92	common_voice_ar_19540125.wav	لكن هذا ليس صحيحاً.	not_defined	not_defined	92	41
+167	ara_trn_sp_93	common_voice_ar_19204176.wav	التحدث بالإنجليزية ليس أمراً سهلاً.	not_defined	not_defined	93	41
+168	ara_trn_sp_93	common_voice_ar_19204175.wav	غطاه الوحل من رأسه إلى أخمص قدميه.	not_defined	not_defined	93	41
+173	ara_trn_sp_94	common_voice_ar_19380209.wav	في وقت واحد سيتم إنشاء عشرات من دول الكومنولث التعاونية	not_defined	not_defined	94	42
+170	ara_trn_sp_94	common_voice_ar_19380208.wav	دعني أشرح سبب وصولي متأخراً.	not_defined	not_defined	94	42
+174	ara_trn_sp_95	common_voice_ar_19322540.wav	.ينقص شوكة	twenties	male	95	42
+175	ara_trn_sp_95	common_voice_ar_19322539.wav	وفقا للشاعر ، أبريل هو أقسى شهر	twenties	male	95	42
+180	ara_trn_sp_96	common_voice_ar_20023514.wav	كل من فهمني هم حفنة من الناس.	not_defined	not_defined	96	42
+178	ara_trn_sp_96	common_voice_ar_20023497.wav	لم أسمع بقصة مثل هذه من قبل.	not_defined	not_defined	96	42
+179	ara_trn_sp_96	common_voice_ar_20023495.wav	تم تنظيم مجموعة من رؤوس الأموال الكندية بسرعة وتم التماسها للحصول على نفس الامتيازات	not_defined	not_defined	96	42
+184	ara_trn_sp_97	common_voice_ar_19680201.wav	لم يصل الباص بعد.	thirties	male	97	42
+182	ara_trn_sp_97	common_voice_ar_19680199.wav	أدرس ثلاث ساعات في اليوم.	thirties	male	97	42
+185	ara_trn_sp_97	common_voice_ar_19680203.wav	لقد تركت أنوارك مفتوحة.	thirties	male	97	42
+187	ara_trn_sp_98	common_voice_ar_19842602.wav	.تدور الأرض	not_defined	not_defined	98	43
+189	ara_trn_sp_98	common_voice_ar_19842606.wav	ماعليك إلا ان تسأل.	not_defined	not_defined	98	43
+186	ara_trn_sp_98	common_voice_ar_19842605.wav	شهر في أستراليا سينهي بي	not_defined	not_defined	98	43
+841	ara_tst_sp_1	common_voice_ar_19224914.wav	.الأرض ، المريخ ، و المشتري كلهم كواكب	not_defined	not_defined	1	43
+835	ara_tst_sp_1	common_voice_ar_19224888.wav	عرّفني بأختها.	not_defined	not_defined	1	43
+830	ara_tst_sp_1	common_voice_ar_19224862.wav	.الصين غنية بالموارد الطبيعية	not_defined	not_defined	1	43
+955	ara_tst_sp_10	common_voice_ar_19233861.wav	هل هذا هو الحب ؟	twenties	male	10	43
+957	ara_tst_sp_10	common_voice_ar_19233862.wav	هذا زميلي بالمحاضرة	twenties	male	10	43
+962	ara_tst_sp_10	common_voice_ar_19233876.wav	لدي ثلاث أولاد خالة.	twenties	male	10	43
+952	ara_tst_sp_10	common_voice_ar_19233797.wav	عليك أن تؤدي واجباتك حالاً.	twenties	male	10	43
+958	ara_tst_sp_10	common_voice_ar_19233880.wav	توقف جاك فجأة عن الكلام عندما دخلت ماري إلى الغرفة.	twenties	male	10	43
+970	ara_tst_sp_11	common_voice_ar_19206429.wav	.لا أقدر أن أسامحه على ما فعل	not_defined	not_defined	11	43
+977	ara_tst_sp_11	common_voice_ar_19206446.wav	لدي مغص.	not_defined	not_defined	11	43
+964	ara_tst_sp_11	common_voice_ar_19206424.wav	.أخذ أخته معه	not_defined	not_defined	11	43
+971	ara_tst_sp_11	common_voice_ar_19206432.wav	كلمة أخرى للكوسة هي الكوسة	not_defined	not_defined	11	43
+986	ara_tst_sp_12	common_voice_ar_21101454.wav	.يبدو أن العصافة هدأت	twenties	female	12	44
+980	ara_tst_sp_12	common_voice_ar_21101360.wav	علينا أن نتوقع الأسوأ.	twenties	female	12	44
+988	ara_tst_sp_12	common_voice_ar_21101478.wav	أنت محق تماماً!	twenties	female	12	44
+992	ara_tst_sp_12	common_voice_ar_21101495.wav	يا لك من وقح!	twenties	female	12	44
+984	ara_tst_sp_12	common_voice_ar_21101455.wav	أظنه يختلف حين تفكر فيه على المدى البعيد.	twenties	female	12	44
+981	ara_tst_sp_12	common_voice_ar_21101385.wav	! أنزِل يديك	twenties	female	12	44
+979	ara_tst_sp_12	common_voice_ar_21101359.wav	الشاحنة صدمت الكلب.	twenties	female	12	44
+995	ara_tst_sp_13	common_voice_ar_19653457.wav	أنا جوعان.	teens	male	13	44
+999	ara_tst_sp_13	common_voice_ar_19653546.wav	عليك أن تنام.	teens	male	13	44
+1002	ara_tst_sp_13	common_voice_ar_19653548.wav	لديك مستقبل مشرق.	teens	male	13	44
+998	ara_tst_sp_13	common_voice_ar_19653516.wav	أظن أنني قد كنت هنا.	teens	male	13	44
+1024	ara_tst_sp_14	common_voice_ar_21314822.wav	هل فهمت ؟	twenties	male	14	44
+1011	ara_tst_sp_14	common_voice_ar_21308018.wav	هناك الكثير من الورود الحمراء في الحديقة.	twenties	male	14	44
+1022	ara_tst_sp_14	common_voice_ar_21310486.wav	شاهدت التلفاز هذا الصباح.	twenties	male	14	44
+1018	ara_tst_sp_14	common_voice_ar_21310360.wav	.لوني المفضّل هو الأحمر	twenties	male	14	44
+1023	ara_tst_sp_14	common_voice_ar_21310497.wav	إنه أصعب مما تظن.	twenties	male	14	44
+1019	ara_tst_sp_14	common_voice_ar_21310390.wav	لا أحد يملك القمر.	twenties	male	14	44
+1014	ara_tst_sp_14	common_voice_ar_21310273.wav	هل تسكن هنا ؟	twenties	male	14	44
+1013	ara_tst_sp_14	common_voice_ar_21310242.wav	أحب القطط والكلاب.	twenties	male	14	44
+1033	ara_tst_sp_15	common_voice_ar_19204547.wav	.احترقت المنازل واحدة تلو الأخرى	not_defined	not_defined	15	44
+1038	ara_tst_sp_15	common_voice_ar_19246012.wav	.الكتابُ سهلٌ	not_defined	not_defined	15	44
+1029	ara_tst_sp_15	common_voice_ar_19204523.wav	هذه السيارة أكبر من تلك.	not_defined	not_defined	15	44
+1030	ara_tst_sp_15	common_voice_ar_19204525.wav	كلا الطالبين لم ينجحا الإختبار.	not_defined	not_defined	15	44
+1042	ara_tst_sp_16	common_voice_ar_21091561.wav	لا يوجد شك.	twenties	male	16	45
+1052	ara_tst_sp_16	common_voice_ar_21374282.wav	وارض الله واسعة ولكن اذا نزل القضاء ضاق الفضاء	twenties	male	16	45
+1050	ara_tst_sp_16	common_voice_ar_21374204.wav	ماذا هناك في حقيبتك ؟	twenties	male	16	45
+1044	ara_tst_sp_16	common_voice_ar_21315990.wav	أين كتابي ؟	twenties	male	16	45
+1065	ara_tst_sp_17	common_voice_ar_19794804.wav	على العموم ، التاريخ يكرّر نفسه.	fourties	male	17	45
+1058	ara_tst_sp_17	common_voice_ar_19794793.wav	هى غائبة بسبب المرض.	fourties	male	17	45
+1059	ara_tst_sp_17	common_voice_ar_19794795.wav	.لا أعرف متى جاء بوب إلى اليابان	fourties	male	17	45
+1092	ara_tst_sp_18	common_voice_ar_19204333.wav	صححني إذا كنت مخطئاً.	not_defined	not_defined	18	45
+1087	ara_tst_sp_18	common_voice_ar_19204315.wav	ليس لدينا خيار سوى الانتظار قليلا من اجل المقاعد.	not_defined	not_defined	18	45
+1080	ara_tst_sp_18	common_voice_ar_19204287.wav	.نحن نتعلم بالتجربة	not_defined	not_defined	18	45
+1079	ara_tst_sp_18	common_voice_ar_19204289.wav	يصبح الجو أبرد يوماً بعد يوم.	not_defined	not_defined	18	45
+1091	ara_tst_sp_18	common_voice_ar_19204338.wav	أعطاني توم قلماً.	not_defined	not_defined	18	45
+1081	ara_tst_sp_18	common_voice_ar_19204288.wav	فكرة جيدة أن نلعب الشوقي بعد الغداء.	not_defined	not_defined	18	45
+1095	ara_tst_sp_19	common_voice_ar_19060091.wav	الألمانية ليست لغة سهلة.	not_defined	not_defined	19	45
+1099	ara_tst_sp_19	common_voice_ar_19060104.wav	الحمد لله.	not_defined	not_defined	19	45
+1100	ara_tst_sp_19	common_voice_ar_19060107.wav	خذ مظلة معك في حال أمطرت.	not_defined	not_defined	19	45
+1094	ara_tst_sp_19	common_voice_ar_19060089.wav	ماتت عمتي منذ سنتين.	not_defined	not_defined	19	45
+1109	ara_tst_sp_19	common_voice_ar_19302449.wav	وحتى في وقت مبكر من الرحلة ، أيضا	not_defined	not_defined	19	45
+1103	ara_tst_sp_19	common_voice_ar_19089321.wav	.أُعجبت عمتي بنجاحي	not_defined	not_defined	19	45
+845	ara_tst_sp_2	common_voice_ar_19489431.wav	أقلعت عن التدخين منذ سنة.	thirties	male	2	46
+851	ara_tst_sp_2	common_voice_ar_19489430.wav	كنت في الجبال.	thirties	male	2	46
+848	ara_tst_sp_2	common_voice_ar_19489435.wav	سجلت رقم هاتفه.	thirties	male	2	46
+852	ara_tst_sp_2	common_voice_ar_19489450.wav	أخذت تبكي.	thirties	male	2	46
+1127	ara_tst_sp_20	common_voice_ar_19664758.wav	.فشل تلو الآخر	twenties	male	20	46
+1114	ara_tst_sp_20	common_voice_ar_19664565.wav	.تبدو شاحب الوجه	twenties	male	20	46
+1112	ara_tst_sp_20	common_voice_ar_19664564.wav	أيمكنني أن أستعير سِكّينَك ؟	twenties	male	20	46
+1121	ara_tst_sp_20	common_voice_ar_19664726.wav	.لا يمكنني نسيان معروفه	twenties	male	20	46
+1118	ara_tst_sp_20	common_voice_ar_19664698.wav	هذه قصة حقيقية.	twenties	male	20	46
+1142	ara_tst_sp_21	common_voice_ar_20275171.wav	العلم يرفع بيتاً لا عماد له والجهل يهدم بيت العز والشرف	twenties	female	21	46
+1145	ara_tst_sp_21	common_voice_ar_20275187.wav	.خذ الكرسي الآخر	twenties	female	21	46
+1134	ara_tst_sp_21	common_voice_ar_20275154.wav	.تأخرنا بسبب العاصفة	twenties	female	21	46
+1131	ara_tst_sp_21	common_voice_ar_20275122.wav	نيويورك مدينة كبيرة.	twenties	female	21	46
+1162	ara_tst_sp_22	common_voice_ar_19204777.wav	هل أنت صينية أم يابانية ؟	not_defined	not_defined	22	46
+1154	ara_tst_sp_22	common_voice_ar_19204677.wav	حبل الكذب صغير	not_defined	not_defined	22	46
+1155	ara_tst_sp_22	common_voice_ar_19204695.wav	ركل الكرة.	not_defined	not_defined	22	46
+1165	ara_tst_sp_22	common_voice_ar_19204775.wav	أيمكنني أن أستعير مضرب التنس خاصتك لليوم ؟	not_defined	not_defined	22	46
+1156	ara_tst_sp_22	common_voice_ar_19204693.wav	بكين هي عاصمة الصين.	not_defined	not_defined	22	46
+1181	ara_tst_sp_23	common_voice_ar_19220470.wav	.أنا أيضاً أحب الموسيقى	not_defined	not_defined	23	47
+1171	ara_tst_sp_23	common_voice_ar_19220443.wav	ألا يمكنك أن تأجلها إلى الغد ؟	not_defined	not_defined	23	47
+1168	ara_tst_sp_23	common_voice_ar_19220435.wav	كان يقف وراء الباب.	not_defined	not_defined	23	47
+1170	ara_tst_sp_23	common_voice_ar_19220438.wav	لم يرد أحد على الهاتف.	not_defined	not_defined	23	47
+1175	ara_tst_sp_23	common_voice_ar_19220446.wav	لماذا لم تستطع النوم ليلة أمس ؟	not_defined	not_defined	23	47
+1174	ara_tst_sp_23	common_voice_ar_19220471.wav	.عرض هذا النهر ميل	not_defined	not_defined	23	47
+1190	ara_tst_sp_24	common_voice_ar_19351497.wav	بدأت صحته تتدهور.	not_defined	not_defined	24	47
+1195	ara_tst_sp_24	common_voice_ar_19351512.wav	ترجم هذه الجملة إلى الإنجليزية.	not_defined	not_defined	24	47
+1187	ara_tst_sp_24	common_voice_ar_19351483.wav	استمرت المحاضرة ساعتين.	not_defined	not_defined	24	47
+1194	ara_tst_sp_24	common_voice_ar_19351498.wav	هذا الشبل من ذاك الأسد	not_defined	not_defined	24	47
+1191	ara_tst_sp_24	common_voice_ar_19351507.wav	.في هذه الظروف ، لا يمكننا النجاح	not_defined	not_defined	24	47
+1211	ara_tst_sp_25	common_voice_ar_19220380.wav	متى ينتهي ذلك ؟	twenties	male	25	47
+1222	ara_tst_sp_25	common_voice_ar_19220406.wav	هل أنهيت واجباتك ؟	twenties	male	25	47
+1204	ara_tst_sp_25	common_voice_ar_19220362.wav	إنها تمطر بشدة.	twenties	male	25	47
+1212	ara_tst_sp_25	common_voice_ar_19220379.wav	لم يُقدَّر للبشر إطلاقًا أن يعيشوا إلى الأبد.	twenties	male	25	47
+1213	ara_tst_sp_25	common_voice_ar_19220381.wav	.ذلك مثير للإهتمام	twenties	male	25	47
+1228	ara_tst_sp_26	common_voice_ar_19203931.wav	أين تلعب التنس ؟	twenties	male	26	47
+1233	ara_tst_sp_26	common_voice_ar_19203945.wav	.لا تتسرع بالإجابة	twenties	male	26	47
+1239	ara_tst_sp_26	common_voice_ar_19203953.wav	لا بد أنك تمزح!	twenties	male	26	47
+1245	ara_tst_sp_26	common_voice_ar_19203956.wav	.هذه ملاحظة في غاية الأهمية	twenties	male	26	47
+1238	ara_tst_sp_26	common_voice_ar_19203952.wav	هل غرفتي حضيرة للخنازير ؟	twenties	male	26	47
+1230	ara_tst_sp_26	common_voice_ar_19203940.wav	إبحث تجد.	twenties	male	26	47
+860	ara_tst_sp_3	common_voice_ar_19728764.wav	علي أن أبقى في السرير طوال اليوم.	twenties	male	3	48
+862	ara_tst_sp_3	common_voice_ar_19728778.wav	أذهبت إلى المدرسة اليوم ؟	twenties	male	3	48
+859	ara_tst_sp_3	common_voice_ar_19728763.wav	يمكنك استعارة الكتاب بشرط أن تحافظ عليه.	twenties	male	3	48
+863	ara_tst_sp_3	common_voice_ar_19728779.wav	افتقدتك كثيراً!	twenties	male	3	48
+882	ara_tst_sp_4	common_voice_ar_19947212.wav	كانت يومي غاضبة بعض الشيء.	not_defined	not_defined	4	48
+878	ara_tst_sp_4	common_voice_ar_19947224.wav	للنادي ثلاثون مشترك.	not_defined	not_defined	4	48
+874	ara_tst_sp_4	common_voice_ar_19947206.wav	ما رأيك في خطاب الرئيس ؟	not_defined	not_defined	4	48
+875	ara_tst_sp_4	common_voice_ar_19947207.wav	ماذا صنعت ؟	not_defined	not_defined	4	48
+870	ara_tst_sp_4	common_voice_ar_19947194.wav	! يا لها من فتاة جميلة	not_defined	not_defined	4	48
+872	ara_tst_sp_4	common_voice_ar_19947196.wav	قابلنا كاتباً.	not_defined	not_defined	4	48
+873	ara_tst_sp_4	common_voice_ar_19947204.wav	دائماً ما تبقي غرفتها نظيفة.	not_defined	not_defined	4	48
+890	ara_tst_sp_5	common_voice_ar_19259861.wav	حل الربيع.	twenties	male	5	48
+885	ara_tst_sp_5	common_voice_ar_19259856.wav	احتاج المزيد من الوقت.	twenties	male	5	48
+895	ara_tst_sp_5	common_voice_ar_19274825.wav	.لا يستطيع أحدٌ مساعدتي	twenties	male	5	48
+883	ara_tst_sp_5	common_voice_ar_19259855.wav	.أعد الكتاب إلى صاحبه	twenties	male	5	48
+884	ara_tst_sp_5	common_voice_ar_19259854.wav	.لا أستطيع رؤية شيء	twenties	male	5	48
+904	ara_tst_sp_6	common_voice_ar_19706400.wav	بإمكان بيتي العزف على البيانو.	twenties	female	6	48
+901	ara_tst_sp_6	common_voice_ar_19706363.wav	.اخلع نعلَيْك	twenties	female	6	48
+910	ara_tst_sp_6	common_voice_ar_19706667.wav	رفضت المال.	twenties	female	6	48
+912	ara_tst_sp_7	common_voice_ar_19897046.wav	بالصحة و العافية!	not_defined	not_defined	7	49
+916	ara_tst_sp_7	common_voice_ar_19897132.wav	أكلت الصبر وذقت المر فلم أرى شيئا أمر من الفقر.	not_defined	not_defined	7	49
+913	ara_tst_sp_7	common_voice_ar_19897044.wav	إنه على وشك المغادرة إلى كندا.	not_defined	not_defined	7	49
+917	ara_tst_sp_7	common_voice_ar_19897130.wav	برجاء إرفاق شهادة جودة.	not_defined	not_defined	7	49
+926	ara_tst_sp_8	common_voice_ar_19955695.wav	.هدفي في الحياة هو أن أصبح كاتباً روائياً	not_defined	not_defined	8	49
+927	ara_tst_sp_8	common_voice_ar_19955696.wav	أعطني انطباعك عن هذا الكتاب.	not_defined	not_defined	8	49
+925	ara_tst_sp_8	common_voice_ar_19955693.wav	شارك في المظاهرة ما يقارب ألف شخص.	not_defined	not_defined	8	49
+932	ara_tst_sp_8	common_voice_ar_19968969.wav	عليك أن ترتاح بعد التمرين.	not_defined	not_defined	8	49
+944	ara_tst_sp_9	common_voice_ar_19666398.wav	الجو حار جداً.	not_defined	not_defined	9	49

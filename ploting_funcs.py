@@ -1,17 +1,8 @@
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
-
 import numpy as np
-
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.decomposition import PCA
 from scipy.spatial.distance import cosine
 
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.decomposition import PCA
-from scipy.spatial.distance import cosine
 
 def plot_embedding(embedding_list, config):
     # Check if the input is a list of embeddings

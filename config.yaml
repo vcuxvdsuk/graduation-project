@@ -1,12 +1,16 @@
 # Configurations for the Speaker Embedding Pipeline
 
-# Audio file to process
 
-embedding_output_file: /media/ACLP-Nimble/Users/shakedb/final_project/speech_brain_valid_sound/Arabic/embedding
-train_audio_list_file: /media/ACLP-Nimble/Users/shakedb/final_project/speech_brain_valid_sound/Arabic/families.csv
-test_audio_list_file: /media/ACLP-Nimble/Users/shakedb/final_project/speech_brain_valid_sound/Arabic/families_test.csv
-audio_dir: /media/ACLP-Nimble/Users/shakedb/final_project/speech_brain_valid_sound/Arabic/combined_voice_dir
-familes_emb: /media/ACLP-Nimble/Users/shakedb/final_project/speech_brain_valid_sound/Arabic/familes_emb.csv
+# need to be updated for the current directory of the project for current 
+CURRENT_DIR: C:\Users\USER\source\repos\vcuxvdsuk\graduation-project
+
+
+# Audio file to process
+embedding_output_file: "${CURRENT_DIR}/Arabic/embedding"
+train_audio_list_file: "${CURRENT_DIR}/Arabic/families.csv"
+test_audio_list_file: "${CURRENT_DIR}/Arabic/families_test.csv"
+audio_dir: "${CURRENT_DIR}/Arabic/combined_voice_dir"
+familes_emb: "${CURRENT_DIR}/Arabic/familes_emb.csv"
 
 # ECAPA-TDNN model configuration
 speechbrain_model:
