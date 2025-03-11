@@ -10,7 +10,7 @@ import numpy as np
 from tqdm import tqdm
 
 # Load configuration from the YAML file
-def load_config(config_file='Users/shakedb/final_project/source code/config.yaml'):
+def load_config(config_file='app/config.yaml'):
     with open(config_file, 'r') as f:
         config = yaml.safe_load(f)
     return config
@@ -26,7 +26,6 @@ def load_model_ASR(config):
     asr = SpeakerRecognition.from_hparams(source=config['speechbrain_model']['ASR'],
                                         savedir=config['speechbrain_model']['savedir'])
     return asr
-
 
 def extract_single_embedding(speaker_model, audio_path):
     try:
@@ -46,7 +45,7 @@ def extract_single_embedding(speaker_model, audio_path):
         embedding = speaker_model.encode_batch(signal)
 
         # Return the embedding as a numpy array
-        return embedding.cpu().numpy()
+        return embedding.squeeze().cpu().numpy()
 
     except Exception as e:
         print(f"Error processing audio file {audio_path}: {e}")
@@ -94,7 +93,7 @@ def extract_family_embeddings(speaker_model, audio_dir, file, emb_dir, csv_file)
                 embedding = speaker_model.encode_batch(signal)
 
                 # Append the embedding to the list for this family
-                family_embeddings_list.append(embedding.cpu().numpy())
+                family_embeddings_list.append(embedding.squeeze().cpu().numpy())
 
             # Store the embeddings for the entire family (as a list of arrays)
             family_embedding_array = np.array(family_embeddings_list)

@@ -13,6 +13,19 @@ def count_unique_speakers(df):
     
     return unique_speakers
 
+#gets the file and a family_id and return the num of uniqe client id of given family_id assuming the family_id are sorted
+def get_unique_speakers_in_family(file_path, family_id):
+    # Read the CSV file
+    df = pd.read_csv(file_path, delimiter="\t")
+    
+    # Filter the DataFrame by the given family_id
+    family_df = df[df['family_id'] == family_id]
+    
+    # Get the unique client_id values
+    unique_clients = family_df['client_id'].nunique()
+    
+    return unique_clients
+
 class Evaluations:
     # Method to calculate Equal Error Rate (EER)
     def calculate_eer(self, false_acceptance_rates, false_rejection_rates):
