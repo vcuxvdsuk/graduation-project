@@ -6,87 +6,95 @@ from sklearn.decomposition import PCA
 from model_funcs import *
 from sklearn.mixture import GaussianMixture
 import tensorflow as tf
-from sklearn.cluster import KMeans
 from sklearn.cluster import SpectralClustering
+import warnings
 
-def simple_cluster(embeding, n_clusters=5):
+def simple_cluster(embedding, n_clusters=5, family_id=-1):
+    """
+    Perform K-means clustering on the embeddings and return cluster labels and centroids.
+    """
+    if isinstance(embedding, list):
+        embedding = np.array(embedding)
 
-
-    # Step 1: Prepare your embeddings (assuming `embeddings` is a NumPy array)
-    # Example: Let's assume `embeddings` is a 2D NumPy array where each row is an embedding vector.
-    # `embeddings` should have shape (n_samples, n_features)
-    # For the sake of this example, let's assume you already have embeddings loaded:
-
-    # Step 2: Apply K-means clustering
-    #n_clusters = 3  # Specify the number of clusters (change this value as needed)
+    # Apply K-means clustering
     kmeans = KMeans(n_clusters=n_clusters, random_state=42)
-    kmeans.fit(embeding)
+    labels = kmeans.fit_predict(embedding)
 
-    # Get the cluster labels
-    labels = kmeans.labels_
-
-    # Step 3: Calculate the Silhouette score
-    sil_score = silhouette_score(embeding, labels)
-    print(f"Silhouette Score: {sil_score}")
-
-    # Step 4: Visualize the clustering using PCA (Dimensionality reduction for 2D or 3D visualization)
-    # PCA to reduce the embeddings to 2D for visualization
-    pca = PCA(n_components=2)
-    reduced_embeddings = pca.fit_transform(embeding)
-
-    # Plot the clusters
-    plt.figure(figsize=(8, 6))
-    plt.scatter(reduced_embeddings[:, 0], reduced_embeddings[:, 1], c=labels, cmap='Spectral', marker='o')
-    plt.title(f"K-means Clustering (Silhouette Score: {sil_score:.2f})")
-    plt.xlabel('PCA Component 1')
-    plt.ylabel('PCA Component 2')
-    plt.colorbar(label='Cluster Label')
-    plt.savefig('clustering_plot.png', dpi=300) 
-    plt.show()
-
-
-def gmm_cluster(embeding, n_clusters=5):
-    """
-    Perform Gaussian Mixture Model clustering on the embeddings.
-    """
-    
-    #n_clusters = 10
-    gmm = GaussianMixture(n_components=n_clusters, random_state=42)
-    gmm.fit(embeding)
-    
-    # Get the cluster labels
-    labels = gmm.predict(embeding)
-    
     # Calculate the Silhouette score
-    sil_score = silhouette_score(embeding, labels)
+    sil_score = silhouette_score(embedding, labels)
     print(f"Silhouette Score: {sil_score}")
-    
+
+    # Calculate the centroids of each cluster (mean of all points in each cluster)
+    centroids = kmeans.cluster_centers_
+
     # Visualize the clustering using PCA (for 2D visualization)
     pca = PCA(n_components=2)
-    reduced_embeddings = pca.fit_transform(embeding)
+    reduced_embeddings = pca.fit_transform(embedding)
     
     plt.figure(figsize=(8, 6))
     plt.scatter(reduced_embeddings[:, 0], reduced_embeddings[:, 1], c=labels, cmap='Spectral', marker='o')
-    plt.title(f"GMM Clustering (Silhouette Score: {sil_score:.2f})")
+    plt.title(f"K-means Clustering {family_id} (Silhouette Score: {sil_score:.2f})")
     plt.xlabel('PCA Component 1')
     plt.ylabel('PCA Component 2')
     plt.colorbar(label='Cluster Label')
-    plt.savefig('gmm_clustering_plot.png', dpi=300)
+    plt.savefig(f'plots/kmeans_clustering_plot{family_id}.png', dpi=300)
     plt.show()
+    plt.close()
+
+    # Return labels and centroids
+    return labels, centroids
 
 
-def dec_cluster(embeding, n_clusters=5):
+def gmm_cluster(embedding, n_clusters=5, family_id=-1):
     """
-    Perform Deep Embedded Clustering (DEC) on the embeddings.
+    Perform Gaussian Mixture Model clustering on the embeddings and return cluster labels and centroids.
     """
+    if isinstance(embedding, list):
+        embedding = np.array(embedding)
+
+    # Apply Gaussian Mixture Model clustering
+    gmm = GaussianMixture(n_components=n_clusters, random_state=42)
+    labels = gmm.fit_predict(embedding)
+
+    # Calculate the Silhouette score
+    sil_score = silhouette_score(embedding, labels)
+    print(f"Silhouette Score: {sil_score}")
+
+    # Calculate the centroids of each cluster (mean of all points in each cluster)
+    centroids = np.array([embedding[labels == i].mean(axis=0) for i in range(n_clusters)])
+
+    # Visualize the clustering using PCA (for 2D visualization)
+    pca = PCA(n_components=2)
+    reduced_embeddings = pca.fit_transform(embedding)
     
+    plt.figure(figsize=(8, 6))
+    plt.scatter(reduced_embeddings[:, 0], reduced_embeddings[:, 1], c=labels, cmap='Spectral', marker='o')
+    plt.title(f"GMM Clustering {family_id} (Silhouette Score: {sil_score:.2f})")
+    plt.xlabel('PCA Component 1')
+    plt.ylabel('PCA Component 2')
+    plt.colorbar(label='Cluster Label')
+    plt.savefig(f'plots/gmm_clustering_plot{family_id}.png', dpi=300)
+    plt.show()
+    plt.close()
+
+    # Return labels and centroids
+    return labels, centroids
+
+
+def dec_cluster(embedding, n_clusters=5, family_id=-1):
+    """
+    Perform Deep Embedded Clustering (DEC) on the embeddings and return cluster labels and centroids.
+    """
+    if isinstance(embedding, list):
+        embedding = np.array(embedding)
+
     # Step 1: Initialize KMeans to get initial cluster centroids
     kmeans = KMeans(n_clusters=n_clusters, random_state=42)
-    initial_labels = kmeans.fit_predict(embeding)
+    initial_labels = kmeans.fit_predict(embedding)
     
     # Step 2: Create a deep neural network model for DEC
     model = tf.keras.Sequential([
-        tf.keras.layers.InputLayer(input_shape=(embeding.shape[1],)),
+        tf.keras.layers.InputLayer(input_shape=(embedding.shape[1],)),
         tf.keras.layers.Dense(512, activation='relu'),
         tf.keras.layers.Dense(256, activation='relu'),
         tf.keras.layers.Dense(128, activation='relu'),
@@ -98,57 +106,72 @@ def dec_cluster(embeding, n_clusters=5):
     
     # One-hot encode the labels for DEC training
     labels_one_hot = tf.keras.utils.to_categorical(initial_labels, num_classes=n_clusters)
-    model.fit(embeding, labels_one_hot, epochs=20, batch_size=64)
+    model.fit(embedding, labels_one_hot, epochs=20, batch_size=64)
     
     # Step 4: Use the DEC model to predict the cluster labels
-    dec_labels = np.argmax(model.predict(embeding), axis=1)
+    dec_labels = np.argmax(model.predict(embedding), axis=1)
     
     # Calculate the Silhouette score
-    sil_score = silhouette_score(embeding, dec_labels)
-    print(f"Silhouette Score: {sil_score}")
-    
-    # Visualize the clustering using PCA
-    pca = PCA(n_components=2)
-    reduced_embeddings = pca.fit_transform(embeding)
-    
-    plt.figure(figsize=(8, 6))
-    plt.scatter(reduced_embeddings[:, 0], reduced_embeddings[:, 1], c=dec_labels, cmap='Spectral', marker='o')
-    plt.title(f"DEC Clustering (Silhouette Score: {sil_score:.2f})")
-    plt.xlabel('PCA Component 1')
-    plt.ylabel('PCA Component 2')
-    plt.colorbar(label='Cluster Label')
-    plt.savefig('dec_clustering_plot.png', dpi=300)
-    plt.show()
-
-
-def spectral_clustering(embeding, n_clusters=5):
-    """
-    Perform Spectral Clustering on the embeddings and return cluster labels and centroids.
-    """
-
-    # Apply Spectral Clustering
-    spectral = SpectralClustering(n_clusters=n_clusters, random_state=42, affinity='nearest_neighbors')
-    labels = spectral.fit_predict(embeding)
-
-    # Calculate the Silhouette score
-    sil_score = silhouette_score(embeding, labels)
+    sil_score = silhouette_score(embedding, dec_labels)
     print(f"Silhouette Score: {sil_score}")
 
     # Calculate the centroids of each cluster (mean of all points in each cluster)
-    centroids = np.array([embeding[labels == i].mean(axis=0) for i in range(n_clusters)])
+    centroids = np.array([embedding[dec_labels == i].mean(axis=0) for i in range(n_clusters)])
 
-    # Visualize the clustering using PCA (for 2D visualization)
+    # Visualize the clustering using PCA
     pca = PCA(n_components=2)
-    reduced_embeddings = pca.fit_transform(embeding)
+    reduced_embeddings = pca.fit_transform(embedding)
     
     plt.figure(figsize=(8, 6))
-    plt.scatter(reduced_embeddings[:, 0], reduced_embeddings[:, 1], c=labels, cmap='Spectral', marker='o')
-    plt.title(f"Spectral Clustering (Silhouette Score: {sil_score:.2f})")
+    plt.scatter(reduced_embeddings[:, 0], reduced_embeddings[:, 1], c=dec_labels, cmap='Spectral', marker='o')
+    plt.title(f"DEC Clustering {family_id} (Silhouette Score: {sil_score:.2f})")
     plt.xlabel('PCA Component 1')
     plt.ylabel('PCA Component 2')
     plt.colorbar(label='Cluster Label')
-    plt.savefig('spectral_clustering_plot.png', dpi=300)
+    plt.savefig(f'plots/dec_clustering_plot{family_id}.png', dpi=300)
     plt.show()
+    plt.close()
+
+    # Return labels and centroids
+    return dec_labels, centroids
+
+
+def spectral_clustering(embedding, n_clusters=5, family_id=-1):
+    """
+    Perform Spectral Clustering on the embeddings and return cluster labels and centroids.
+    """
+    if isinstance(embedding, list):
+        embedding = np.array(embedding)
+
+    # Ensure n_neighbors is less than the number of samples
+    n_neighbors = min(n_clusters, len(embedding) - 1)
+
+    # Apply Spectral Clustering
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", UserWarning)
+        spectral = SpectralClustering(n_clusters=n_clusters, random_state=42, affinity='nearest_neighbors', n_neighbors=n_neighbors)
+        labels = spectral.fit_predict(embedding)
+
+    # Calculate the Silhouette score
+    sil_score = silhouette_score(embedding, labels)
+    print(f"Silhouette Score: {sil_score}")
+
+    # Calculate the centroids of each cluster (mean of all points in each cluster)
+    centroids = np.array([embedding[labels == i].mean(axis=0) for i in range(n_clusters)])
+
+    # Visualize the clustering using PCA (for 2D visualization)
+    pca = PCA(n_components=2)
+    reduced_embeddings = pca.fit_transform(embedding)
+    
+    plt.figure(figsize=(8, 6))
+    plt.scatter(reduced_embeddings[:, 0], reduced_embeddings[:, 1], c=labels, cmap='Spectral', marker='o')
+    plt.title(f"Spectral Clustering {family_id} (Silhouette Score: {sil_score:.2f})")
+    plt.xlabel('PCA Component 1')
+    plt.ylabel('PCA Component 2')
+    plt.colorbar(label='Cluster Label')
+    plt.savefig(f'plots/spectral_clustering_plot{family_id}.png', dpi=300)
+    plt.show()
+    plt.close()
 
     # Return labels and centroids
     return labels, centroids
@@ -165,4 +188,6 @@ def count_unique_speakers(csv_file_path):
     unique_speakers = df['speaker_number'].nunique()
     
     return unique_speakers
+
+
 

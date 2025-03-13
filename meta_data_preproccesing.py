@@ -3,17 +3,17 @@ import pandas as pd
 import shutil
 from utils import *
 # נתיבים
-data_root = "/media/ACLP-Nimble/Users/shakedb/final_project/speech_brain_valid_sound/Arabic"
+data_root = "/app/Arabic"
 clips_dir = os.path.join(data_root, "clips")  # תיקיית קבצי האודיו
 
-def preproccess_pipline():
+def preproccess_pipline(config):
     
-    files = ["Users/shakedb/final_project/speech_brain_valid_sound/Arabic/test.csv",
-             "Users/shakedb/final_project/speech_brain_valid_sound/Arabic/train.csv", 
-             "Users/shakedb/final_project/speech_brain_valid_sound/Arabic/dev.csv"]  
-    combain_csv = "Users/shakedb/final_project/speech_brain_valid_sound/Arabic/combined.csv"
-    family_csv = "Users/shakedb/final_project/speech_brain_valid_sound/Arabic/families.csv"
-    family_test_csv = "Users/shakedb/final_project/speech_brain_valid_sound/Arabic/families_test.csv"
+    files = ["/app/Arabic/test.csv",
+             "/app/Arabic/train.csv", 
+             "/app/Arabic/dev.csv"]  
+    combain_csv = "/app/Arabic/combined.csv"
+    family_csv = "/app/Arabic/families.csv"
+    family_test_csv = "/app/families_test.csv"
 
     combine_csv(files, combain_csv)
 
@@ -21,10 +21,10 @@ def preproccess_pipline():
 
     extract_first_record_per_speaker(family_csv,family_test_csv)
 
-    source_dirs = ["Users/shakedb/final_project/speech_brain_valid_sound/Arabic/dev",
-                    "Users/shakedb/final_project/speech_brain_valid_sound/Arabic/test",
-                    "Users/shakedb/final_project/speech_brain_valid_sound/Arabic/train"]  # List of directories to combine
-    target_dir = "Users/shakedb/final_project/speech_brain_valid_sound/Arabic/combined_voice_dir"  # Target directory to combine the contents into
+    source_dirs = ["/app/Arabic/dev",
+                    "/app/Arabic/test",
+                    "/app/Arabic/train"]  # List of directories to combine
+    target_dir = "/app/Arabic/combined_voice_dir"  # Target directory to combine the contents into
 
     combine_directories(source_dirs,target_dir)
 
