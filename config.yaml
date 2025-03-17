@@ -1,16 +1,17 @@
 # Configurations for the Speaker Embedding Pipeline
 
 
-# need to be updated for the current directory of the project for current 
-CURRENT_DIR: C:\Users\USER\source\repos\vcuxvdsuk\graduation-project
+# need to be updated for the current directory of the project for current
 
+###CURRENT_DIR: C:\Users\USER\source\repos\vcuxvdsuk\graduation-project
+CURRENT_DIR: 
 
 # Audio file to process
-embedding_output_file: "${CURRENT_DIR}/Arabic/embedding"
-train_audio_list_file: "${CURRENT_DIR}/Arabic/families.csv"
-test_audio_list_file: "${CURRENT_DIR}/Arabic/families_test.csv"
-audio_dir: "${CURRENT_DIR}/Arabic/combined_voice_dir"
-familes_emb: "${CURRENT_DIR}/Arabic/familes_emb.csv"
+embedding_output_file: "/app/Arabic/embedding"
+train_audio_list_file: "/app/Arabic/families.csv"
+test_audio_list_file: "/app/Arabic/families_test.csv"
+audio_dir: "/app/Arabic/combined_voice_dir"
+familes_emb: "/app/Arabic/familes_emb.csv"
 
 # ECAPA-TDNN model configuration
 speechbrain_model:

@@ -40,5 +40,34 @@ def plot_embedding(embedding_list, config):
     plt.title(config['plotting']['title'])
     plt.xlabel(config['plotting']['xlabel'])
     plt.ylabel(config['plotting']['ylabel'])
-    
     plt.show()
+    plt.close()
+
+def plot_embeddings_with_new_sample(cenroid_label, KNN_label, cosine_label, family_emb, family_num, test_emb,test_num, labels):
+    """
+    Print the labels and plot all embeddings, highlighting the test embedding.
+    """
+    print(f"Centroid Label: {cenroid_label}")
+    print(f"KNN Label: {KNN_label}")
+    print(f"Cosine Label: {cosine_label}")
+
+    # Perform PCA to reduce the embeddings to 2D for visualization
+    pca = PCA(n_components=2)
+    reduced_family_emb = pca.fit_transform(family_emb)
+    reduced_test_emb = pca.transform([test_emb])
+
+    # Plot the family embeddings with cluster labels
+    plt.figure(figsize=(8, 6))
+    scatter = plt.scatter(reduced_family_emb[:, 0], reduced_family_emb[:, 1], c=labels, cmap='Spectral', alpha=0.5, label='Family Embeddings')
+    
+    # Highlight the test embedding
+    plt.scatter(reduced_test_emb[:, 0], reduced_test_emb[:, 1], c='red', label='Test Embedding', edgecolors='black', s=100)
+    
+    plt.title('Embeddings Visualization')
+    plt.xlabel('PCA Component 1')
+    plt.ylabel('PCA Component 2')
+    plt.legend()
+    plt.colorbar(scatter, label='Cluster Label')
+    plt.savefig(f'test_emb_plot/new_sample_embeddings_plot_family{family_num}_sample{test_num}.png', dpi=300)
+    plt.show()
+    plt.close()

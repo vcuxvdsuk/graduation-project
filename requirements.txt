@@ -1,8 +1,12 @@
 torch
+PySoundFile
 torchaudio
 pandas
 numpy
 tqdm
 pyyaml
 speechbrain
-python-dotenv
+matplotlib
+scikit-learn
+tensorflow
+scipy
