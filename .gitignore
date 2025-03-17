@@ -1,2 +1,24 @@
 .vs/
-/models_dir
+
+# Ignore Python cache files
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignore virtual environment directories
+venv/
+env/
+
+# Ignore other unnecessary files and directories
+.DS_Store
+*.log
+*.tmp
+
+# Ignore large data files
+models_dir/
+plots/
+test_emb_plot/
+
+
+# Ignore wandb directory
+wandb/
