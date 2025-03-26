@@ -4,7 +4,6 @@
 # need to be updated for the current directory of the project for current
 
 ###CURRENT_DIR: C:\Users\USER\source\repos\vcuxvdsuk\graduation-project
-CURRENT_DIR: 
 
 # Audio file to process
 embedding_output_file: "/app/Arabic/embedding"
@@ -12,6 +11,7 @@ train_audio_list_file: "/app/Arabic/families.csv"
 test_audio_list_file: "/app/Arabic/families_test.csv"
 audio_dir: "/app/Arabic/combined_voice_dir"
 familes_emb: "/app/Arabic/familes_emb.csv"
+familes_labels: "/app/Arabic/familes_labels.csv"
 
 # ECAPA-TDNN model configuration
 speechbrain_model:
@@ -23,6 +23,9 @@ speechbrain_model:
 # PCA settings for dimensionality reduction
 pca:
   n_components: 2  # Number of components for PCA (2D for plotting)
+
+adaptation:
+  num_epochs: 1  # Number of epochs for adaptation
 
 # Embedding modification settings
 modification:

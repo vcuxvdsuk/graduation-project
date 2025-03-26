@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 import numpy as np
 from scipy.spatial.distance import cosine
+import wandb
 
 
 def plot_embedding(embedding_list, config):
@@ -68,6 +69,9 @@ def plot_embeddings_with_new_sample(cenroid_label, KNN_label, cosine_label, fami
     plt.ylabel('PCA Component 2')
     plt.legend()
     plt.colorbar(scatter, label='Cluster Label')
-    plt.savefig(f'test_emb_plot/new_sample_embeddings_plot_family{family_num}_sample{test_num}.png', dpi=300)
+    plot_path = f'test_emb_plot/new_sample_embeddings_plot_family{family_num}_sample{test_num}.png'
+    plt.savefig(plot_path, dpi=300)
+    # Log the plot to wandb
+    wandb.log({"clustering_plot": wandb.Image(plot_path)})
+
     plt.show()
-    plt.close()
