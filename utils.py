@@ -3,8 +3,31 @@ import pandas as pd
 import shutil
 import csv
 from collections import defaultdict
+import wandb
+from model_funcs import *
+from clustering import *
+from meta_data_preproccesing import *
+from SV import *
+from ploting_funcs import *
+from adaptation import *
+from statistics import mode
 
-def count_unique_speakers(df):
+import numpy as np
+from sklearn.metrics import silhouette_score, accuracy_score
+from sklearn.metrics.cluster import contingency_matrix
+from sklearn.metrics import confusion_matrix
+
+from sklearn.metrics.pairwise import cosine_similarity
+from itertools import combinations
+from sklearn.metrics import roc_curve, auc
+from scipy.optimize import brentq
+from scipy.interpolate import interp1d
+from sklearn.metrics import det_curve
+
+
+def count_unique_speakers(file_path):
+    # Read the CSV file
+    df = pd.read_csv(file_path, delimiter="\t")
     
     # Extract the number from the 'client_id' field (after the last underscore)
     df['speaker_number'] = df['client_id'].apply(lambda x: int(x.split('_')[-1]))
@@ -31,12 +54,10 @@ def get_unique_speakers_in_family(file_path, family_id):
 
 class Evaluations:
     # Method to calculate Equal Error Rate (EER)
-    def calculate_eer(self, false_acceptance_rates, false_rejection_rates):
-        eer = 0.0
-        for far, frr in zip(false_acceptance_rates, false_rejection_rates):
-            if far == frr:
-                eer = far
-                break
+    def calculate_eer(self,y_true, y_scores):
+        fpr, fnr, thresholds = det_curve(y_true, y_scores)
+        # EER is the point where FPR = FNR
+        eer = fpr[np.nanargmin(np.absolute(fnr - fpr))]
         return eer
 
     # Method to calculate False Acceptance Rate (FAR)
@@ -52,258 +73,200 @@ class Evaluations:
         return false_rejections / total_genuine_attempts
 
 
-# Function to append clustering results to a CSV file
+from sklearn.metrics import calinski_harabasz_score
+
+def calinski_harabasz_index(X, cluster_labels):
+    score = calinski_harabasz_score(X, cluster_labels)
+    return score
+
+
+def clean_csv(csv_path):
+         # Clean the content of the CSV file
+        with open(csv_path, 'w') as file:
+            file.truncate()
+
+#main logging function
+
+def evaluate_and_log(config, family_id, family_emb, num_of_speakers, labels, speaker_model):
+    evaluations = Evaluations()
+
+    # Read the CSV file containing paths to all families
+    df = pd.read_csv(config['train_audio_list_file'], delimiter="\t")
+    
+    # Filter to only include rows with the relevant family_id
+    if family_id is not None:
+        family_df = df[df['family_id'] == family_id]
+    else:
+        family_df = df
+
+    # Extract true labels from the 'client_id' column
+    true_labels = family_df['client_id'].values
+    
+    # Map true labels to integers
+    label_mapping = {label: idx for idx, label in enumerate(np.unique(true_labels))}
+    true_labels_mapped = np.array([label_mapping[label] for label in true_labels])
+    
+    # Ensure the lengths of true_labels and labels match
+    if len(true_labels_mapped) != len(labels):
+        raise ValueError(f"Mismatch in lengths. True Labels: {len(true_labels_mapped)}, Cluster Labels: {len(labels)}")
+
+    # Calculate confusion matrix and accuracy
+    cm = confusion_matrix(true_labels_mapped, labels)
+    accuracy = accuracy_score(true_labels_mapped, labels)
+    
+    # Log the results to wandb
+    wandb.log({
+        f"confusion_matrix_id_{family_id}": wandb.plot.confusion_matrix(probs=None,
+                                                        y_true=true_labels_mapped,
+                                                        preds=labels,
+                                                        class_names=list(label_mapping.keys()))
+    })
+    
+    # Calculate EER
+    assert len(family_emb) == len(labels), "Family embeddings and labels must have the same length"
+    y_true, y_scores = build_verification_pairs(family_emb, labels)
+    assert len(y_true) == len(y_scores), "y_true and y_scores must have the same length"
+    eer = evaluations.calculate_eer(y_true, y_scores)
+
+    # Log the averages EER values
+    if family_id:
+        wandb.log({
+            f"family_{family_id}_eer": eer,
+            f"family_{family_id}_accuracy": accuracy
+        })
+    else:
+        wandb.log({
+            "eer": eer,
+            "accuracy": accuracy
+        })
+
+
+
+#evaluate the SV errors by creating confusion matrix for each label
+def evaluate_SV_errors(config, labels, speaker_model, family_id, family_emb, num_of_speakers):
+    # Read the CSV file containing paths to all families
+    df = pd.read_csv(config['train_audio_list_file'], delimiter="\t")
+    
+    # Filter to only include rows with the relevant family_id
+    if family_id:
+        family_df = df[df['family_id'] == family_id]
+    else:
+        family_df = df
+
+    # Extract file paths
+    file_paths = family_df['path'].values
+    
+    # Initialize confusion matrix values for each true label
+    confusion_matrices = {label: {'tp': 0, 'fp': 0, 'fn': 0, 'tn': 0} for label in set(labels)}
+    
+    for true_label, file_path in zip(labels, file_paths):
+        if isinstance(file_path, str) and file_path.strip():
+            audio_path = os.path.join(config['audio_dir'], file_path)
+            test_emb = extract_single_embedding(speaker_model, audio_path)
+            if test_emb is not None:
+                cenroid_label = identify_cluster(family_emb, labels, test_emb, method="centroid")
+                KNN_label = identify_cluster(family_emb, labels, test_emb, method="knn", k=num_of_speakers)
+                cosine_label = identify_cluster(family_emb, labels, test_emb, method="cosine")
+                
+                common_label = mode([cenroid_label, KNN_label, cosine_label])
+                
+                for label in confusion_matrices:
+                    if common_label == true_label:
+                        if true_label == label:
+                            confusion_matrices[label]['tp'] += 1
+                        else:
+                            confusion_matrices[label]['tn'] += 1
+                    else:
+                        if true_label == label:
+                            confusion_matrices[label]['fn'] += 1
+                        else:
+                            confusion_matrices[label]['fp'] += 1
+    return confusion_matrices
+
+# in case of label 2
+#   true\label1   2   3   4
+#    1       tn  fp  tn  tn
+#    2       fn  tp  fn  fn
+#    3       tn  fp  tn  tn
+#    4       tn  fp  tn  tn
+
 def append_to_csv(family_id, labels, audio_csv, csv_file='clustering_loss_preparation.csv'):
     # Read the audio CSV file to get the file paths
     audio_df = pd.read_csv(audio_csv, delimiter="\t")
     audio_paths = audio_df[audio_df['family_id'] == family_id]['path'].tolist()
 
+    # Check if the lengths of labels and audio_paths match
+    if len(labels) != len(audio_paths):
+        print(f"Error: Mismatch in lengths.(append_to_csv func) Labels: {len(labels)}, Audio Paths: {len(audio_paths)}")
+        return
+
     label_dict = defaultdict(list)
     for i, label in enumerate(labels):
-        label_dict[label].append(audio_paths[i])  # appending names from the CSV to label
+        if i < len(audio_paths):
+            label_dict[label].append(audio_paths[i])  # appending names from the CSV to label
+        else:
+            print(f"Warning: Index {i} out of range for audio_paths")
 
+    # Check if the target CSV file exists, if not, create it and write the header
+    file_exists = os.path.isfile(csv_file)
     with open(csv_file, mode='a', newline='') as file:
-        writer = csv.writer(file)
+        writer = csv.writer(file, delimiter='\t')
+        if not file_exists:
+            # Write the header row
+            writer.writerow(['label'] + [f'file_{i}' for i in range(max(len(files) for files in label_dict.values()))])
+
+        # Write the data rows
+        for label, audio_files in label_dict.items():
+            writer.writerow([family_id] + [label] + audio_files)
+
+
+def append_All_to_csv(labels, audio_csv, csv_file='clustering_loss_preparation.csv'):
+    # Read the audio CSV file to get the file paths
+    audio_df = pd.read_csv(audio_csv, delimiter="\t")
+    audio_paths = audio_df['path'].tolist()
+
+    # Check if the lengths of labels and audio_paths match
+    if len(labels) != len(audio_paths):
+        print(f"Error: Mismatch in lengths.(append_to_csv func) Labels: {len(labels)}, Audio Paths: {len(audio_paths)}")
+        return
+
+    label_dict = defaultdict(list)
+    for i, label in enumerate(labels):
+        if i < len(audio_paths):
+            label_dict[label].append(audio_paths[i])  # appending names from the CSV to label
+        else:
+            print(f"Warning: Index {i} out of range for audio_paths")
+
+    # Check if the target CSV file exists, if not, create it and write the header
+    file_exists = os.path.isfile(csv_file)
+    with open(csv_file, mode='a', newline='') as file:
+        writer = csv.writer(file, delimiter='\t')
+        if not file_exists:
+            # Write the header row
+            writer.writerow(['label'] + [f'file_{i}' for i in range(max(len(files) for files in label_dict.values()))])
+
+        # Write the data rows
         for label, audio_files in label_dict.items():
             writer.writerow([label] + audio_files)
 
 
 
-import numpy as np
-from sklearn.metrics import silhouette_score, accuracy_score
-from sklearn.metrics.cluster import contingency_matrix
-from sklearn.metrics import roc_curve, auc
-from scipy.optimize import brentq
-from scipy.interpolate import interp1d
+def build_verification_pairs(embeddings, labels):
+    y_true = []
+    y_scores = []
 
-def domain_shift_factor(baseline_scores, adapted_scores):
-    """
-    """
-    # ����� ������ ����� ������ ������ ������� ����
-    baseline_performance = np.mean(baseline_scores)
-    adapted_performance = np.mean(adapted_scores)
-    
-    # ����� ����� ����� ������� - ���� ������
-    dsf_improvement = ((adapted_performance - baseline_performance) / baseline_performance) * 100
-    
-    return dsf_improvement
+    # Compare all combinations of pairs
+    for (i, j) in combinations(range(len(embeddings)), 2):
+        emb_i, emb_j = embeddings[i], embeddings[j]
+        label_i, label_j = labels[i], labels[j]
 
-#maybe?
-def multilingual_accuracy(true_labels, predicted_labels, noise_levels, languages):
-    """
-    """
-    # ���� ����
-    overall_accuracy = accuracy_score(true_labels, predicted_labels)
-    
-    # ���� ��� ���
-    language_accuracy = {}
-    unique_languages = set(languages)
-    for lang in unique_languages:
-        lang_indices = [i for i, l in enumerate(languages) if l == lang]
-        lang_accuracy = accuracy_score(
-            [true_labels[i] for i in lang_indices],
-            [predicted_labels[i] for i in lang_indices]
-        )
-        language_accuracy[lang] = lang_accuracy
-    
-    # ���� ��� ��� ���
-    noise_accuracy = {}
-    unique_noise_levels = set(noise_levels)
-    for noise in unique_noise_levels:
-        noise_indices = [i for i, n in enumerate(noise_levels) if n == noise]
-        noise_acc = accuracy_score(
-            [true_labels[i] for i in noise_indices],
-            [predicted_labels[i] for i in noise_indices]
-        )
-        noise_accuracy[noise] = noise_acc
-    
-    return {
-        "overall_accuracy": overall_accuracy,
-        "language_accuracy": language_accuracy,
-        "noise_accuracy": noise_accuracy
-    }
+        # Cosine similarity (can also use Euclidean or other)
+        score = cosine_similarity([emb_i], [emb_j])[0][0]
 
-# delete?
-def cluster_metrics(embeddings, true_labels=None):
-    """
-    ���� ���� ������� ���� ������ ������ �� ������
-    
-    �������:
-    embeddings (numpy.ndarray): ������ �� ������ ������ �� ������
-    true_labels (numpy.ndarray, optional): ������ �������, �� ������
-    
-    �����:
-    dict: ����� �� ���� Cluster Round Index ����� ������
-    """
-    from sklearn.cluster import KMeans
-    
-    # ������ ����� �������� ��� ���� ������� ���������
-    if true_labels is not None:
-        n_clusters = len(set(true_labels))
-    else:
-        # �� ��� ������, ������� ����� ��������� ������ ���� ��������
-        # (����� ����� ���� ������ ������ ��� silhouette, elbow method ���')
-        n_clusters = min(10, len(embeddings) // 5)  # ����� ���� ������
-    
-    # ����� ����� K-means
-    kmeans = KMeans(n_clusters=n_clusters, random_state=42, n_init=10)
-    cluster_labels = kmeans.fit_predict(embeddings)
-    
-    # ����� ���� ������
-    silhouette = silhouette_score(embeddings, cluster_labels) if len(set(cluster_labels)) > 1 else 0
-    
-    # ����� Cluster Round Index (CRI)
-    # ��� �� ����� �� ������ ������ ������ ������ �� ��������
-    intra_cluster_distances = []
-    for i in range(n_clusters):
-        cluster_points = embeddings[cluster_labels == i]
-        if len(cluster_points) > 1:
-            centroid = cluster_points.mean(axis=0)
-            distances = np.linalg.norm(cluster_points - centroid, axis=1)
-            intra_cluster_distances.append(np.mean(distances))
-    
-    # �� �� ����� ����� ��� �� ���� ������ ���
-    if intra_cluster_distances:
-        intra_dist = np.mean(intra_cluster_distances)
-        
-        # ���� ��� ����� ��������
-        centroids = kmeans.cluster_centers_
-        inter_dist = 0
-        count = 0
-        for i in range(n_clusters):
-            for j in range(i+1, n_clusters):
-                inter_dist += np.linalg.norm(centroids[i] - centroids[j])
-                count += 1
-        
-        if count > 0:
-            inter_dist /= count
-            # ����� �-CRI
-            cri = (inter_dist - intra_dist) / max(inter_dist, intra_dist)
-        else:
-            cri = 0
-    else:
-        cri = 0
-    
-    return {
-        "silhouette_score": silhouette,
-        "cluster_round_index": cri
-    }
+        # 1 = genuine match, 0 = impostor
+        is_match = int(label_i == label_j)
 
-#needs work
-def closed_set_metrics(true_speaker_ids, predicted_speaker_ids, similarity_scores):
-    """
-    ���� ���� ����� ���� ������ ����� �����
-    
-    �������:
-    true_speaker_ids (list): ���� ������� ��������
-    predicted_speaker_ids (list): ���� ������� �����
-    similarity_scores (numpy.ndarray): ������ ����� ��� �� ������� ��� ������� �������
-    
-    �����:
-    dict: ����� �� ����, ����� ���� ������ ����� (IEER) ������ ������
-    """
-    # ����� ���� ������
-    accuracy = accuracy_score(true_speaker_ids, predicted_speaker_ids)
-    
-    # ����� ����� ����� ������ ����� (IEER)
-    # ������ ������ ���: 1 �� ������ ������ ������, 0 ����
-    true_matches = []
-    scores = []
-    
-    for i, true_id in enumerate(true_speaker_ids):
-        for j, speaker_id in enumerate(set(true_speaker_ids)):
-            true_matches.append(1 if true_id == speaker_id else 0)
-            scores.append(similarity_scores[i, j])
-    
-    # calc error
-    fpr, tpr, thresholds = roc_curve(true_matches, scores)
-    eer = brentq(lambda x: 1. - x - interp1d(fpr, tpr)(x), 0., 1.)
-    
-    # ����� ����� ������
-    false_acceptance = sum([1 for i, (true, pred) in enumerate(zip(true_speaker_ids, predicted_speaker_ids)) 
-                          if true != pred])
-    false_rejection = sum([1 for i, (true, pred) in enumerate(zip(true_speaker_ids, predicted_speaker_ids)) 
-                          if true == pred and np.max(similarity_scores[i]) < 0.5])  # �� ����� ������: 0.5
-    
-    total_comparisons = len(true_speaker_ids)
-    far = false_acceptance / total_comparisons  # False Acceptance Rate
-    frr = false_rejection / total_comparisons   # False Rejection Rate
-    
-    return {
-        "accuracy": accuracy,
-        "identification_equal_error_rate": eer,
-        "false_acceptance_rate": far,
-        "false_rejection_rate": frr
-    }
+        y_true.append(is_match)
+        y_scores.append(score)
 
-#not valid
-def open_set_metrics(enrolled_embeddings, test_embeddings, enrolled_ids, test_ids, threshold=0.5):
-    """
-    ���� ���� openFEAT ������� ����� �����
-    
-    �������:
-    enrolled_embeddings (numpy.ndarray): ������ ������ �� ������ ������
-    test_embeddings (numpy.ndarray): ������ ������ �� ������ ������
-    enrolled_ids (list): ���� ������� �������
-    test_ids (list): ���� ������� ��� ������
-    threshold (float): �� ����� ������ �����
-    
-    �����:
-    dict: ����� �� ���� openFEAT ������ ������ ������ �����
-    """
-    # ����� ������ ����� ��� ������ ������ ������� �������
-    similarity_matrix = np.zeros((len(test_embeddings), len(enrolled_embeddings)))
-    for i, test_emb in enumerate(test_embeddings):
-        for j, enrolled_emb in enumerate(enrolled_embeddings):
-            # ������� ������ �������
-            similarity_matrix[i, j] = np.dot(test_emb, enrolled_emb) / (
-                np.linalg.norm(test_emb) * np.linalg.norm(enrolled_emb))
-    
-    # ����� ������: ���� �� ����� ������ �� ����� ����� �� ������ ����� �����
-    predicted_ids = []
-    for i in range(len(test_embeddings)):
-        max_similarity_idx = np.argmax(similarity_matrix[i])
-        max_similarity = similarity_matrix[i, max_similarity_idx]
-        
-        if max_similarity >= threshold:
-            predicted_ids.append(enrolled_ids[max_similarity_idx])
-        else:
-            predicted_ids.append("unknown")  # ���� �� �����
-    
-    # ����� ����� ������ �������: ������ ��� ������
-    known_indices = [i for i, id in enumerate(test_ids) if id in enrolled_ids]
-    unknown_indices = [i for i, id in enumerate(test_ids) if id not in enrolled_ids]
-    
-    # ����� ���� ���� ���� ������ ������
-    known_correct = 0
-    for i in known_indices:
-        if test_ids[i] == predicted_ids[i]:
-            known_correct += 1
-    
-    known_accuracy = known_correct / len(known_indices) if known_indices else 0
-    
-    # ����� ��� ����� ���� �� ������ �� ������
-    unknown_correct = 0
-    for i in unknown_indices:
-        if predicted_ids[i] == "unknown":
-            unknown_correct += 1
-    
-    unknown_accuracy = unknown_correct / len(unknown_indices) if unknown_indices else 0
-    
-    # ����� ��� openFEAT
-    # openFEAT ���� �� ������ ����� ������ ������ ������ ������ �� ������
-    if known_indices and unknown_indices:
-        openFEAT = (known_accuracy + unknown_accuracy) / 2
-    elif known_indices:
-        openFEAT = known_accuracy
-    elif unknown_indices:
-        openFEAT = unknown_accuracy
-    else:
-        openFEAT = 0
-    
-    return {
-        "openFEAT": openFEAT,
-        "known_speaker_accuracy": known_accuracy,
-        "unknown_speaker_accuracy": unknown_accuracy,
-        "overall_accuracy": (known_correct + unknown_correct) / len(test_ids) if test_ids else 0
-    }
+    return y_true, y_scores

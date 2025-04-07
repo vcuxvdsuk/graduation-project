@@ -5,9 +5,10 @@ import torch
 import numpy as np
 from scipy.spatial.distance import cdist
 
+# func for close set
 def identify_cluster(embeddings, labels, new_sample, method="centroid", k=5):
     """
-    Identify the best matching cluster for a new sample using different methods.
+    Identify the best matching cluster for a new sample.
 
     :param embeddings: np.array of shape (n_samples, n_features), existing embeddings.
     :param labels: np.array of shape (n_samples,), cluster labels corresponding to embeddings.
@@ -46,34 +47,75 @@ def identify_cluster(embeddings, labels, new_sample, method="centroid", k=5):
     else:
         raise ValueError("Invalid method. Choose from 'centroid', 'knn', 'cosine', or 'density'.")
 
-
-def compute_prototypes(embeddings, labels):
+# func for open set
+def identify_or_assign_cluster(embeddings, labels, new_sample, method="centroid", k=5, threshold=1.2):
     """
-    Compute cluster prototypes as the mean embedding of few-shot samples.
+    Identify the best matching cluster for a new sample or assign it to a new cluster.
 
-    :param embeddings: np.array of shape (n_samples, n_features)
-    :param labels: np.array of shape (n_samples,)
-    :return: Dictionary {cluster_id: prototype_vector}
+    :param embeddings: np.array of shape (n_samples, n_features), existing embeddings.
+    :param labels: np.array of shape (n_samples,), cluster labels corresponding to embeddings.
+    :param new_sample: np.array of shape (n_features,), the new sample embedding.
+    :param method: str, the method to use ("centroid", "knn", "cosine", "density").
+    :param k: int, number of neighbors for k-NN method.
+    :param threshold: float, similarity threshold for assigning to a new cluster.
+    :return: int, best matching cluster label or new cluster label.
     """
-    unique_clusters = np.unique(labels)
-    prototypes = {c: embeddings[labels == c].mean(axis=0) for c in unique_clusters}
-    return prototypes
-
-def identify_cluster_protonet(embeddings, labels, new_sample):
-    """
-    Identify the best matching cluster for a new sample using Prototypical Networks.
-
-    :param embeddings: np.array of shape (n_samples, n_features), few-shot support set.
-    :param labels: np.array of shape (n_samples,), cluster labels.
-    :param new_sample: np.array of shape (n_features,), new sample embedding.
-    :return: int, best matching cluster label.
-    """
-    prototypes = compute_prototypes(embeddings, labels)
-    cluster_ids = list(prototypes.keys())
-    prototype_vectors = np.array(list(prototypes.values()))
-
-    # Compute Euclidean distance to prototypes
-    distances = cdist([new_sample], prototype_vectors, metric="euclidean")
     
-    # Assign to nearest cluster prototype
-    return cluster_ids[np.argmin(distances)]
+    unique_clusters = np.unique(labels)
+    
+    if method == "centroid":
+        # Compute centroids for each cluster
+        centroids = {c: embeddings[labels == c].mean(axis=0) for c in unique_clusters}
+        centroids_array = np.array(list(centroids.values()))
+        cluster_ids = list(centroids.keys())
+
+        # Find the closest centroid
+        distances = cdist([new_sample], centroids_array, metric="euclidean")
+        closest_cluster = cluster_ids[np.argmin(distances)]
+        closest_centroid = centroids[closest_cluster]
+
+        # Compute the maximum distance from the centroid to any point in the cluster
+        cluster_points = embeddings[labels == closest_cluster]
+        max_distance = np.max(cdist([closest_centroid], cluster_points, metric="euclidean"))
+
+        # Check if the new sample is within the threshold distance
+        new_sample_distance = np.linalg.norm(new_sample - closest_centroid)
+        if new_sample_distance <= threshold * max_distance:
+            return closest_cluster
+        else:
+            return max(cluster_ids) + 1  # Assign to a new cluster
+    
+    elif method == "knn":
+        knn = KNeighborsClassifier(n_neighbors=k)
+        knn.fit(embeddings, labels)
+        predicted_label = knn.predict([new_sample])[0]
+        distances, _ = knn.kneighbors([new_sample])
+        if np.mean(distances) < threshold:
+            return predicted_label
+        else:
+            return max(unique_clusters) + 1  # Assign to a new cluster
+
+    elif method == "cosine":
+        # Compute centroids and find the most similar cluster using cosine similarity
+        centroids = {c: embeddings[labels == c].mean(axis=0) for c in unique_clusters}
+        centroids_array = np.array(list(centroids.values()))
+        cluster_ids = list(centroids.keys())
+
+        similarities = 1 - cdist([new_sample], centroids_array, metric="cosine")
+        closest_cluster = cluster_ids[np.argmax(similarities)]
+        closest_centroid = centroids[closest_cluster]
+
+        # Compute the maximum similarity from the centroid to any point in the cluster
+        cluster_points = embeddings[labels == closest_cluster]
+        max_similarity = np.max(1 - cdist([closest_centroid], cluster_points, metric="cosine"))
+
+        # Check if the new sample is within the threshold similarity
+        new_sample_similarity = 1 - cdist([new_sample], [closest_centroid], metric="cosine")[0][0]
+        if new_sample_similarity >= threshold * max_similarity:
+            return closest_cluster
+        else:
+            return max(cluster_ids) + 1  # Assign to a new cluster
+    
+    else:
+        raise ValueError("Invalid method. Choose from 'centroid', 'knn', 'cosine', or 'density'.")
+

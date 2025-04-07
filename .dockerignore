@@ -17,6 +17,7 @@ env/
 # Ignore large data files
 models_dir/
 plots/
+test_emb_plots/
 test_emb_plot/
 
 # Ignore wandb directory

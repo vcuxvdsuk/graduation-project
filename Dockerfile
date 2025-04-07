@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN apt-get update && apt-get install -y \
     libsndfile1 \
     && pip install --no-cache-dir --timeout=120 --retries=2 -r requirements.txt
-    
+
 # Set the WANDB_API_KEY environment variable #dont do this in production
 #ENV WANDB_API_KEY=your_api_key
 
@@ -23,6 +23,11 @@ EXPOSE 80
 
 # Define environment variable
 ENV NAME World
+   
+# Set environment variables to control CUDA behavior
+ENV CUDA_CACHE_DISABLE=1
+ENV CUDA_LAUNCH_BLOCKING=1
+ENV CUDA_VISIBLE_DEVICES=0
 
 # Run app.py when the container launches
 CMD ["python", "main.py"]
