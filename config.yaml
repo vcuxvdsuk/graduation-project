@@ -27,12 +27,9 @@ pca:
   n_components: 2  # Number of components for PCA (2D for plotting)
 
 adaptation:
-  num_epochs: 2  # Number of epochs for adaptation
-
-# Embedding modification settings
-modification:
-  noise_mean: 0  # Mean of the normal noise distribution
-  noise_std: 0.1  # Standard deviation of the normal noise distribution
+  num_epochs: 50  # Number of epochs for adaptation
+  epochs_per_family: 3 
+  load_localy_saved: True  # use the locally saved and fine tune model
 
 # Speaker Verification settings
 verification:

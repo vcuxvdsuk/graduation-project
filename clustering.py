@@ -169,7 +169,7 @@ def spectral_clustering(embedding, n_clusters=5, family_id=-1):
     plt.xlabel('PCA Component 1')
     plt.ylabel('PCA Component 2')
     plt.colorbar(label='Cluster Label')
-    plt.savefig(f'plots/spectral_clustering_plot{family_id}.png', dpi=300)
+    #plt.savefig(f'plots/spectral_clustering_plot{family_id}.png', dpi=300)
     plt.show()
     plt.close()
 

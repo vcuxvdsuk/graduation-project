@@ -3,117 +3,134 @@ import numpy as np
 import torch
 import random
 from collections import defaultdict
-from torch.utils.data import Dataset, DataLoader
 import torch.nn.functional as F
 import torch.nn as nn
 import torchaudio
 import torchaudio.transforms as transforms
 import pandas as pd
+import os
+from pytorch_metric_learning import miners
+from pytorch_metric_learning.utils.loss_and_miner_utils import get_all_triplets_indices
+from torch.utils.data import Dataset, DataLoader
 
-def create_triplets(family_id, df, target_sr=16000, target_length=2.0):
-    triplets = []
+def set_seed(seed=42):
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+
+
+def _prepare_audio_dataset(df, filter_family_id=None):
+    """Convert DataFrame to label->file_paths dictionary."""
     audio_dataset = defaultdict(list)
-
-    # Convert the filtered DataFrame into a dictionary {label: [file_paths]}
     for row_family_id, row in df.iterrows():
-        # Filter to only include rows with the relevant family_id
-        if row_family_id != family_id:
+        if filter_family_id is not None and row_family_id != filter_family_id:
             continue
-        label = str(row.iloc[0])  # Ensure the label is a string
+        label = str(row.iloc[0])
         file_paths = [fp for fp in row.iloc[1:] if isinstance(fp, str) and fp.strip()]
         if file_paths:
             audio_dataset[label].extend(file_paths)
+    return audio_dataset
 
-    speakers = list(audio_dataset.keys())
-    for speaker in audio_dataset:
-        pos_files = audio_dataset[speaker]
-        if len(pos_files) < 2:
-            continue  # Skip if fewer than 2 samples for a positive pair
 
-        # Create multiple triplets per speaker
-        for _ in range(min(len(pos_files) // 2, 5)):  # Limits number of triplets per speaker
-            anchor_path, positive_path = random.sample(pos_files, 2)
-
-            # Ensure we pick a different speaker for the negative sample
-            negative_speakers = [s for s in speakers if s != speaker]
-            if not negative_speakers:
-                continue  # Skip if no negative speaker is available
-
-            negative_speaker = random.choice(negative_speakers)
-            negative_path = random.choice(audio_dataset[negative_speaker])
-            
-            triplets.append((anchor_path, positive_path, negative_path))
-    return triplets
-
-def create_triplets_all_data(df, target_sr=16000, target_length=2.0):
-    triplets = []
-    audio_dataset = defaultdict(list)
-
-    # Convert the DataFrame into a dictionary {label: [file_paths]}
-    for _, row in df.iterrows():
-        label = str(row.iloc[0])  # Ensure the label is a string
-        file_paths = [fp for fp in row.iloc[1:] if isinstance(fp, str) and fp.strip()]
-        if file_paths:
-            audio_dataset[label].extend(file_paths)
-
-    speakers = list(audio_dataset.keys())
-    for speaker in audio_dataset:
-        pos_files = audio_dataset[speaker]
-        if len(pos_files) < 2:
-            continue  # Skip if fewer than 2 samples for a positive pair
-
-        # Create multiple triplets per speaker
-        for _ in range(min(len(pos_files) // 2, 5)):  # Limits number of triplets per speaker
-            anchor_path, positive_path = random.sample(pos_files, 2)
-
-            # Ensure we pick a different speaker for the negative sample
-            negative_speakers = [s for s in speakers if s != speaker]
-            if not negative_speakers:
-                continue  # Skip if no negative speaker is available
-
-            negative_speaker = random.choice(negative_speakers)
-            negative_path = random.choice(audio_dataset[negative_speaker])
-            
-            triplets.append((anchor_path, positive_path, negative_path))
-    return triplets
 
 def process_triplet(speaker_model, triplet, config):
     anchor_path, positive_path, negative_path = triplet
     try:
-        anchor = extract_single_embedding(speaker_model, f"{config['audio_dir']}/{anchor_path}")
-        positive = extract_single_embedding(speaker_model, f"{config['audio_dir']}/{positive_path}")
-        negative = extract_single_embedding(speaker_model, f"{config['audio_dir']}/{negative_path}")
+        audio_dir = config.get("audio_dir", "")
+        anchor = extract_single_embedding(speaker_model, os.path.join(audio_dir, anchor_path))
+        positive = extract_single_embedding(speaker_model, os.path.join(audio_dir, positive_path))
+        negative = extract_single_embedding(speaker_model, os.path.join(audio_dir, negative_path))
         return anchor, positive, negative
     except Exception as e:
-        print(f"Error processing triplet(process_triplet) {triplet}: {e}")
+        print(f"[process_triplet ERROR] {triplet} -> {e}")
         return None
 
 
-class TripletAudioDataset(Dataset):
-    def __init__(self,speaker_model, triplet_list, config):
-        self.speaker_model = speaker_model
-        self.triplet_list = triplet_list
-        self.config = config
+class OnlineTripletDataset(Dataset):
+    def __init__(self, audio_paths, labels):
+        self.audio_paths = audio_paths
+        self.labels = labels
 
     def __len__(self):
-        return len(self.triplet_list)
+        return len(self.audio_paths)
 
     def __getitem__(self, idx):
-        for _ in range(len(self.triplet_list)):
-            triplet = process_triplet(self.speaker_model, self.triplet_list[idx], self.config)
-            if triplet is not None:
-                return triplet
-            idx = (idx + 1) % len(self.triplet_list)
-        raise RuntimeError("All triplets are invalid")
+        return self.audio_paths[idx], self.labels[idx]
 
 
-class TripletLoss(nn.Module):
-    def __init__(self, margin=1.0):
-        super().__init__()
-        self.margin = margin
 
-    def forward(self, anchor, positive, negative):
-        pos_dist = F.pairwise_distance(anchor, positive)  # Distance between Anchor & Positive
-        neg_dist = F.pairwise_distance(anchor, negative)  # Distance between Anchor & Negative
-        loss = torch.mean(F.relu(pos_dist - neg_dist + self.margin))  # Triplet Loss
+#################################################################################################################
+####################### model?
+#################################################################################################################
+
+from speechbrain.lobes.features import Fbank
+import torch
+import speechbrain as sb
+import torch
+
+class modelTune(sb.Brain):
+    def on_stage_start(self, stage, epoch):
+        # Enable grad for fine-tuning during training
+        if stage == sb.Stage.TRAIN:
+            for module in [
+                self.modules.compute_features,
+                self.modules.mean_var_norm,
+                self.modules.embedding_model,
+                self.modules.mean_var_norm_emb,
+                self.modules.classifier,
+            ]:
+                for p in module.parameters():
+                    p.requires_grad = True
+
+    def compute_forward(self, batch, stage):
+        """Forward computation for speaker embeddings or classification."""
+        wavs, wav_lens = batch.signal
+        wavs, wav_lens = wavs.to(self.device), wav_lens.to(self.device)
+        # Feature extraction
+        feats = self.modules.compute_features(wavs)
+        feats = self.modules.mean_var_norm(feats,wav_lens)
+
+        # Embedding extraction
+        embeddings = self.modules.embedding_model(feats)
+
+        # Optional normalization
+        embeddings = self.modules.mean_var_norm_emb(embeddings,wav_lens)
+        # Classification head
+        #outputs = self.modules.classifier(embeddings)
+
+        return embeddings, wav_lens
+
+    def compute_objectives(self, predictions, batch, stage):
+        """Computes classification loss (e.g., cross-entropy)."""
+        outputs, wav_lens = predictions
+        _, targets = batch.class_labels
+
+        loss = self.hparams.compute_cost(outputs, targets)
+
         return loss
+
+
+
+    ######################################################
+    # open feat method
+
+    """
+    class PrototypeAdapter(nn.Module):
+    def __init__(self, embed_dim, hidden_dim=None, heads=1):
+        super().__init__()
+        H = heads
+        self.self_attn = nn.MultiheadAttention(embed_dim, H, batch_first=True)
+        self.fc        = nn.Linear(embed_dim, embed_dim)
+        self.norm      = nn.LayerNorm(embed_dim)
+        self.dropout   = nn.Dropout(0.5)
+
+    def forward(self, prototypes):
+        # prototypes: [N_classes, embed_dim]
+        q = k = v = prototypes.unsqueeze(0)  # [1, N, D]
+        attn_out, _ = self.self_attn(q, k, v)           # :contentReference[oaicite:2]{index=2}
+        out = self.dropout(self.fc(attn_out))           # :contentReference[oaicite:3]{index=3}
+        adapted = self.norm(out + prototypes.unsqueeze(0))
+        return adapted.squeeze(0)  # [N, D]
+        """

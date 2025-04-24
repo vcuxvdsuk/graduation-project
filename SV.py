@@ -17,23 +17,30 @@ def identify_cluster(embeddings, labels, new_sample, method="centroid", k=5):
     :param k: int, number of neighbors for k-NN method.
     :return: int, best matching cluster label.
     """
-    
+    # Ensure new_sample is 2D
+    if new_sample.ndim == 1:
+        new_sample = new_sample.reshape(1, -1)
+
     unique_clusters = np.unique(labels)
-    
+
     if method == "centroid":
         # Compute centroids for each cluster
         centroids = {c: embeddings[labels == c].mean(axis=0) for c in unique_clusters}
         centroids_array = np.array(list(centroids.values()))
         cluster_ids = list(centroids.keys())
 
+        # Ensure centroids_array is also 2D (just in case)
+        if centroids_array.ndim == 1:
+            centroids_array = centroids_array.reshape(1, -1)
+
         # Find the closest centroid
-        distances = cdist([new_sample], centroids_array, metric="euclidean")
+        distances = cdist(new_sample, centroids_array, metric="euclidean")
         return cluster_ids[np.argmin(distances)]
-    
+
     elif method == "knn":
         knn = KNeighborsClassifier(n_neighbors=k)
         knn.fit(embeddings, labels)
-        return knn.predict([new_sample])[0]
+        return knn.predict(new_sample)[0]
 
     elif method == "cosine":
         # Compute centroids and find the most similar cluster using cosine similarity
@@ -41,9 +48,9 @@ def identify_cluster(embeddings, labels, new_sample, method="centroid", k=5):
         centroids_array = np.array(list(centroids.values()))
         cluster_ids = list(centroids.keys())
 
-        similarities = 1 - cdist([new_sample], centroids_array, metric="cosine")
+        similarities = 1 - cdist(new_sample, centroids_array, metric="cosine")
         return cluster_ids[np.argmax(similarities)]
-    
+
     else:
         raise ValueError("Invalid method. Choose from 'centroid', 'knn', 'cosine', or 'density'.")
 
@@ -60,7 +67,10 @@ def identify_or_assign_cluster(embeddings, labels, new_sample, method="centroid"
     :param threshold: float, similarity threshold for assigning to a new cluster.
     :return: int, best matching cluster label or new cluster label.
     """
-    
+        # Ensure new_sample is 2D
+    if new_sample.ndim == 1:
+        new_sample = new_sample.reshape(1, -1)
+
     unique_clusters = np.unique(labels)
     
     if method == "centroid":

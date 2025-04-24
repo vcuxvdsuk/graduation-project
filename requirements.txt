@@ -1,4 +1,5 @@
 torch
+pytorch-metric-learning
 PySoundFile
 torchaudio
 pandas

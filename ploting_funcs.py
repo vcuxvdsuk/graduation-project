@@ -16,21 +16,6 @@ def plot_embedding(config, embedding_list, labels):
     # Plot the reduced embeddings (only works for 2D embeddings)
     scatter = plt.scatter(reduced_embedding[:, 0], reduced_embedding[:, 1], c=labels, cmap='Spectral', alpha=0.5, label='Family Embeddings')
     
-    """
-       # Compute cosine similarity between embeddings for coloring the area
-    for i in range(reduced_embedding.shape[0] - 1):
-        for j in range(i + 1, reduced_embedding.shape[0]):
-            # Cosine similarity for the embeddings i and j
-            sim = 1 - cosine(reduced_embedding[i], reduced_embedding[j])
-            
-            # Plot the area between embeddings based on the cosine similarity threshold
-            if sim >= config['verification']['threshold']:
-                # We plot a line (or shaded area) between the two embeddings if the similarity is high
-                plt.plot([reduced_embedding[i, 0], reduced_embedding[j, 0]],
-                         [reduced_embedding[i, 1], reduced_embedding[j, 1]], 
-                         color='yellow', alpha=0.5)
-
-    """
     # Title and labels from the configuration
     plt.title(config['plotting']['title'])
     plt.xlabel(config['plotting']['xlabel'])
@@ -47,9 +32,8 @@ def plot_embedding(config, embedding_list, labels):
     plt.close()
 
 
-def plot_embeddings_with_new_sample(config, cenroid_label, KNN_label, cosine_label, family_emb, family_num, test_emb, test_num, labels):
+def plot_embeddings_with_new_sample(config, family_emb, family_num, test_emb, test_num, labels):
     family_emb = check_embedding(family_emb)
-    print("entering plot_embeddings_with_new_sample")
     assert len(family_emb) == len(labels), "Family embeddings and labels must have the same length"
     # Perform PCA to reduce the embeddings to 2D for visualization
     pca = PCA(n_components=2)

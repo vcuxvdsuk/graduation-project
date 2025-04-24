@@ -15,28 +15,15 @@ import torch.nn as nn
 import torch.optim as optim
 
 
-def main(config_file='/app/config.yaml'):
+def main(run, config_file='/app/config.yaml'):
     # Load configuration settings
     config = load_config(config_file)
-    
-    # Initialize wandb
-    run = wandb.init(                    
-                    entity="oribaruch-engineering",     # the wandb entity where the project is logged
-                    project="graduation_project",   # the wandb project where this run is logged.
-                    )
     
     # Load model
     speaker_model = load_model_ecapa_from_speechbrain(config)
 
     for epoch in range(config['adaptation']['num_epochs']):
-        """
-        # Extract embeddings from the audio files
-        extract_family_embeddings(speaker_model,
-                                  config['audio_dir'],
-                                  config['train_audio_list_file'],
-                                  config['embedding_output_file'],
-                                  config['familes_emb'])
-        """
+        
         # Read the CSV file containing paths to all families
         families_df = pd.read_csv(config['familes_emb'], delimiter="\t")
         labels_csv_file_path = f"{config['familes_labels']}_epoch_{epoch}.csv"
@@ -63,6 +50,13 @@ def main(config_file='/app/config.yaml'):
         # Process the entire dataset
         process_entire_dataset(config, labels_csv_file_path, speaker_model,
                               all_embeddings, num_of_speakers, True)
+
+        # Extract embeddings from the audio files
+        extract_family_embeddings(speaker_model,
+                                  config['audio_dir'],
+                                  config['train_audio_list_file'],
+                                  config['embedding_output_file'],
+                                  config['familes_emb'])
 
     Save_Model_Localy(speaker_model, config)
 

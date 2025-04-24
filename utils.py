@@ -1,223 +1,201 @@
 import os
 import pandas as pd
-import shutil
 import csv
 from collections import defaultdict
 import wandb
-from model_funcs import *
-from clustering import *
-from meta_data_preproccesing import *
-from SV import *
-from ploting_funcs import *
-from adaptation import *
-from statistics import mode
-
 import numpy as np
-from sklearn.metrics import silhouette_score, accuracy_score
-from sklearn.metrics.cluster import contingency_matrix
-from sklearn.metrics import confusion_matrix
-
+from sklearn.metrics import silhouette_score, accuracy_score, confusion_matrix, det_curve, calinski_harabasz_score
 from sklearn.metrics.pairwise import cosine_similarity
 from itertools import combinations
-from sklearn.metrics import roc_curve, auc
-from scipy.optimize import brentq
-from scipy.interpolate import interp1d
-from sklearn.metrics import det_curve
+import logging
+
+# Initialize logging
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 
-def count_unique_speakers(file_path):
-    # Read the CSV file
-    df = pd.read_csv(file_path, delimiter="\t")
-    
-    # Extract the number from the 'client_id' field (after the last underscore)
-    df['speaker_number'] = df['client_id'].apply(lambda x: int(x.split('_')[-1]))
-    
-    # Count the number of unique speakers based on the extracted speaker numbers
-    unique_speakers = df['speaker_number'].nunique()
-    
-    return unique_speakers
+# Utility Functions
+def count_unique_speakers(file_path, delimiter="\t"):
+    """
+    Counts the number of unique speakers in a CSV file.
+
+    Args:
+        file_path (str): Path to the CSV file.
+        delimiter (str): Delimiter used in the CSV file (default: "\t").
+
+    Returns:
+        int: Number of unique speakers by counting the unique values in client_id.
+
+    Raises:
+        FileNotFoundError: If the file does not exist.
+        ValueError: If the 'client_id' column is missing or improperly formatted.
+    """
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"File not found: {file_path}")
+
+    df = pd.read_csv(file_path, delimiter=delimiter)
+    if 'client_id' not in df.columns:
+        raise ValueError("The 'client_id' column is missing from the CSV file.")
+
+    try:
+        df['speaker_number'] = df['client_id'].apply(lambda x: int(x.split('_')[-1]))
+    except Exception as e:
+        raise ValueError(f"Error processing 'client_id' column: {e}")
+
+    return df['speaker_number'].nunique()
 
 
-#gets the file and a family_id and return the num of uniqe client id of given family_id assuming the family_id are sorted
-def get_unique_speakers_in_family(file_path, family_id):
-    # Read the CSV file
-    df = pd.read_csv(file_path, delimiter="\t")
-    
-    # Filter the DataFrame by the given family_id
+def get_unique_speakers_in_family(file_path, family_id, delimiter="\t"):
+    """
+    Gets the number of unique client IDs for a given family ID.
+
+    Args:
+        file_path (str): Path to the CSV file.
+        family_id (int): Family ID to filter by.
+        delimiter (str): Delimiter used in the CSV file (default: "\t").
+
+    Returns:
+        int: Number of unique client IDs for the given family ID.
+    """
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"File not found: {file_path}")
+
+    df = pd.read_csv(file_path, delimiter=delimiter)
     family_df = df[df['family_id'] == family_id]
-    
-    # Get the unique client_id values
-    unique_clients = family_df['client_id'].nunique()
-    
-    return unique_clients
+    return family_df['client_id'].nunique()
 
 
+def clean_csv(csv_path):
+    """
+    Cleans the content of a CSV file by truncating it.
+
+    Args:
+        csv_path (str): Path to the CSV file.
+    """
+    try:
+        with open(csv_path, 'w') as file:
+            file.truncate()
+    except Exception as e:
+        logging.error(f"Error cleaning CSV file {csv_path}: {e}")
+
+
+# Evaluation Utilities
 class Evaluations:
-    # Method to calculate Equal Error Rate (EER)
-    def calculate_eer(self,y_true, y_scores):
+    """
+    A class for evaluation metrics such as EER, FAR, and FRR.
+    """
+
+    @staticmethod
+    def calculate_eer(y_true, y_scores):
+        """
+        Calculates the Equal Error Rate (EER).
+
+        Args:
+            y_true (list): True labels (1 for genuine, 0 for impostor).
+            y_scores (list): Similarity scores.
+
+        Returns:
+            float: Equal Error Rate (EER).
+        """
         fpr, fnr, thresholds = det_curve(y_true, y_scores)
-        # EER is the point where FPR = FNR
         eer = fpr[np.nanargmin(np.absolute(fnr - fpr))]
         return eer
 
-    # Method to calculate False Acceptance Rate (FAR)
-    def calculate_far(self, false_acceptances, total_impostor_attempts):
+    @staticmethod
+    def calculate_far(false_acceptances, total_impostor_attempts):
+        """
+        Calculates the False Acceptance Rate (FAR).
+
+        Args:
+            false_acceptances (int): Number of false acceptances.
+            total_impostor_attempts (int): Total number of impostor attempts.
+
+        Returns:
+            float: False Acceptance Rate (FAR).
+        """
         if total_impostor_attempts == 0:
             return 0.0
         return false_acceptances / total_impostor_attempts
 
-    # Method to calculate False Rejection Rate (FRR)
-    def calculate_frr(self, false_rejections, total_genuine_attempts):
+    @staticmethod
+    def calculate_frr(false_rejections, total_genuine_attempts):
+        """
+        Calculates the False Rejection Rate (FRR).
+
+        Args:
+            false_rejections (int): Number of false rejections.
+            total_genuine_attempts (int): Total number of genuine attempts.
+
+        Returns:
+            float: False Rejection Rate (FRR).
+        """
         if total_genuine_attempts == 0:
             return 0.0
         return false_rejections / total_genuine_attempts
 
 
-from sklearn.metrics import calinski_harabasz_score
+def build_verification_pairs(embeddings, labels):
+    """
+    Efficiently builds verification pairs using cosine similarity matrix.
 
-def calinski_harabasz_index(X, cluster_labels):
-    score = calinski_harabasz_score(X, cluster_labels)
-    return score
+    Args:
+        embeddings (list or np.ndarray): List/array of embeddings.
+        labels (list or np.ndarray): Corresponding labels.
 
+    Returns:
+        tuple: (y_true, y_scores)
+    """
+    embeddings = np.array(embeddings)
+    labels = np.array(labels)
 
-def clean_csv(csv_path):
-         # Clean the content of the CSV file
-        with open(csv_path, 'w') as file:
-            file.truncate()
+    sim_matrix = cosine_similarity(embeddings)
+    i_upper, j_upper = np.triu_indices(len(labels), k=1)
 
-#main logging function
+    y_true = (labels[i_upper] == labels[j_upper]).astype(int)
+    y_scores = sim_matrix[i_upper, j_upper]
 
-def evaluate_and_log(config, family_id, family_emb, num_of_speakers, labels, speaker_model):
-    evaluations = Evaluations()
-
-    # Read the CSV file containing paths to all families
-    df = pd.read_csv(config['train_audio_list_file'], delimiter="\t")
-    
-    # Filter to only include rows with the relevant family_id
-    if family_id is not None:
-        family_df = df[df['family_id'] == family_id]
-    else:
-        family_df = df
-
-    # Extract true labels from the 'client_id' column
-    true_labels = family_df['client_id'].values
-    
-    # Map true labels to integers
-    label_mapping = {label: idx for idx, label in enumerate(np.unique(true_labels))}
-    true_labels_mapped = np.array([label_mapping[label] for label in true_labels])
-    
-    # Ensure the lengths of true_labels and labels match
-    if len(true_labels_mapped) != len(labels):
-        raise ValueError(f"Mismatch in lengths. True Labels: {len(true_labels_mapped)}, Cluster Labels: {len(labels)}")
-
-    # Calculate confusion matrix and accuracy
-    cm = confusion_matrix(true_labels_mapped, labels)
-    accuracy = accuracy_score(true_labels_mapped, labels)
-    
-    # Log the results to wandb
-    wandb.log({
-        f"confusion_matrix_id_{family_id}": wandb.plot.confusion_matrix(probs=None,
-                                                        y_true=true_labels_mapped,
-                                                        preds=labels,
-                                                        class_names=list(label_mapping.keys()))
-    })
-    
-    # Calculate EER
-    assert len(family_emb) == len(labels), "Family embeddings and labels must have the same length"
-    y_true, y_scores = build_verification_pairs(family_emb, labels)
-    assert len(y_true) == len(y_scores), "y_true and y_scores must have the same length"
-    eer = evaluations.calculate_eer(y_true, y_scores)
-
-    # Log the averages EER values
-    if family_id:
-        wandb.log({
-            f"family_{family_id}_eer": eer,
-            f"family_{family_id}_accuracy": accuracy
-        })
-    else:
-        wandb.log({
-            "eer": eer,
-            "accuracy": accuracy
-        })
+    return y_true.tolist(), y_scores.tolist()
 
 
 
-#evaluate the SV errors by creating confusion matrix for each label
-def evaluate_SV_errors(config, labels, speaker_model, family_id, family_emb, num_of_speakers):
-    # Read the CSV file containing paths to all families
-    df = pd.read_csv(config['train_audio_list_file'], delimiter="\t")
-    
-    # Filter to only include rows with the relevant family_id
-    if family_id:
-        family_df = df[df['family_id'] == family_id]
-    else:
-        family_df = df
+# CSV Utilities
+def append_to_csv(family_id, labels, audio_csv, csv_file='clustering_loss_preparation.csv', delimiter="\t"):
+    """
+    Appends clustering results to a CSV file.
 
-    # Extract file paths
-    file_paths = family_df['path'].values
-    
-    # Initialize confusion matrix values for each true label
-    confusion_matrices = {label: {'tp': 0, 'fp': 0, 'fn': 0, 'tn': 0} for label in set(labels)}
-    
-    for true_label, file_path in zip(labels, file_paths):
-        if isinstance(file_path, str) and file_path.strip():
-            audio_path = os.path.join(config['audio_dir'], file_path)
-            test_emb = extract_single_embedding(speaker_model, audio_path)
-            if test_emb is not None:
-                cenroid_label = identify_cluster(family_emb, labels, test_emb, method="centroid")
-                KNN_label = identify_cluster(family_emb, labels, test_emb, method="knn", k=num_of_speakers)
-                cosine_label = identify_cluster(family_emb, labels, test_emb, method="cosine")
-                
-                common_label = mode([cenroid_label, KNN_label, cosine_label])
-                
-                for label in confusion_matrices:
-                    if common_label == true_label:
-                        if true_label == label:
-                            confusion_matrices[label]['tp'] += 1
-                        else:
-                            confusion_matrices[label]['tn'] += 1
-                    else:
-                        if true_label == label:
-                            confusion_matrices[label]['fn'] += 1
-                        else:
-                            confusion_matrices[label]['fp'] += 1
-    return confusion_matrices
+    Args:
+        family_id (int): Family ID.
+        labels (list): Cluster labels.
+        audio_csv (str): Path to the audio CSV file.
+        csv_file (str): Path to the output CSV file.
+        delimiter (str): Delimiter used in the CSV file (default: "\t").
+    """
+    try:
+        audio_df = pd.read_csv(audio_csv, delimiter=delimiter)
+        audio_paths = audio_df[audio_df['family_id'] == family_id]['path'].tolist()
 
-# in case of label 2
-#   true\label1   2   3   4
-#    1       tn  fp  tn  tn
-#    2       fn  tp  fn  fn
-#    3       tn  fp  tn  tn
-#    4       tn  fp  tn  tn
+        if len(labels) != len(audio_paths):
+            logging.error(f"Mismatch in lengths. Labels: {len(labels)}, Audio Paths: {len(audio_paths)}")
+            return
 
-def append_to_csv(family_id, labels, audio_csv, csv_file='clustering_loss_preparation.csv'):
-    # Read the audio CSV file to get the file paths
-    audio_df = pd.read_csv(audio_csv, delimiter="\t")
-    audio_paths = audio_df[audio_df['family_id'] == family_id]['path'].tolist()
+        label_dict = defaultdict(list)
+        for i, label in enumerate(labels):
+            if i < len(audio_paths):
+                label_dict[label].append(audio_paths[i])
+            else:
+                logging.warning(f"Index {i} out of range for audio_paths")
 
-    # Check if the lengths of labels and audio_paths match
-    if len(labels) != len(audio_paths):
-        print(f"Error: Mismatch in lengths.(append_to_csv func) Labels: {len(labels)}, Audio Paths: {len(audio_paths)}")
-        return
+        file_exists = os.path.isfile(csv_file)
+        with open(csv_file, mode='a', newline='') as file:
+            writer = csv.writer(file, delimiter=delimiter)
+            if not file_exists:
+                writer.writerow(['label'] + [f'file_{i}' for i in range(max(len(files) for files in label_dict.values()))])
 
-    label_dict = defaultdict(list)
-    for i, label in enumerate(labels):
-        if i < len(audio_paths):
-            label_dict[label].append(audio_paths[i])  # appending names from the CSV to label
-        else:
-            print(f"Warning: Index {i} out of range for audio_paths")
+            for label, audio_files in label_dict.items():
+                writer.writerow([family_id] + [label] + audio_files)
 
-    # Check if the target CSV file exists, if not, create it and write the header
-    file_exists = os.path.isfile(csv_file)
-    with open(csv_file, mode='a', newline='') as file:
-        writer = csv.writer(file, delimiter='\t')
-        if not file_exists:
-            # Write the header row
-            writer.writerow(['label'] + [f'file_{i}' for i in range(max(len(files) for files in label_dict.values()))])
-
-        # Write the data rows
-        for label, audio_files in label_dict.items():
-            writer.writerow([family_id] + [label] + audio_files)
+        #logging.info(f"Clustering results appended to {csv_file}")
+    except Exception as e:
+        logging.error(f"Error appending to CSV file {csv_file}: {e}")
 
 
 def append_All_to_csv(labels, audio_csv, csv_file='clustering_loss_preparation.csv'):
@@ -250,23 +228,45 @@ def append_All_to_csv(labels, audio_csv, csv_file='clustering_loss_preparation.c
             writer.writerow([label] + audio_files)
 
 
+# Evaluation and Logging
+def evaluate_and_log(config, family_id, family_emb, num_of_speakers, labels):
+    """
+    Evaluates clustering and logs metrics to wandb.
 
-def build_verification_pairs(embeddings, labels):
-    y_true = []
-    y_scores = []
+    Args:
+        config (dict): Configuration dictionary.
+        family_id (int): Family ID.
+        family_emb (list): Family embeddings.
+        num_of_speakers (int): Number of speakers.
+        labels (list): Cluster labels.
+    """
+    evaluations = Evaluations()
 
-    # Compare all combinations of pairs
-    for (i, j) in combinations(range(len(embeddings)), 2):
-        emb_i, emb_j = embeddings[i], embeddings[j]
-        label_i, label_j = labels[i], labels[j]
+    df = pd.read_csv(config['train_audio_list_file'], delimiter="\t")
+    family_df = df[df['family_id'] == family_id] if family_id is not None else df
 
-        # Cosine similarity (can also use Euclidean or other)
-        score = cosine_similarity([emb_i], [emb_j])[0][0]
+    true_labels = family_df['client_id'].values
+    label_mapping = {label: idx for idx, label in enumerate(np.unique(true_labels))}
+    true_labels_mapped = np.array([label_mapping[label] for label in true_labels])
 
-        # 1 = genuine match, 0 = impostor
-        is_match = int(label_i == label_j)
+    if len(true_labels_mapped) != len(labels):
+        raise ValueError(f"Mismatch in lengths. True Labels: {len(true_labels_mapped)}, Cluster Labels: {len(labels)}")
+    
+    #accuracy
+    accuracy = accuracy_score(true_labels_mapped, labels)
+    y_true, y_scores = build_verification_pairs(family_emb, labels)
+    #EER
+    eer = evaluations.calculate_eer(y_true, y_scores)
+    #silhouette
+    silhouette = silhouette_score(family_emb, labels) if len(set(labels)) > 1 else -1
+    #calinski
+    calinski = calinski_harabasz_score(family_emb, labels) if len(set(labels)) > 1 else -1
 
-        y_true.append(is_match)
-        y_scores.append(score)
+    wandb.log({
+        f"family_{family_id}_accuracy": accuracy,
+        f"family_{family_id}_eer": eer,
+        f"family_{family_id}_silhouette": silhouette,
+        f"family_{family_id}_calinski_harabasz": calinski
+    })
 
-    return y_true, y_scores
+    logging.info(f"Family {family_id}: Accuracy={accuracy}, EER={eer}, Silhouette={silhouette}, Calinski-Harabasz={calinski}")
