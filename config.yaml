@@ -10,6 +10,7 @@ embedding_output_file: "/app/Arabic/embedding"
 train_audio_list_file: "/app/Arabic/families.csv"
 test_audio_list_file: "/app/Arabic/families_test.csv"
 audio_dir: "/app/Arabic/combined_voice_dir"
+all_samples: "/app/Arabic/combined.csv"
 familes_emb: "/app/Arabic/familes_emb.csv"
 familes_re_emb: "/app/Arabic/familes_re_emb.csv"
 familes_labels: "/app/Arabic/familes_labels/familes_labels_round_" #adding number and then .csv in the pipline
@@ -28,6 +29,8 @@ pca:
 
 adaptation:
   num_epochs: 50  # Number of epochs for adaptation
+  batch_size: 16
+  train_nums_of_families: 40 #out of 50 families
   epochs_per_family: 3 
   load_localy_saved: True  # use the locally saved and fine tune model
 

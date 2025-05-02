@@ -78,84 +78,6 @@ def clean_csv(csv_path):
         logging.error(f"Error cleaning CSV file {csv_path}: {e}")
 
 
-# Evaluation Utilities
-class Evaluations:
-    """
-    A class for evaluation metrics such as EER, FAR, and FRR.
-    """
-
-    @staticmethod
-    def calculate_eer(y_true, y_scores):
-        """
-        Calculates the Equal Error Rate (EER).
-
-        Args:
-            y_true (list): True labels (1 for genuine, 0 for impostor).
-            y_scores (list): Similarity scores.
-
-        Returns:
-            float: Equal Error Rate (EER).
-        """
-        fpr, fnr, thresholds = det_curve(y_true, y_scores)
-        eer = fpr[np.nanargmin(np.absolute(fnr - fpr))]
-        return eer
-
-    @staticmethod
-    def calculate_far(false_acceptances, total_impostor_attempts):
-        """
-        Calculates the False Acceptance Rate (FAR).
-
-        Args:
-            false_acceptances (int): Number of false acceptances.
-            total_impostor_attempts (int): Total number of impostor attempts.
-
-        Returns:
-            float: False Acceptance Rate (FAR).
-        """
-        if total_impostor_attempts == 0:
-            return 0.0
-        return false_acceptances / total_impostor_attempts
-
-    @staticmethod
-    def calculate_frr(false_rejections, total_genuine_attempts):
-        """
-        Calculates the False Rejection Rate (FRR).
-
-        Args:
-            false_rejections (int): Number of false rejections.
-            total_genuine_attempts (int): Total number of genuine attempts.
-
-        Returns:
-            float: False Rejection Rate (FRR).
-        """
-        if total_genuine_attempts == 0:
-            return 0.0
-        return false_rejections / total_genuine_attempts
-
-
-def build_verification_pairs(embeddings, labels):
-    """
-    Efficiently builds verification pairs using cosine similarity matrix.
-
-    Args:
-        embeddings (list or np.ndarray): List/array of embeddings.
-        labels (list or np.ndarray): Corresponding labels.
-
-    Returns:
-        tuple: (y_true, y_scores)
-    """
-    embeddings = np.array(embeddings)
-    labels = np.array(labels)
-
-    sim_matrix = cosine_similarity(embeddings)
-    i_upper, j_upper = np.triu_indices(len(labels), k=1)
-
-    y_true = (labels[i_upper] == labels[j_upper]).astype(int)
-    y_scores = sim_matrix[i_upper, j_upper]
-
-    return y_true.tolist(), y_scores.tolist()
-
-
 
 # CSV Utilities
 def append_to_csv(family_id, labels, audio_csv, csv_file='clustering_loss_preparation.csv', delimiter="\t"):
@@ -228,45 +150,12 @@ def append_All_to_csv(labels, audio_csv, csv_file='clustering_loss_preparation.c
             writer.writerow([label] + audio_files)
 
 
-# Evaluation and Logging
-def evaluate_and_log(config, family_id, family_emb, num_of_speakers, labels):
-    """
-    Evaluates clustering and logs metrics to wandb.
 
-    Args:
-        config (dict): Configuration dictionary.
-        family_id (int): Family ID.
-        family_emb (list): Family embeddings.
-        num_of_speakers (int): Number of speakers.
-        labels (list): Cluster labels.
-    """
-    evaluations = Evaluations()
 
-    df = pd.read_csv(config['train_audio_list_file'], delimiter="\t")
-    family_df = df[df['family_id'] == family_id] if family_id is not None else df
-
-    true_labels = family_df['client_id'].values
-    label_mapping = {label: idx for idx, label in enumerate(np.unique(true_labels))}
-    true_labels_mapped = np.array([label_mapping[label] for label in true_labels])
-
-    if len(true_labels_mapped) != len(labels):
-        raise ValueError(f"Mismatch in lengths. True Labels: {len(true_labels_mapped)}, Cluster Labels: {len(labels)}")
-    
-    #accuracy
-    accuracy = accuracy_score(true_labels_mapped, labels)
-    y_true, y_scores = build_verification_pairs(family_emb, labels)
-    #EER
-    eer = evaluations.calculate_eer(y_true, y_scores)
-    #silhouette
-    silhouette = silhouette_score(family_emb, labels) if len(set(labels)) > 1 else -1
-    #calinski
-    calinski = calinski_harabasz_score(family_emb, labels) if len(set(labels)) > 1 else -1
-
-    wandb.log({
-        f"family_{family_id}_accuracy": accuracy,
-        f"family_{family_id}_eer": eer,
-        f"family_{family_id}_silhouette": silhouette,
-        f"family_{family_id}_calinski_harabasz": calinski
-    })
-
-    logging.info(f"Family {family_id}: Accuracy={accuracy}, EER={eer}, Silhouette={silhouette}, Calinski-Harabasz={calinski}")
+    #   1 2   3   4   5
+    #1 tp fn fn  fn  fn
+    #2 fp 
+    #3 fp
+    #4 fp
+    #5 fp
+   

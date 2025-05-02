@@ -4,6 +4,7 @@ from meta_data_preproccesing import *
 from SV import *
 from ploting_funcs import *
 from adaptation import *
+from evaluation import *
 from utils import *
 from statistics import mode
 
@@ -58,7 +59,7 @@ def train_per_family(config, speaker_brain, epoch):
     labels_csv_path = f"{config['familes_labels']}{epoch}.csv"
     clean_csv(labels_csv_path)
 
-    for _, row in families_df.iterrows():
+    for _, row in families_df.head(config['adaptation']['train_nums_of_families']).iterrows():
         family_id = row['family_number']
         family_emb = np.load(row['embedding_path'])
         num_speakers = get_unique_speakers_in_family(config['train_audio_list_file'], family_id)
@@ -127,7 +128,6 @@ def test_entire_database(config, speaker_model, epoch):
 
 
 def process_entire_dataset(config, labels_csv_path, speaker_model, all_embeddings, num_speakers, to_plot):
-    speaker_model.eval()
 
     labels, _ = spectral_clustering(all_embeddings, num_speakers, "entire_dataset")
     os.makedirs(os.path.dirname(config['familes_labels']), exist_ok=True)

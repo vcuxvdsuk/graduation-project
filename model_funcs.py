@@ -56,7 +56,7 @@ def Load_Model_Localy(model, config, name="fine_tuned_model.pth"):
     
     return model
 
-def add_noise_to_signal(signal, noise_factor=0.01):
+def add_noise_to_signal(signal, noise_factor=0.05):
     """Add random noise to the audio signal."""
     noise = torch.randn(signal.size()) * noise_factor
     noisy_signal = signal + noise
@@ -64,7 +64,7 @@ def add_noise_to_signal(signal, noise_factor=0.01):
     noisy_signal = torch.clamp(noisy_signal, -1.0, 1.0)
     return noisy_signal
 
-def extract_single_embedding(speaker_model, audio_path, noise_factor=0.01):
+def extract_single_embedding(speaker_model, audio_path, noise_factor=0.1):
     try:
         if not os.path.exists(audio_path):
             print(f"Audio file not found: {audio_path}")
@@ -93,7 +93,7 @@ def extract_single_embedding(speaker_model, audio_path, noise_factor=0.01):
         return None
 
 
-def extract_all_families_embeddings(speaker_model, audio_dir, file, emb_dir, save_csv_file,noise_factor = 0.01, re_do=False):
+def extract_all_families_embeddings(speaker_model, audio_dir, file, emb_dir, save_csv_file,noise_factor = 0.05, re_do=False):
     family_embeddings = []
     family_ids = []
     embedding_paths = []
@@ -174,11 +174,9 @@ def extract_all_families_embeddings(speaker_model, audio_dir, file, emb_dir, sav
         print(f"CSV file saved to {save_csv_file}")
     except Exception as e:
         print(f"Error saving CSV file: {e}")
-
-
-
-
-def extract_batch_embeddings_train(speaker_brain, audio_dir, batch_paths, noise_factor=0.01):
+        
+        
+def extract_batch_embeddings_train(speaker_brain, audio_dir, batch_paths, noise_factor=0.05):
     # Set the model in training mode
     speaker_brain.modules.embedding_model.train()
     embeddings = []
@@ -243,4 +241,3 @@ def extract_batch_embeddings_train(speaker_brain, audio_dir, batch_paths, noise_
         emb = emb.squeeze(1)
 
     return emb
-

@@ -62,7 +62,7 @@ class OnlineTripletDataset(Dataset):
 
 
 #################################################################################################################
-####################### model?
+####################### model
 #################################################################################################################
 
 from speechbrain.lobes.features import Fbank
@@ -70,19 +70,26 @@ import torch
 import speechbrain as sb
 import torch
 
+
 class modelTune(sb.Brain):
     def on_stage_start(self, stage, epoch):
-        # Enable grad for fine-tuning during training
+        # Enable grad for fine-tuning during training, and freeze other modules
         if stage == sb.Stage.TRAIN:
             for module in [
-                self.modules.compute_features,
-                self.modules.mean_var_norm,
                 self.modules.embedding_model,
-                self.modules.mean_var_norm_emb,
                 self.modules.classifier,
             ]:
                 for p in module.parameters():
                     p.requires_grad = True
+
+            # Optionally freeze feature extractor and normalization layers
+            for module in [
+                self.modules.compute_features,
+                self.modules.mean_var_norm,
+                self.modules.mean_var_norm_emb,
+            ]:
+                for p in module.parameters():
+                    p.requires_grad = False
 
     def compute_forward(self, batch, stage):
         """Forward computation for speaker embeddings or classification."""
@@ -90,47 +97,44 @@ class modelTune(sb.Brain):
         wavs, wav_lens = wavs.to(self.device), wav_lens.to(self.device)
         # Feature extraction
         feats = self.modules.compute_features(wavs)
-        feats = self.modules.mean_var_norm(feats,wav_lens)
+        feats = self.modules.mean_var_norm(feats, wav_lens)
 
         # Embedding extraction
         embeddings = self.modules.embedding_model(feats)
 
         # Optional normalization
-        embeddings = self.modules.mean_var_norm_emb(embeddings,wav_lens)
-        # Classification head
-        #outputs = self.modules.classifier(embeddings)
+        embeddings = self.modules.mean_var_norm_emb(embeddings, wav_lens)
 
-        return embeddings, wav_lens
+        # Classification head (add classifier after obtaining embeddings)
+        if stage == sb.Stage.TRAIN or stage == sb.Stage.VALID:
+            logits = self.modules.classifier(embeddings)
+        else:
+            logits = None
+
+        return embeddings, wav_lens, logits
 
     def compute_objectives(self, predictions, batch, stage):
         """Computes classification loss (e.g., cross-entropy)."""
-        outputs, wav_lens = predictions
+        embeddings, wav_lens, logits = predictions
         _, targets = batch.class_labels
-
-        loss = self.hparams.compute_cost(outputs, targets)
-
-        return loss
+        return self.hparams.compute_cost(logits, targets)
 
 
+    ##################################3
+from torch.nn.functional import normalize
+import torch.nn.functional as F
 
-    ######################################################
-    # open feat method
-
-    """
-    class PrototypeAdapter(nn.Module):
-    def __init__(self, embed_dim, hidden_dim=None, heads=1):
+class AMSoftmaxHead(nn.Module):
+    def __init__(self, in_features, out_features, margin=0.2, scale=30):
         super().__init__()
-        H = heads
-        self.self_attn = nn.MultiheadAttention(embed_dim, H, batch_first=True)
-        self.fc        = nn.Linear(embed_dim, embed_dim)
-        self.norm      = nn.LayerNorm(embed_dim)
-        self.dropout   = nn.Dropout(0.5)
+        self.weight = nn.Parameter(torch.FloatTensor(out_features, in_features))
+        nn.init.xavier_uniform_(self.weight)
+        self.margin = margin
+        self.scale = scale
 
-    def forward(self, prototypes):
-        # prototypes: [N_classes, embed_dim]
-        q = k = v = prototypes.unsqueeze(0)  # [1, N, D]
-        attn_out, _ = self.self_attn(q, k, v)           # :contentReference[oaicite:2]{index=2}
-        out = self.dropout(self.fc(attn_out))           # :contentReference[oaicite:3]{index=3}
-        adapted = self.norm(out + prototypes.unsqueeze(0))
-        return adapted.squeeze(0)  # [N, D]
-        """
+    def forward(self, x, labels):
+        x = normalize(x)
+        w = normalize(self.weight)
+        logits = torch.matmul(x, w.T)
+        logits = logits - self.margin * F.one_hot(labels, num_classes=w.shape[0])
+        return logits * self.scale
