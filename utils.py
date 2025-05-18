@@ -36,12 +36,7 @@ def count_unique_speakers(file_path, delimiter="\t"):
     if 'client_id' not in df.columns:
         raise ValueError("The 'client_id' column is missing from the CSV file.")
 
-    try:
-        df['speaker_number'] = df['client_id'].apply(lambda x: int(x.split('_')[-1]))
-    except Exception as e:
-        raise ValueError(f"Error processing 'client_id' column: {e}")
-
-    return df['speaker_number'].nunique()
+    return df['client_id'].nunique()
 
 
 def get_unique_speakers_in_family(file_path, family_id, delimiter="\t"):

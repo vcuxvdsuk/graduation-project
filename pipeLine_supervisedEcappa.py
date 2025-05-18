@@ -111,7 +111,7 @@ def train_epoch(speaker_brain, train_dataset, config, epoch):
             numeric.append(label_map[l])
         labels_tensor = torch.tensor(numeric, device=device)
 
-        # 3) Classification head + CE loss (if you still want it)
+        # 3) Classification head + CE loss
         logits  = classifier(emb, labels_tensor)
         ce_loss = ce_loss_fn(logits, labels_tensor)
 
@@ -130,7 +130,7 @@ def train_epoch(speaker_brain, train_dataset, config, epoch):
         else:
             triplet_loss = torch.tensor(0.0, device=device)
 
-        # 6) Combine everything
+        # 6) Combine
         loss = ce_loss \
              + alpha_cos  * cos_loss \
              + alpha_trip * triplet_loss
@@ -143,7 +143,7 @@ def train_epoch(speaker_brain, train_dataset, config, epoch):
         total_loss += loss.item()
 
     avg_loss = total_loss / len(train_loader)
-    print(f"[Epoch {epoch}] Training Loss: {avg_loss:.4f}")
+    print(f"Training Loss: {avg_loss:.4f}")
     wandb.log({"train_loss": avg_loss})
 
 
@@ -180,7 +180,7 @@ def evaluate_model(speaker_brain, dataloader, config, epoch, train = False):
     assert len(all_preds) == len(all_labels) == len(all_embeddings)
 
     evaluations = Evaluations()
-    y_true, y_scores = build_verification_pairs(all_embeddings, all_labels)
+    y_true, y_scores = evaluations.build_verification_pairs(all_embeddings, all_labels)
     eer = evaluations.calculate_eer(y_true, y_scores)
 
     ieer = evaluations.calculate_ieer(y_true, y_scores)

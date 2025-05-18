@@ -8,6 +8,7 @@ from sklearn.mixture import GaussianMixture
 import tensorflow as tf
 from sklearn.cluster import SpectralClustering
 import warnings
+import hdbscan
 
 def simple_cluster(embedding, n_clusters=5, family_id=-1):
     """
@@ -45,7 +46,6 @@ def simple_cluster(embedding, n_clusters=5, family_id=-1):
     return labels, centroids
 
 
-
 def spectral_clustering(embedding, n_clusters=5, family_id=-1):
     """
     Perform Spectral Clustering on the embeddings and return cluster labels and centroids.
@@ -54,7 +54,7 @@ def spectral_clustering(embedding, n_clusters=5, family_id=-1):
         embedding = np.array(embedding)
 
     # Ensure n_neighbors is less than the number of samples
-    n_neighbors = min(n_clusters, len(embedding) - 1)
+    n_neighbors = min(n_clusters, len(embedding) - 1,4) #avrg 4 samples per speaker
 
     # Apply Spectral Clustering
     with warnings.catch_warnings():

@@ -1,17 +1,20 @@
 
+import os
+import yaml
+import torch
+import random
+import torchaudio
+import numpy as np
+import pandas as pd
+from tqdm import tqdm
+import speechbrain as sb
+from types import SimpleNamespace
+from torch.nn.functional import pad
+import torchaudio.transforms as transforms
 from speechbrain.inference import Tacotron2, HIFIGAN
 from speechbrain.inference import SpeakerRecognition
-import torch
-import yaml
-import torchaudio
-import os
-import pandas as pd
-import numpy as np
-from tqdm import tqdm
-from types import SimpleNamespace
-import speechbrain as sb
 
-from torch.nn.functional import pad
+import logging
 
 MAX_LEN = 16000 * 3  # 3 seconds at 16kHz
 
@@ -27,11 +30,6 @@ def load_model_ecapa_from_speechbrain(config):
                                                      savedir=config['speechbrain_model']['savedir'])
     return speaker_model
 
-# Load the ECAPA-TDNN speaker embedding model
-def load_model_ASR(config):
-    asr = SpeakerRecognition.from_hparams(source=config['speechbrain_model']['ASR'],
-                                        savedir=config['speechbrain_model']['savedir'])
-    return asr
 
 
 def Save_Model_Localy(model, config, name="fine_tuned_model.pth"):
@@ -56,7 +54,7 @@ def Load_Model_Localy(model, config, name="fine_tuned_model.pth"):
     
     return model
 
-def add_noise_to_signal(signal, noise_factor=0.05):
+def add_noise_to_signal(signal, noise_factor=0.00):
     """Add random noise to the audio signal."""
     noise = torch.randn(signal.size()) * noise_factor
     noisy_signal = signal + noise
@@ -64,7 +62,7 @@ def add_noise_to_signal(signal, noise_factor=0.05):
     noisy_signal = torch.clamp(noisy_signal, -1.0, 1.0)
     return noisy_signal
 
-def extract_single_embedding(speaker_model, audio_path, noise_factor=0.1):
+def extract_single_embedding(speaker_model, audio_path, noise_factor=0.0):
     try:
         if not os.path.exists(audio_path):
             print(f"Audio file not found: {audio_path}")
@@ -76,24 +74,38 @@ def extract_single_embedding(speaker_model, audio_path, noise_factor=0.1):
         if signal.dim() > 1:
             signal = signal.mean(dim=0)
 
-        # Check if signal is too short
-        if signal.numel() < 16000:  # <1s audio
+        if signal.numel() < 16000:
             print(f"Audio too short: {audio_path}")
             return None
 
+        # Add noise and pad
         signal = signal.squeeze(0)
         noisy_signal = add_noise_to_signal(signal, noise_factor).unsqueeze(0)
 
-        embedding = speaker_model.encode_batch(noisy_signal)
+        if noisy_signal.shape[-1] > MAX_LEN:
+            noisy_signal = noisy_signal[..., :MAX_LEN]
+        else:
+            noisy_signal = pad(noisy_signal, (0, MAX_LEN - noisy_signal.shape[-1]))
 
-        return embedding.squeeze(0)  # Shape: [embedding_dim]
+        noisy_signal = noisy_signal.to(speaker_model.device)
+
+        with torch.no_grad():
+            feats = speaker_model.modules.compute_features(noisy_signal)
+            feats = speaker_model.modules.mean_var_norm(feats, torch.tensor([1.0], device=speaker_model.device))
+
+            emb = speaker_model.modules.embedding_model(feats)
+            emb = speaker_model.modules.mean_var_norm_emb(emb, torch.tensor([1.0], device=speaker_model.device))
+            emb = emb.squeeze(0)
+
+        return emb.detach()
 
     except Exception as e:
-        print(f"Error processing audio file (extract_single_embedding) {audio_path}: {e}")
+        print(f"Error processing audio file (extract_single_embedding): {e}")
         return None
 
 
-def extract_all_families_embeddings(speaker_model, audio_dir, file, emb_dir, save_csv_file,noise_factor = 0.05, re_do=False):
+def extract_all_families_embeddings(speaker_model, audio_dir, file, emb_dir, 
+                                    save_csv_file, noise_factor = 0.0, re_do=False):
     family_embeddings = []
     family_ids = []
     embedding_paths = []
@@ -133,23 +145,24 @@ def extract_all_families_embeddings(speaker_model, audio_dir, file, emb_dir, sav
                 # Ensure the signal is in the expected format (mono)
                 if noisy_signal.dim() > 1:
                     noisy_signal = noisy_signal.mean(dim=0, keepdim=True)  # Convert stereo to mono if necessary
-
+                
+                #logging.info(f"1")
                 # Get the embedding for the signal
                 with torch.no_grad():
                     batch = SimpleNamespace(signal=(noisy_signal, torch.tensor([1.0])))
-                    embedding, _ = speaker_model.compute_forward(batch, sb.Stage.VALID)
+                    embedding, wav_lens, logits = speaker_model.compute_forward(batch, sb.Stage.VALID)
+
+                #logging.info(f"2 \nembedding {embedding}, \nwav_lens {wav_lens}, \nlogits {logits}")
 
                 # Append the embedding to the list for this family
                 family_embeddings_list.append(embedding.squeeze().cpu().numpy())
+                #logging.info(f"3")
 
             # Store the embeddings for the entire family (as a list of arrays)
             family_embedding_array = np.array(family_embeddings_list)
 
             # Save the family embedding array to a file
-            if re_do:
-                family_emb_file = os.path.join(emb_dir, f"family_{family_id}_RE_embedding.npy")
-            else:
-                family_emb_file = os.path.join(emb_dir, f"family_{family_id}_embedding.npy")
+            family_emb_file = os.path.join(emb_dir, f"family_{family_id}_embedding.npy")
 
             np.save(family_emb_file, family_embedding_array)
 
@@ -176,7 +189,7 @@ def extract_all_families_embeddings(speaker_model, audio_dir, file, emb_dir, sav
         print(f"Error saving CSV file: {e}")
         
         
-def extract_batch_embeddings_train(speaker_brain, audio_dir, batch_paths, noise_factor=0.05):
+def extract_batch_embeddings_train(speaker_brain, audio_dir, batch_paths, noise_factor=0.0, augment=False):
     # Set the model in training mode
     speaker_brain.modules.embedding_model.train()
     embeddings = []
@@ -184,6 +197,7 @@ def extract_batch_embeddings_train(speaker_brain, audio_dir, batch_paths, noise_
     # Normalize batch_paths input
     if isinstance(batch_paths, tuple):
         batch_paths = list(batch_paths)
+
 
     # Construct full paths
     audio_paths = [os.path.join(audio_dir, path) for path in batch_paths]
@@ -205,7 +219,13 @@ def extract_batch_embeddings_train(speaker_brain, audio_dir, batch_paths, noise_
                 continue
 
             # Add noise
+            if augment:
+                signal = augment_waveform(signal)
             noisy_signal = add_noise_to_signal(signal, noise_factor)
+            
+            # Ensure the signal is in the expected format (mono)
+            if noisy_signal.dim() > 1:
+                noisy_signal = noisy_signal.mean(dim=0, keepdim=True)  # Convert stereo to mono if necessary
 
             # Truncate or pad to MAX_LEN
             if noisy_signal.shape[-1] > MAX_LEN:
@@ -222,12 +242,12 @@ def extract_batch_embeddings_train(speaker_brain, audio_dir, batch_paths, noise_
 
     if len(signals) < 2:
         print(f"Too few valid signals in batch (found {len(signals)}), skipping this batch.")
-        return []
+        return torch.empty((0, 192), device=speaker_brain.device)
 
     # Prepare batch
     batch_signals = torch.cat(signals, dim=0).to(speaker_brain.device)  # Use speaker_brain.device
     wav_lens = torch.ones(batch_signals.shape[0], device=speaker_brain.device)
-
+    
     # Ensure parameters are trainable
     for param in speaker_brain.modules.embedding_model.parameters():
         param.requires_grad = True
@@ -235,9 +255,36 @@ def extract_batch_embeddings_train(speaker_brain, audio_dir, batch_paths, noise_
     # Forward pass through model
     with torch.set_grad_enabled(True):  # Enable gradients
         batch_signals = batch_signals.squeeze(1)
+
         feats = speaker_brain.modules.compute_features(batch_signals)
-        emb = speaker_brain.modules.embedding_model(feats)
+
+        emb = speaker_brain.modules.embedding_model(feats)  #shape [batch,fatures,?]
+
         emb = speaker_brain.modules.mean_var_norm_emb(emb, wav_lens)
         emb = emb.squeeze(1)
 
     return emb
+
+
+
+def augment_waveform(wav, sample_rate = 16000):
+    # 1. Additive noise
+    #logging.info(f"1")
+    noise = torch.randn_like(wav) * 0.01
+    wav = wav + noise
+
+    # 2. Reverberation (RIR conv)
+    # assume `rir` is a preloaded tensor [1, L]
+    # wav = torch.nn.functional.conv1d(wav.unsqueeze(0), rir.unsqueeze(0)).squeeze(0)
+
+    # 3. Speed perturbation
+    #logging.info(f"3")
+    speed = random.choice([0.9, 1.0, 1.1])
+    wav = torchaudio.functional.resample(wav, sample_rate, int(sample_rate*speed))
+
+    # 5. Volume scaling
+    #logging.info(f"5")
+    gain = random.uniform(0.8, 1.2)
+    wav = wav * gain
+
+    return wav

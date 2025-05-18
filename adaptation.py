@@ -13,12 +13,15 @@ from pytorch_metric_learning import miners
 from pytorch_metric_learning.utils.loss_and_miner_utils import get_all_triplets_indices
 from torch.utils.data import Dataset, DataLoader
 
+
 def set_seed(seed=42):
     random.seed(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
+
+
 
 
 def _prepare_audio_dataset(df, filter_family_id=None):
@@ -72,7 +75,7 @@ import torch
 
 
 class modelTune(sb.Brain):
-    def on_stage_start(self, stage, epoch):
+    def on_stage_start(self, stage):
         # Enable grad for fine-tuning during training, and freeze other modules
         if stage == sb.Stage.TRAIN:
             for module in [
@@ -117,8 +120,18 @@ class modelTune(sb.Brain):
         """Computes classification loss (e.g., cross-entropy)."""
         embeddings, wav_lens, logits = predictions
         _, targets = batch.class_labels
+
         return self.hparams.compute_cost(logits, targets)
 
+    def set_eval_mode(self):
+        for module in [
+            self.modules.embedding_model,
+            self.modules.classifier,
+            self.modules.compute_features,
+            self.modules.mean_var_norm,
+            self.modules.mean_var_norm_emb,
+        ]:
+            module.eval()
 
     ##################################3
 from torch.nn.functional import normalize
@@ -136,5 +149,5 @@ class AMSoftmaxHead(nn.Module):
         x = normalize(x)
         w = normalize(self.weight)
         logits = torch.matmul(x, w.T)
-        logits = logits - self.margin * F.one_hot(labels, num_classes=w.shape[0])
+        logits[torch.arange(x.size(0)), labels] -= self.margin
         return logits * self.scale

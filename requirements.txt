@@ -5,6 +5,7 @@ torchaudio
 pandas
 numpy
 tqdm
+hdbscan
 pyyaml
 speechbrain
 matplotlib

@@ -3,6 +3,8 @@ from pipeLinePerFamilyToAll import main as pipeline_per_family_to_all
 from perfamilyPipLine import main as pipeline_per_family
 from PipLineAllData import main as pipeline_all_data
 from pipeLine_supervisedEcappa import main as pipeline_supervised
+from Ecappa_training_loop_superviesd import main as Ecappa_pipeline_supervised
+from Ecappa_training_loop_unSupervised import main as Ecappa_pipeline_unsupervised
 
 from model_funcs import *
 from utils import *
@@ -15,8 +17,8 @@ def main():
         "--pipeline",
         type=str,
         required=True,
-        choices=["per_family_to_all", "per_family", "supervised", "all_data"],
-        help="Specify which pipeline to run: 'per_family_to_all', 'per_family', 'supervised', or 'all_data'."
+        choices=["per_family_to_all", "per_family", "supervised", "all_data", "ecappa_supervised", "ecappa_unsupervised"],
+        help="Specify which pipeline to run: 'per_family_to_all', 'per_family', 'supervised', 'ecappa_supervised', 'ecappa_unsupervised',  or 'all_data'."
     )
     parser.add_argument(
         "--config",
@@ -48,6 +50,12 @@ def main():
     elif args.pipeline == "all_data":
         print("Running pipeline: All Data")
         pipeline_all_data(run, args.config)
+    elif args.pipeline == "ecappa_supervised":
+        print("Running pipeline: All Data ecappa_supervised")
+        Ecappa_pipeline_supervised(run, args.config)
+    elif args.pipeline == "ecappa_unsupervised":
+        print("Running pipeline: All Data ecappa_unsupervised")
+        Ecappa_pipeline_unsupervised(run, args.config)
     else:
         print("Invalid pipeline selected. Use --help for usage information.")
 

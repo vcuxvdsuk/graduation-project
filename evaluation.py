@@ -11,34 +11,13 @@ from sklearn.metrics import (
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy.optimize import linear_sum_assignment
 
-def build_verification_pairs(embeddings, labels):
-    """
-    Efficiently builds verification pairs using cosine similarity matrix.
-
-    Args:
-        embeddings (list or np.ndarray): List/array of embeddings.
-        labels (list or np.ndarray): Corresponding labels.
-
-    Returns:
-        tuple: (y_true, y_scores)
-    """
-    embeddings = np.array(embeddings)
-    labels = np.array(labels)
-
-    sim_matrix = cosine_similarity(embeddings)
-    i_upper, j_upper = np.triu_indices(len(labels), k=1)
-
-    y_true = (labels[i_upper] == labels[j_upper]).astype(int)
-    y_scores = sim_matrix[i_upper, j_upper]
-
-    return y_true.tolist(), y_scores.tolist()
 
 
 class Evaluations:
     """Misc. speaker‐verification and clustering metrics."""
 
     @staticmethod
-    def calculate_eer(y_true, y_scores):
+    def calculate_eer(y_true, y_scores):    #לעבור על זה שוב
         """Find EER from ROC curve (FPR vs TPR)."""
         fpr, tpr, _ = roc_curve(y_true, y_scores, pos_label=1)
         fnr = 1 - tpr
@@ -85,16 +64,24 @@ class Evaluations:
     @staticmethod
     def build_verification_pairs(embeddings, labels):
         """
-        Return (y_true, y_scores) for all upper‐triangle pairs.
-        embeddings: list/array of shape (N, D)
-        labels:       array of shape (N,)
+        Efficiently builds verification pairs using cosine similarity matrix.
+
+        Args:
+            embeddings (list or np.ndarray): List/array of embeddings.
+            labels (list or np.ndarray): Corresponding labels.
+
+        Returns:
+            tuple: (y_true, y_scores)
         """
-        E = np.vstack(embeddings)
-        L = np.asarray(labels)
-        sim = cosine_similarity(E)
-        i, j = np.triu_indices_from(sim, k=1)
-        y_true = (L[i] == L[j]).astype(int)
-        y_scores = sim[i, j]
+        embeddings = np.array(embeddings)
+        labels = np.array(labels)
+
+        sim_matrix = cosine_similarity(embeddings)
+        i_upper, j_upper = np.triu_indices(len(labels), k=1)
+
+        y_true = (labels[i_upper] == labels[j_upper]).astype(int)
+        y_scores = sim_matrix[i_upper, j_upper]
+
         return y_true.tolist(), y_scores.tolist()
 
     @staticmethod
@@ -123,7 +110,7 @@ def evaluate_and_log(config, family_id, family_emb, predicted_labels):
     - predicted_labels: list/array of cluster IDs length N
     """
     # 1. Load ground‐truth for this family
-    df = pd.read_csv(config['all_samples'], sep="\t")
+    df = pd.read_csv(config['train_audio_list_file'], sep="\t")
     if family_id is not None:
         df = df[df['family_id'] == family_id]
     true_ids = df['client_id'].astype('category').cat.codes.values
@@ -147,8 +134,7 @@ def evaluate_and_log(config, family_id, family_emb, predicted_labels):
     eer = evals.calculate_eer(y_true, y_scores)
 
     # 5. Speaker identification IEER
-    thresholds = np.linspace(0.5, 1.0, num=50)
-    ieer = evals.calculate_ieer(true_ids, predicted_labels, thresholds)
+    ieer = evals.calculate_ieer(true_ids, predicted_labels)
 
     # 6. Log everything
     wandb.log({

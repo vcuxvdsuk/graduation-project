@@ -1,142 +1,206 @@
+
 from model_funcs import *
 from clustering import *
 from meta_data_preproccesing import *
 from SV import *
 from ploting_funcs import *
 from adaptation import *
+from evaluation import *
 from utils import *
-from statistics import mode
-import wandb
+
 import os
-import torch.nn.functional as F
-import csv
+import logging
+import numpy as np
+import pandas as pd
 import torch
+import torch.nn.functional as F
 import torch.nn as nn
-import torch.optim as optim
+from torch.utils.data import DataLoader
+import wandb
+import speechbrain as sb
 
 
-def main(run, config_file='/app/config.yaml'):
-    # Load configuration settings
+def main(run=None, config_file='/app/config.yaml'):
+    # Load configuration
     config = load_config(config_file)
-    
-    # Load model
+
+    # Initialize model and embedding sub-module
     speaker_model = load_model_ecapa_from_speechbrain(config)
+    embedding_model = speaker_model.mods.embedding_model
+    for p in embedding_model.parameters():
+        p.requires_grad = True
 
+    # Loss functions
+    triplet_loss_fn = nn.TripletMarginLoss(margin=1.0, p=2, swap=True, reduction="mean")
+    ssreg_loss_fn = nn.MSELoss(reduction="mean")
+
+    # Optimizer and scheduler
+    optimizer = torch.optim.AdamW(
+        embedding_model.parameters(),
+        lr=1e-3, weight_decay=1e-1
+    )
+
+    scheduler = torch.optim.lr_scheduler.LambdaLR(optimizer, lambda step: min((step + 1) / 1000, 1.0))
+
+    # Wrap in SpeechBrain brain for training loops
+    speaker_brain = modelTune(
+        modules=speaker_model.mods,
+        opt_class=lambda args: optimizer,
+        hparams={
+            "triplet_loss": triplet_loss_fn,
+            "ssreg_loss":    ssreg_loss_fn,
+            "ssreg_weight":  2,
+            "optimizer":    optimizer,
+            "scheduler":    scheduler
+        },
+        run_opts={"device": speaker_model.device}
+    )
+
+    # Prepare full-dataset paths and pseudo-labels
+    df = pd.read_csv(config['train_audio_list_file'], sep="\t")
+    audio_paths = df['path'].tolist()
+
+    num_clusters = count_unique_speakers(config['train_audio_list_file'])
+
+
+    # Initialize Weights & Biases run
+    if run:
+        wandb.init(config=config)
+    
+
+    miner           = miners.TripletMarginMiner(margin=1.0, type_of_triplets="semihard")
+    triplet_loss_fn = speaker_brain.hparams.triplet_loss
+    ssreg_loss_fn   = speaker_brain.hparams.ssreg_loss
+    ssreg_weight    = speaker_brain.hparams.ssreg_weight
+    optimizer       = speaker_brain.hparams.optimizer
+    scheduler       = speaker_brain.hparams.scheduler
+    
+    # Training loop over entire dataset with pseudo labels
     for epoch in range(config['adaptation']['num_epochs']):
-        
-        # Read the CSV file containing paths to all families
+        logging.info(f"[Epoch {epoch}] full dataset")
+
+        with torch.no_grad():
+            #run test every 5 epochs
+            if epoch%5==0:
+                logging.info(f"[Epoch {epoch}] Test full DB")
+                test_entire_database(config, speaker_model, epoch)
+            
+
+        # collect embeddings for clustering
+        speaker_model.eval()
         families_df = pd.read_csv(config['familes_emb'], delimiter="\t")
-        labels_csv_file_path = f"{config['familes_labels']}_epoch_{epoch}.csv"
 
-        # Clean the content of the CSV file
-        clean_csv(labels_csv_file_path)
+        all_embeddings = [
+            np.load(row['embedding_path']) for _, row in families_df.iterrows()
+        ]
+        all_embeddings = np.concatenate(all_embeddings, axis=0)
 
-        # Load all family embeddings into a single array
-        all_embeddings = []
-        for index, row in families_df.iterrows():
-            family_id = row['family_number']  
-            family_path = row['embedding_path']
+        # Spectral clustering to obtain pseudo labels
+        logging.info("Performing spectral clustering...")
+        labels, _ = spectral_clustering(all_embeddings, num_clusters, "all")
 
-            # Load a single family embeddings as numpy array
-            print(f"Processing family {family_id}")
-            family_emb = np.load(family_path)
-            for emb in family_emb:
-                all_embeddings.append(emb)
+        # Create Dataset & DataLoader
+        full_dataset = OnlineTripletDataset(audio_paths, labels)
+        loader = DataLoader(
+            full_dataset,
+            batch_size=16,
+            shuffle=True
+        )
 
-        all_embeddings = np.array(all_embeddings)
-        # Get the total number of speakers in the dataset
-        num_of_speakers = count_unique_speakers(config['train_audio_list_file'])
+        logging.info(f"[Epoch {epoch}] Training on entire dataset with pseudo labels")
+        speaker_brain.on_stage_start(sb.Stage.TRAIN)
+        
+        for paths, labels in loader:
+            embeddings = extract_batch_embeddings_train(
+                speaker_brain,
+                config['audio_dir'],
+                paths
+            )
+            if embeddings.size(0) == 0:
+                continue
 
-        # Process the entire dataset
-        process_entire_dataset(config, labels_csv_file_path, speaker_model,
-                              all_embeddings, num_of_speakers, True)
+            labels = labels.long()
+            embeddings = F.normalize(embeddings, p=2, dim=1)
 
-        # Extract embeddings from the audio files
-        extract_family_embeddings(speaker_model,
-                                  config['audio_dir'],
-                                  config['train_audio_list_file'],
-                                  config['embedding_output_file'],
-                                  config['familes_emb'])
+            # Triplet mining and loss
+            a, p, n = miner(embeddings, labels)
+            if a.numel() > 0:
+                t_loss = triplet_loss_fn(embeddings[a], embeddings[p], embeddings[n])
+            else:
+                t_loss = torch.tensor(0.0)
 
-    Save_Model_Localy(speaker_model, config)
+            # Self-supervised loss (SSReg)
+            aug_embeddings = extract_batch_embeddings_train(speaker_brain,
+                                                            config['audio_dir'],
+                                                            paths,0.05,True)
+            aug_embeddings = F.normalize(aug_embeddings, p=2, dim=1)
+            ssreg_loss = ssreg_loss_fn(embeddings, aug_embeddings)
 
-    # Finish the run and upload any remaining data.
-    run.finish()
+            # Combined loss
+            loss = 10* t_loss + ssreg_weight * ssreg_loss
+
+            # Backpropagation
+            optimizer.zero_grad()
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(embedding_model.parameters(), max_norm=1.0)
+            optimizer.step()
+            scheduler.step()
+
+            # Log metrics
+            if run:
+                wandb.log({
+                    'triplet_loss': t_loss.item(),
+                    'ssreg_loss': ssreg_loss.item(),
+                    'combined_loss': loss.item()
+                })
+
+        with torch.no_grad():
+
+            logging.info(f"[Epoch {epoch}] Extract embeddings")
+            extract_all_families_embeddings(speaker_brain,  # fine-tuned model
+                                            config['audio_dir'],
+                                            config['train_audio_list_file'],
+                                            config['embedding_output_file'],
+                                            config['familes_emb'])
+        
+
+    # Save the fine-tuned embedding model
+    Save_Model_Localy(
+        embedding_model,
+        config,
+        name="fine_tuned_full_dataset_unsupervised.pth")
+
+    if run:
+        wandb.finish()
 
 
-def process_entire_dataset(config, labels_csv_file_path, speaker_model, 
-                           all_embeddings, num_of_speakers, to_plot ):
+def test_entire_database(config, speaker_model, epoch):
+    speaker_model.eval()
+    families_df = pd.read_csv(config['familes_emb'], delimiter="\t")
+    labels_csv_path = f"{config['familes_labels']}_entire_database_{epoch}.csv"
+    clean_csv(labels_csv_path)
 
-    # Cluster the embeddings
-    labels, centroids = spectral_clustering(all_embeddings, num_of_speakers, "entire_dataset")
+    all_embeddings = []
+    for _, row in families_df.iterrows():
+        all_embeddings.extend(np.load(row['embedding_path']))
 
-    # Ensure the directory exists
-    output_dir = os.path.dirname(config['familes_labels'])
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
+    all_embeddings = np.array(all_embeddings)
+    num_speakers = count_unique_speakers(config['train_audio_list_file'])
 
-    # Append clustering results to CSV
-    append_All_to_csv(labels, config['train_audio_list_file'], labels_csv_file_path)
+    process_entire_dataset(config, labels_csv_path, speaker_model, all_embeddings, num_speakers, to_plot=True)
 
-    # Evaluate clustering
-    evaluate_and_log(config, None, all_embeddings, num_of_speakers, labels, speaker_model)
-    wandb.log({"dataset": "entire_dataset", "silhouette_score": silhouette_score(all_embeddings, labels)})
 
-    # Read the CSV file containing paths to all test audio files
-    test_families_df = pd.read_csv(config['test_audio_list_file'], delimiter="\t")
-    test_sample_num = 0
+def process_entire_dataset(config, labels_csv_path, speaker_model, all_embeddings, num_speakers, to_plot):
 
-    #if to_plot:
-    plot_embedding(config, all_embeddings, labels)
+    labels, _ = spectral_clustering(all_embeddings, num_speakers, "entire_dataset")
+    os.makedirs(os.path.dirname(config['familes_labels']), exist_ok=True)
+    append_All_to_csv(labels, config['train_audio_list_file'], labels_csv_path)
 
-    for _, row in test_families_df.iterrows():
-        audio_path = os.path.join(config['audio_dir'], row['path'])
-        test_emb = extract_single_embedding(speaker_model, audio_path)
-        if test_emb is not None:
-            test_sample_num += 1
+    evaluate_and_log(config, None, all_embeddings, labels)
 
-            cenroid_label = identify_cluster(all_embeddings, labels, test_emb, method="centroid")
-            KNN_label = identify_cluster(all_embeddings, labels, test_emb, method="knn", k=num_of_speakers)
-            cosine_label = identify_cluster(all_embeddings, labels, test_emb, method="cosine")
+    if to_plot:
+        plot_embedding(config, all_embeddings, labels)
 
-            common_label = mode([cenroid_label, KNN_label, cosine_label])
-            wandb.log({"common_label": common_label, "cenroid_label": cenroid_label,
-                        "KNN_label": KNN_label, "cosine_label": cosine_label})
 
-    # Create triplets
-    try:
-        triplet_data = create_triplets_all_data(pd.read_csv(labels_csv_file_path, delimiter="\t", on_bad_lines='skip'))
-    except pd.errors.ParserError as e:
-        print(f"Error reading CSV file {labels_csv_file_path}: {e}")
-        return
-    if not triplet_data:
-        print(f"No valid triplets found for the entire dataset. Skipping...\n ")
-        return
-
-    dataset = TripletAudioDataset(speaker_model, triplet_data, config)
-    dataloader = DataLoader(dataset, batch_size=4, shuffle=True)
-
-    triplet_loss = nn.TripletMarginLoss(margin=0.1)
-    optimizer = optim.AdamW(speaker_model.parameters(), lr=1e-4, weight_decay=1e-2)
-
-    for batch in dataloader:
-        anchor_embeddings, positive_embeddings, negative_embeddings = batch
-        # Ensure the tensors require gradients
-        anchor_embeddings = anchor_embeddings.clone().detach().requires_grad_(True)
-        positive_embeddings = positive_embeddings.clone().detach().requires_grad_(True)
-        negative_embeddings = negative_embeddings.clone().detach().requires_grad_(True)
-
-        # Compute the triplet loss
-        loss = triplet_loss(anchor_embeddings, positive_embeddings, negative_embeddings)
-
-        # Backpropagation and optimization
-        optimizer.zero_grad()
-        loss.backward()
-        optimizer.step()
-
-        wandb.log({"triplet_loss": loss.item()})
-
-# Run the pipeline
 if __name__ == '__main__':
     main()
-
