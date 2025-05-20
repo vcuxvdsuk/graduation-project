@@ -1,4 +1,4 @@
-﻿import os
+import os
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, Dataset
@@ -7,25 +7,17 @@ import pandas as pd
 import numpy as np
 import logging
 import wandb
-import shutil
-from sklearn.decomposition import PCA
-from sklearn.model_selection import train_test_split
-from sklearn.manifold import TSNE
-import matplotlib.pyplot as plt
 from tqdm import tqdm
-from speechbrain.pretrained import EncoderClassifier
 from model_funcs import *
-from meta_data_preproccesing import *
 from utils import *
-from SV import *
 from clustering import *
 from adaptation import *
 from evaluation import *
 from sklearn.cluster import KMeans, SpectralClustering, AgglomerativeClustering
 from scipy.stats import mode
+from sklearn.model_selection import train_test_split
 
 logging.basicConfig(level=logging.INFO)
-
 
 class ClassificationDatasetFromList(Dataset):
     def __init__(self, paths_labels):
@@ -37,13 +29,13 @@ class ClassificationDatasetFromList(Dataset):
     def __getitem__(self, idx):
         return self.paths_labels[idx]
 
-def extract_and_save_embeddings(speaker_brain, audio_dir, df, emb_dir):
+def extract_and_save_family_embeddings(speaker_brain, audio_dir, family_df, emb_dir, family_id):
     os.makedirs(emb_dir, exist_ok=True)
     emb_paths = []
     valid_rows = []
-    for idx, row in tqdm(df.iterrows(), total=len(df), desc="Extracting embeddings"):
+    for idx, row in family_df.iterrows():
         audio_path = os.path.join(audio_dir, row['path'])
-        emb_path = os.path.join(emb_dir, f"{os.path.splitext(os.path.basename(row['path']))[0]}.npy")
+        emb_path = os.path.join(emb_dir, f"{family_id}_{os.path.splitext(os.path.basename(row['path']))[0]}.npy")
         emb = extract_single_embedding(speaker_brain, audio_path)
         if emb is not None:
             np.save(emb_path, emb.cpu().numpy())
@@ -51,54 +43,32 @@ def extract_and_save_embeddings(speaker_brain, audio_dir, df, emb_dir):
             valid_rows.append(row)
         else:
             logging.warning(f"Failed to extract embedding for {audio_path}. Skipping.")
-    # Return a DataFrame of only valid rows
     return emb_paths, pd.DataFrame(valid_rows)
 
 def load_embeddings(emb_paths):
     embeddings = []
     for emb_path in emb_paths:
         emb = np.load(emb_path)
-        # Flatten in case emb is not 1D
         emb = emb.flatten()
         embeddings.append(emb)
     return np.stack(embeddings)
 
 def ensemble_clustering(embeddings, n_clusters, n_runs=5):
-    """
-    Perform ensemble clustering using multiple algorithms and seeds.
-    Returns consensus labels (majority vote).
-    """
     all_labels = []
-
-    # Run KMeans with different seeds
     for seed in range(n_runs):
         km = KMeans(n_clusters=n_clusters, random_state=seed)
         all_labels.append(km.fit_predict(embeddings))
-
-    # Run Spectral Clustering with different seeds
     for seed in range(n_runs):
         sc = SpectralClustering(n_clusters=n_clusters, random_state=seed, affinity='nearest_neighbors', n_neighbors=min(n_clusters, len(embeddings)-1, 4))
         all_labels.append(sc.fit_predict(embeddings))
 
-    # Run Agglomerative Clustering
     agg = AgglomerativeClustering(n_clusters=n_clusters)
     all_labels.append(agg.fit_predict(embeddings))
-
-    # Stack and compute consensus (mode across runs)
-    all_labels = np.stack(all_labels, axis=1)  # shape: (N, n_ensemble)
+    all_labels = np.stack(all_labels, axis=1)
     consensus_labels, _ = mode(all_labels, axis=1)
     consensus_labels = consensus_labels.flatten()
     return consensus_labels
 
-def apply_spectral_clustering_to_disk_embeddings(df, emb_paths, config):
-    embeddings_np = load_embeddings(emb_paths)
-    n_clusters = count_unique_speakers(config['train_audio_list_file'])
-    # Use ensemble clustering instead of a single clustering method
-    cluster_labels = ensemble_clustering(embeddings_np, n_clusters=n_clusters, n_runs=3)
-    clustered_data = []
-    for i, path in enumerate(df['path']):
-        clustered_data.append({"path": path, "cluster_label": f"{cluster_labels[i]}"})
-    return pd.DataFrame(clustered_data)
 
 
 def train_epoch(speaker_brain, train_loader, config, epoch):
@@ -120,7 +90,6 @@ def train_epoch(speaker_brain, train_loader, config, epoch):
             labels_tensor = numeric_labels
         else:
             labels_tensor = torch.tensor(numeric_labels)
-
         logits = classifier(embeddings,labels_tensor)
         loss = ce_loss(logits, labels_tensor)
 
@@ -133,7 +102,7 @@ def train_epoch(speaker_brain, train_loader, config, epoch):
     logging.info(f"[Epoch {epoch}] Train Loss: {avg_loss:.4f}")
     wandb.log({"train_loss": avg_loss})
 
-
+    
 def log_embedding_plot(embeddings, labels, epoch, split="train"):
     """
     Plots embeddings using PCA and logs to wandb.
@@ -159,18 +128,22 @@ def log_embedding_plot(embeddings, labels, epoch, split="train"):
 
 def main(run=None, config_file='/app/config.yaml'):
     config = load_config(config_file)
-
     speaker_model = load_model_ecapa_from_speechbrain(config)
     embedding_model = speaker_model.mods.embedding_model
     for p in embedding_model.parameters():
         p.requires_grad = True
 
     df = pd.read_csv(config['train_audio_list_file'], delimiter="\t")
-    num_speakers = count_unique_speakers(config['train_audio_list_file'])
+    families = df['family_id'].unique()
+    emb_dir = config.get('embedding_output_file', '/app/embeddings_per_family')
 
-    classifier_head = AMSoftmaxHead(192, num_speakers)
+    label_set = sorted(set(df['client_id']))
+    label_map = {label: idx for idx, label in enumerate(label_set)}
+    num_classes = len(label_map)
+
+    classifier_head = AMSoftmaxHead(192, num_classes)
     optimizer = AdamW(
-        list(embedding_model.parameters()) + list(classifier_head.parameters()), lr=1e-4, weight_decay=1e-2
+        list(embedding_model.parameters()) + list(classifier_head.parameters()), lr=1e-5, weight_decay=1e-1
     )
 
     speaker_brain = modelTune(
@@ -180,63 +153,76 @@ def main(run=None, config_file='/app/config.yaml'):
                  "classifier": classifier_head}
     )
 
-    emb_dir = config.get('embedding_output_file', '/app/embeddings')
-
     for epoch in range(config['adaptation']['num_epochs']):
-        # Step 1: Extract and save all embeddings to disk using the current model
-        valid_files_path = os.path.join(emb_dir, "valid_files.tsv")
-        if epoch == 0 or not os.path.exists(valid_files_path):
-            emb_paths, valid_df = extract_and_save_embeddings(speaker_brain, config['audio_dir'], df, emb_dir)
-            valid_df.to_csv(valid_files_path, sep="\t", index=False)
-        else:
-            valid_df = pd.read_csv(valid_files_path, sep="\t")
-            emb_paths, valid_df = extract_and_save_embeddings(speaker_brain, config['audio_dir'], valid_df, emb_dir)
-    
-        # Step 2: Cluster using disk-based embeddings
-        clustered_df = apply_spectral_clustering_to_disk_embeddings(valid_df, emb_paths, config)
-        label_set = sorted(set(clustered_df['cluster_label']))
-        label_map = {label: idx for idx, label in enumerate(label_set)}
-        num_classes = len(label_map)
+        logging.info(f"Epoch {epoch}: Per-family unsupervised adaptation")
+        all_train_data = []
+        for family_id in families:
+            family_df = df[df['family_id'] == family_id]
+            if len(family_df) < 2:
+                logging.info(f"Skipping family {family_id} (not enough samples)")
+                continue
 
-        # Merge cluster labels back to original df to retain client_id
-        merged_df = pd.merge(clustered_df, df[['path', 'client_id']], on='path', how='left')
+            # Step 1: Extract and save embeddings for this family
+            emb_paths, valid_df = extract_and_save_family_embeddings(speaker_brain, config['audio_dir'], family_df, emb_dir, family_id)
+            if len(emb_paths) < 2:
+                logging.info(f"Skipping family {family_id} (not enough valid embeddings)")
+                continue
 
-        # Now split merged_df
-        train_df, val_df = train_test_split(merged_df, test_size=0.2)
+            # Step 2: Cluster using ensemble clustering
+            embeddings_np = load_embeddings(emb_paths)
+            n_clusters = valid_df['client_id'].nunique()  # or use a heuristic
+            cluster_labels = ensemble_clustering(embeddings_np, n_clusters=n_clusters, n_runs=3)
+            label_set = sorted(set(cluster_labels))
+            label_map_family = {str(label): idx for idx, label in enumerate(label_set)}
+            num_classes_family = len(label_map_family)
 
-        train_loader = DataLoader(
-            ClassificationDatasetFromList([(p, label_map[l]) for p, l in zip(train_df['path'], train_df['cluster_label'])]),
-            batch_size=16, shuffle=True
-        )
-        val_loader = DataLoader(
-            ClassificationDatasetFromList([(p, label_map[l]) for p, l in zip(val_df['path'], val_df['cluster_label'])]),
-            batch_size=16
-        )
-
-        logging.info(f"Epoch {epoch}: Training with {num_classes} pseudo-labels")
-        if epoch % 5 == 0 or epoch < 5:
-            # For train split
-            train_emb_paths = [os.path.join(emb_dir, f"{os.path.splitext(os.path.basename(p))[0]}.npy") for p in train_df['path']]
-            train_embeddings = load_embeddings(train_emb_paths)
-            train_predicted_labels = [label_map[l] for l in train_df['cluster_label']]
-
-            evaluate_and_log(config, train_df, None, train_embeddings, train_predicted_labels, train=True)
-            log_embedding_plot(train_embeddings, train_predicted_labels, epoch, split="train")
-
-            # For val split
-            val_emb_paths = [os.path.join(emb_dir, f"{os.path.splitext(os.path.basename(p))[0]}.npy") for p in val_df['path']]
-            val_embeddings = load_embeddings(val_emb_paths)
-            val_predicted_labels = [label_map[l] for l in val_df['cluster_label']]
-            logging.info(f"Epoch {epoch}: Training with {num_classes} pseudo-labels")
-            evaluate_and_log(config, val_df, None, val_embeddings, val_predicted_labels, train=False)
-            log_embedding_plot(val_embeddings, val_predicted_labels, epoch, split="val")
-
+            # Step 3: Prepare data for this family
+            valid_df = valid_df.reset_index(drop=True)
+            valid_df['cluster_label'] = [str(l) for l in cluster_labels]
+            train_df, val_df = train_test_split(valid_df, test_size=0.2)
+            all_train_data.extend([(p, label_map_family[l]) for p, l in zip(train_df['path'], train_df['cluster_label'])])
+        
+        # Create a single DataLoader for all families
+        train_loader = DataLoader(ClassificationDatasetFromList(all_train_data), batch_size=16, shuffle=True)
         train_epoch(speaker_brain, train_loader, config, epoch)
 
-    Save_Model_Localy(speaker_brain.mods.embedding_model, config, name="ecapa_epoch_finetuned.pth")
+        # --- After all families, evaluate on the entire dataset (train and val splits) ---
+        logging.info(f"Epoch {epoch}: Evaluating on all data (train/val splits)")
+        all_emb_paths = []
+        for idx, row in df.iterrows():
+            emb_path = os.path.join(emb_dir, f"{row['family_id']}_{os.path.splitext(os.path.basename(row['path']))[0]}.npy")
+            if os.path.exists(emb_path):
+                all_emb_paths.append(emb_path)
+        if len(all_emb_paths) > 1:
+            all_embeddings = load_embeddings(all_emb_paths)
+            # Cluster all embeddings
+            n_clusters = df['client_id'].nunique()
+            all_cluster_labels = ensemble_clustering(all_embeddings, n_clusters=n_clusters, n_runs=3)
+            label_set = sorted(set(all_cluster_labels))
+            label_map_all = {str(label): idx for idx, label in enumerate(label_set)}
+            all_predicted_labels = [label_map_all[str(l)] for l in all_cluster_labels]
+
+            # Split into train/val using the same split as before
+            df = df.reset_index(drop=True)
+            train_idx, val_idx = train_test_split(df.index, test_size=0.2, random_state=42)
+            train_embeddings = all_embeddings[train_idx]
+            val_embeddings = all_embeddings[val_idx]
+            train_predicted_labels = [all_predicted_labels[i] for i in train_idx]
+            val_predicted_labels = [all_predicted_labels[i] for i in val_idx]
+            train_df = df.iloc[train_idx]
+            val_df = df.iloc[val_idx]
+
+            # Evaluate and log for train split
+            evaluate_and_log(config, train_df, None, train_embeddings, train_predicted_labels, train=True)
+            log_embedding_plot(train_embeddings, train_predicted_labels, epoch, split="train_all")
+
+            # Evaluate and log for val split
+            evaluate_and_log(config, val_df, None, val_embeddings, val_predicted_labels, train=False)
+            log_embedding_plot(val_embeddings, val_predicted_labels, epoch, split="val_all")
+
+    Save_Model_Localy(speaker_brain.mods.embedding_model, config, name="ecapa_epoch_finetuned_per_family.pth")
     if run:
         run.finish()
 
 if __name__ == '__main__':
     main()
-

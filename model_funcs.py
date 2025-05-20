@@ -64,23 +64,29 @@ def add_noise_to_signal(signal, noise_factor=0.00):
 
 def extract_single_embedding(speaker_model, audio_path, noise_factor=0.0):
     try:
+        speaker_model.modules.embedding_model.eval()
         if not os.path.exists(audio_path):
             print(f"Audio file not found: {audio_path}")
             return None
 
         signal, fs = torchaudio.load(audio_path)
+        
+        if signal.dim() > 2:
+            signal = signal.squeeze()  
 
-        # Convert stereo to mono
+        # Convert stereo to mono (always get [1, time])
         if signal.dim() > 1:
-            signal = signal.mean(dim=0)
+            signal = signal.mean(dim=0, keepdim=True)
+        else:
+            signal = signal.unsqueeze(0)  # ensure [1, time]
 
+        # Check length after conversion
         if signal.numel() < 16000:
-            print(f"Audio too short: {audio_path}")
+            print(f"Audio too short after mono conversion: {audio_path} ({signal.numel()} samples)")
             return None
 
         # Add noise and pad
-        signal = signal.squeeze(0)
-        noisy_signal = add_noise_to_signal(signal, noise_factor).unsqueeze(0)
+        noisy_signal = add_noise_to_signal(signal, noise_factor)
 
         if noisy_signal.shape[-1] > MAX_LEN:
             noisy_signal = noisy_signal[..., :MAX_LEN]
@@ -146,17 +152,13 @@ def extract_all_families_embeddings(speaker_model, audio_dir, file, emb_dir,
                 if noisy_signal.dim() > 1:
                     noisy_signal = noisy_signal.mean(dim=0, keepdim=True)  # Convert stereo to mono if necessary
                 
-                #logging.info(f"1")
                 # Get the embedding for the signal
                 with torch.no_grad():
                     batch = SimpleNamespace(signal=(noisy_signal, torch.tensor([1.0])))
                     embedding, wav_lens, logits = speaker_model.compute_forward(batch, sb.Stage.VALID)
 
-                #logging.info(f"2 \nembedding {embedding}, \nwav_lens {wav_lens}, \nlogits {logits}")
-
                 # Append the embedding to the list for this family
                 family_embeddings_list.append(embedding.squeeze().cpu().numpy())
-                #logging.info(f"3")
 
             # Store the embeddings for the entire family (as a list of arrays)
             family_embedding_array = np.array(family_embeddings_list)

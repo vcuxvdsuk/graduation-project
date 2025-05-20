@@ -2,15 +2,18 @@
 import pandas as pd
 import wandb
 import logging
+from sklearn.metrics.pairwise import cosine_similarity
+from scipy.optimize import linear_sum_assignment
 
 from sklearn.metrics import (
     roc_curve,
     silhouette_score,
     calinski_harabasz_score,
+    confusion_matrix,
+    balanced_accuracy_score,
 )
-from sklearn.metrics.pairwise import cosine_similarity
-from scipy.optimize import linear_sum_assignment
-
+import matplotlib.pyplot as plt
+import torch
 
 
 class Evaluations:
@@ -102,15 +105,15 @@ class Evaluations:
         return cost[row_ind, col_ind].sum() / len(true_labels)
 
 
-def evaluate_and_log(config, family_id, family_emb, predicted_labels):
+def evaluate_and_log(config, df, family_id, family_emb, predicted_labels, train=False):
     """
     - config['all_samples']: TSV with columns [..., family_id, client_id, path]
     - family_id:        integer or None
     - family_emb:       list/array of shape (N, D)
     - predicted_labels: list/array of cluster IDs length N
+    - train:            bool, if True logs with 'train_' prefix
     """
     # 1. Load ground‐truth for this family
-    df = pd.read_csv(config['train_audio_list_file'], sep="\t")
     if family_id is not None:
         df = df[df['family_id'] == family_id]
     true_ids = df['client_id'].astype('category').cat.codes.values
@@ -136,16 +139,71 @@ def evaluate_and_log(config, family_id, family_emb, predicted_labels):
     # 5. Speaker identification IEER
     ieer = evals.calculate_ieer(true_ids, predicted_labels)
 
-    # 6. Log everything
+    # 6. Confusion matrix and balanced accuracy
+    cm = confusion_matrix(true_ids, predicted_labels)
+    bal_acc = balanced_accuracy_score(true_ids, predicted_labels)
+
+    # Plot confusion matrix
+    plt.figure(figsize=(8, 6))
+    plt.title("Confusion Matrix")
+    plt.xlabel("Predicted")
+    plt.ylabel("True")
+    plt.tight_layout()
+    cm_img_path = "confusion_matrix.png"
+    plt.savefig(cm_img_path)
+    plt.close()
+
+    prefix = "train_" if train else "val_"
     wandb.log({
-        f"family_{family_id}/cluster_accuracy": acc,
-        f"family_{family_id}/silhouette": sil,
-        f"family_{family_id}/calinski_harabasz": cal,
-        f"family_{family_id}/eer": eer,
-        f"family_{family_id}/ieer": ieer,
+        f"{prefix}family_{family_id}/cluster_accuracy": acc,
+        f"{prefix}family_{family_id}/silhouette": sil,
+        f"{prefix}family_{family_id}/calinski_harabasz": cal,
+        f"{prefix}family_{family_id}/eer": eer,
+        f"{prefix}family_{family_id}/ieer": ieer,
+        f"{prefix}family_{family_id}/balanced_accuracy": bal_acc,
+        f"{prefix}family_{family_id}/confusion_matrix": wandb.Image(cm_img_path),
     })
 
     logging.info(
         f"[Family {family_id}] "
-        f"CluAcc={acc:.4f}, Sil={sil:.4f}, Cal={cal:.4f}, EER={eer:.4f}, IEER={ieer:.4f}"
+        f"{prefix}CluAcc={acc:.4f}, Sil={sil:.4f}, Cal={cal:.4f}, "
+        f"EER={eer:.4f}, IEER={ieer:.4f}, BalAcc={bal_acc:.4f}"
     )
+
+
+def evaluate_model(config, speaker_brain, dataloader, epoch, train=False):
+    all_preds = []
+    all_labels = []
+    all_embeddings = []
+
+    with torch.no_grad():
+        for paths, numeric_labels in dataloader:
+            if isinstance(numeric_labels, torch.Tensor):
+                labels_tensor = numeric_labels.detach().clone()
+            else:
+                labels_tensor = torch.tensor(numeric_labels)
+            emb = extract_batch_embeddings_train(speaker_brain, config['audio_dir'], paths)
+            if emb.size(0) == 0:
+                print("No embeddings in batch, skipping...")
+                continue
+
+            logits = speaker_brain.hparams.classifier(emb, labels_tensor[:len(emb)])
+            preds = torch.argmax(logits, dim=1)
+
+            all_preds.extend(preds.cpu().numpy())
+            all_labels.extend(labels_tensor[:len(preds)].cpu().numpy().tolist())
+            all_embeddings.extend(emb.cpu().numpy().tolist())
+
+    assert len(all_preds) == len(all_labels) == len(all_embeddings)
+
+    evaluations = Evaluations()
+    y_true, y_scores = evaluations.build_verification_pairs(all_embeddings, all_labels)
+    eer = evaluations.calculate_eer(y_true, y_scores)
+    ieer = evaluations.calculate_ieer(y_true, y_scores)
+    logging.info(f"[Epoch {epoch}] EER: {eer}, IEER: {ieer}")
+    if train:
+        wandb.log({"train EER": eer, "train IEER": ieer})
+    else:
+        wandb.log({"val EER": eer, "val IEER": ieer})
+
+    plot_embeddings(np.array(all_embeddings), all_labels, epoch, train)
