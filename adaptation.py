@@ -85,7 +85,7 @@ class modelTune(sb.Brain):
                 for p in module.parameters():
                     p.requires_grad = True
 
-            # Optionally freeze feature extractor and normalization layers
+            # freeze feature extractor and normalization layers
             for module in [
                 self.modules.compute_features,
                 self.modules.mean_var_norm,

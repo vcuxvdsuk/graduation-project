@@ -1,7 +1,9 @@
 import argparse
-from triplet_training_loop_supervised import main as triplet_pipeline_per_family_to_all
-from triplet_training_loop_unSupervised import main as triplet_pipeline_unsupervised
+
 from triplet_training_loop_supervised import main as triplet_pipeline_supervised
+from triplet_training_loop_unSupervised import main as triplet_pipeline_unsupervised
+from triplet_training_loop_unSupervised_family import main as triplet_pipeline_per_family_to_all
+
 from Ecappa_training_loop_supervised import main as Ecappa_pipeline_supervised
 from Ecappa_training_loop_unSupervised import main as Ecappa_pipeline_unsupervised
 from Ecappa_training_loop_unSupervised_family import main as Ecappa_pipeline_unsupervised_family
@@ -17,7 +19,7 @@ def main():
         "--pipeline",
         type=str,
         required=True,
-        choices=[ "triplet_supervised", "triplet_unsuperised", "triplet_unsupervised_family",
+        choices=[ "triplet_supervised", "triplet_unsupervised", "triplet_unsupervised_family",
                   "ecappa_supervised", "ecappa_unsupervised", "ecappa_unsupervised_family"],
         help="Specify which pipeline to run: 'triplet_supervised', 'triplet_unsuperised', 'triplet_per_family', 'ecappa_supervised', 'ecappa_unsupervised', 'ecappa_unsupervised_family'. '"
     )

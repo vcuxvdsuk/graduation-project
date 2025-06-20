@@ -29,9 +29,10 @@ pca:
 
 adaptation:
   num_epochs: 50  # Number of epochs for adaptation
-  batch_size: 16
+  batch_size: 32
+  margin: 0.3
   train_nums_of_families: 40 #out of 50 families
-  epochs_per_family: 2 
+  epochs_per_family: 1
   load_localy_saved: True  # use the locally saved and fine tune model
 
 # Speaker Verification settings

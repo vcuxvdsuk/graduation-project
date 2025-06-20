@@ -54,7 +54,7 @@ def spectral_clustering(embedding, n_clusters=5, family_id=-1):
         embedding = np.array(embedding)
 
     # Ensure n_neighbors is less than the number of samples
-    n_neighbors = min(n_clusters, len(embedding) - 1,3) #avrg 4 samples per speaker
+    n_neighbors = min(n_clusters, len(embedding) - 1,4) #avrg 4 samples per speaker
 
     # Apply Spectral Clustering
     with warnings.catch_warnings():

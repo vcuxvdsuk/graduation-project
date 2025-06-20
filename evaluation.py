@@ -1,4 +1,6 @@
-﻿import numpy as np
+﻿from model_funcs import *
+from ploting_funcs import *
+import numpy as np
 import pandas as pd
 import wandb
 import logging
@@ -143,17 +145,40 @@ def evaluate_and_log(config, df, family_id, family_emb, predicted_labels, train=
     cm = confusion_matrix(true_ids, predicted_labels)
     bal_acc = balanced_accuracy_score(true_ids, predicted_labels)
 
-    # Plot confusion matrix
-    plt.figure(figsize=(8, 6))
-    plt.title("Confusion Matrix")
-    plt.xlabel("Predicted")
-    plt.ylabel("True")
-    plt.tight_layout()
-    cm_img_path = "confusion_matrix.png"
-    plt.savefig(cm_img_path)
-    plt.close()
-
     prefix = "train_" if train else "val_"
+
+
+    if family_id is not None:
+        # Plot confusion matrix
+        fig, ax = plt.subplots(figsize=(8, 6))
+        im = ax.matshow(cm, cmap='Blues')
+        ax.set_title("Confusion Matrix", pad=20)
+        ax.set_xlabel("Predicted")
+        ax.set_ylabel("True")
+        fig.colorbar(im, fraction=0.046, pad=0.04)
+
+        # Set tick marks and labels for all classes
+        num_classes = max(cm.shape[0], cm.shape[1])
+        tick_marks = np.arange(num_classes)
+        ax.set_xticks(tick_marks)
+        ax.set_yticks(tick_marks)
+
+        # Add text annotations for each cell
+        for i in range(cm.shape[0]):
+            for j in range(cm.shape[1]):
+                ax.text(j, i, str(cm[i, j]),
+                        ha="center", va="center",
+                        color="white" if cm[i, j] > cm.max() / 2. else "black",
+                        fontsize=12)
+
+        fig.tight_layout()
+        cm_img_path = "confusion_matrix.png"
+        fig.savefig(cm_img_path)
+        plt.close(fig)
+        wandb.log({
+                f"{prefix}family_{family_id}/confusion_matrix": wandb.Image(cm_img_path),
+                })
+
     wandb.log({
         f"{prefix}family_{family_id}/cluster_accuracy": acc,
         f"{prefix}family_{family_id}/silhouette": sil,
@@ -161,7 +186,6 @@ def evaluate_and_log(config, df, family_id, family_emb, predicted_labels, train=
         f"{prefix}family_{family_id}/eer": eer,
         f"{prefix}family_{family_id}/ieer": ieer,
         f"{prefix}family_{family_id}/balanced_accuracy": bal_acc,
-        f"{prefix}family_{family_id}/confusion_matrix": wandb.Image(cm_img_path),
     })
 
     logging.info(
@@ -206,4 +230,4 @@ def evaluate_model(config, speaker_brain, dataloader, epoch, train=False):
     else:
         wandb.log({"val EER": eer, "val IEER": ieer})
 
-    plot_embeddings(np.array(all_embeddings), all_labels, epoch, train)
+    plot_embedding(config, np.array(all_embeddings), all_labels)
